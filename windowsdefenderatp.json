@@ -16,7 +16,7 @@
     "main_module": "windowsdefenderatp_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "4.10.0.40961",
+    "min_phantom_version": "5.0.0",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
         "Cloud November 2020 Release"
