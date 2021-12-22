@@ -132,7 +132,8 @@ DEFENDERATP_MAX_LOOK_BACK_HOURS = 720
 ERR_CODE_MSG = "Error code unavailable"
 ERR_MSG_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters"
 PARSE_ERR_MSG = "Unable to parse the error message. Please check the asset configuration and|or action parameters"
-TYPE_ERR_MSG = "Error occurred while connecting to the Windows Defender ATP Server. Please check the asset configuration and|or the action parameters"
+TYPE_ERR_MSG = "Error occurred while connecting to the Windows Defender ATP Server." \
+               " Please check the asset configuration and|or the action parameters"
 
 # Constants relating to '_validate_integer'
 VALID_INTEGER_MSG = "Please provide a valid integer value in the {}"
@@ -166,7 +167,8 @@ DEFENDERATP_JSON_RBAC_GROUP_NAMES = 'rbac_group_names'
 DEFENDERATP_PAST_TIME_ERR = 'Invalid {0}, can not be lesser than or equal to current UTC time.'
 DEFENDERATP_INVALID_TIME_ERR = 'Invalid {0}, supports ISO date format only. e.g. 2019-10-17T00:00:00Z.'
 DEFENDERATP_INVALID_RBAC_GROUP_NAMES = 'Please provide valid comma-separated RBAC group names.'
-DEFENDERATP_INVALID_INDICATOR_TYPE = 'Please provide a valid "indicator type" value. Possible indicator types are "FileSha1", "FileSha256", "IpAddress", "DomainName", "Url".'
+DEFENDERATP_INVALID_INDICATOR_TYPE = 'Please provide a valid "indicator type" value.' \
+                                     ' Possible indicator types are "FileSha1", "FileSha256", "IpAddress", "DomainName", "Url".'
 DEFENDERATP_INVALID_ACTION = 'Please provide a valid "action" value. Possible action values are "Alert", "AlertAndBlock", "Allowed".'
 DEFENDERATP_INVALID_SEVERITY = 'Please provide a valid "severity" value. Possible severity values are "Informational", "Low", "Medium", "High".'
 DEFENDERATP_SUBMIT_INDICATOR_PARSE_ERR = 'Submitted indicator but not able to parse the response'
