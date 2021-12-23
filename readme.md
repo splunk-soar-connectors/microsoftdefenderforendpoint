@@ -25,6 +25,14 @@
     -   List Devices - The new \[query\] parameter has been added to support the additional OData V4
         filters.
 
+## Port Information
+The app uses HTTP/ HTTPS protocol for communicating with the Defender ATP server. Below are the default ports used by Splunk SOAR.
+
+SERVICE NAME | TRANSPORT PROTOCOL | PORT
+------------ | ------------------ | ----
+**http** | tcp | 80
+**https** | tcp | 443
+
 ## Pagination Not Supported
 
 -   Based on the base URL link ( [Microsoft Defender ATP API
