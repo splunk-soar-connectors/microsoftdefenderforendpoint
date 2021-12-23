@@ -1814,7 +1814,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_RBAC_GROUP_NAMES)
 
         severity = param.get(DEFENDERATP_JSON_SEVERITY)
-        if severity not in INDICATOR_SEVERITY_LIST:
+        if severity and severity not in INDICATOR_SEVERITY_LIST:
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_SEVERITY)
 
         # prepare data parameters
