@@ -458,7 +458,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return True
 
-    def _update_request(self, action_result, endpoint, headers={}, params=None, data=None, method='get'):
+    def _update_request(self, action_result, endpoint, headers=None, params=None, data=None, method='get'):
         """ This function is used to update the headers with access_token before making REST call.
 
         :param endpoint: REST endpoint that needs to appended to the service address
@@ -470,6 +470,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status phantom.APP_ERROR/phantom.APP_SUCCESS(along with appropriate message),
         response obtained by making an API call
         """
+
+        if not headers:
+            headers = {}
 
         if not self._non_interactive:
             token_data = {
@@ -2026,7 +2029,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.get_status(), None
 
         if response.get("value"):
-            response = requests.get(response["value"])
+            response = requests.get(response["value"])  # nosemgrep: python.requests.best-practice.use-timeout.use-timeout
             if response.status_code == 200:
                 return action_result.set_status(phantom.APP_SUCCESS), response
 
