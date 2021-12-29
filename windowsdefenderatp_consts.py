@@ -1,9 +1,17 @@
 # File: windowsdefenderatp_consts.py
+#
 # Copyright (c) 2019-2021 Splunk Inc.
 #
-# Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+# either express or implied. See the License for the specific language governing permissions
+# and limitations under the License.
 DEFENDERATP_PHANTOM_BASE_URL = '{phantom_base_url}rest'
 DEFENDERATP_PHANTOM_SYS_INFO_URL = '/system_info'
 DEFENDERATP_PHANTOM_ASSET_INFO_URL = '/asset/{asset_id}'
@@ -124,7 +132,8 @@ DEFENDERATP_MAX_LOOK_BACK_HOURS = 720
 ERR_CODE_MSG = "Error code unavailable"
 ERR_MSG_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters"
 PARSE_ERR_MSG = "Unable to parse the error message. Please check the asset configuration and|or action parameters"
-TYPE_ERR_MSG = "Error occurred while connecting to the Windows Defender ATP Server. Please check the asset configuration and|or the action parameters"
+TYPE_ERR_MSG = "Error occurred while connecting to the Windows Defender ATP Server." \
+               " Please check the asset configuration and|or the action parameters"
 
 # Constants relating to '_validate_integer'
 VALID_INTEGER_MSG = "Please provide a valid integer value in the {}"
@@ -139,7 +148,7 @@ INPUT_TYPE_VALUE_LIST_ALERTS = ["All", "Domain", "File Hash", "IP"]
 TYPE_VALUE_LIST = ["Full", "Selective"]
 SCAN_TYPE_VALUE_LIST = ["Quick", "Full"]
 INPUT_TYPE_VALUE_LIST_DEVICES = ["All", "Domain", "File Hash"]
-INDICATOR_SEVERITY_LIST = ["", "Informational", "Low", "Medium", "High", None]
+INDICATOR_SEVERITY_LIST = ["", "Informational", "Low", "Medium", "High"]
 
 # Constants relating to 'Indicators'
 DEFENDERATP_DATE_FORMAT = '%Y-%m-%dT%H:%M:%SZ'
@@ -158,7 +167,8 @@ DEFENDERATP_JSON_RBAC_GROUP_NAMES = 'rbac_group_names'
 DEFENDERATP_PAST_TIME_ERR = 'Invalid {0}, can not be lesser than or equal to current UTC time.'
 DEFENDERATP_INVALID_TIME_ERR = 'Invalid {0}, supports ISO date format only. e.g. 2019-10-17T00:00:00Z.'
 DEFENDERATP_INVALID_RBAC_GROUP_NAMES = 'Please provide valid comma-separated RBAC group names.'
-DEFENDERATP_INVALID_INDICATOR_TYPE = 'Please provide a valid "indicator type" value. Possible indicator types are "FileSha1", "FileSha256", "IpAddress", "DomainName", "Url".'
+DEFENDERATP_INVALID_INDICATOR_TYPE = 'Please provide a valid "indicator type" value.' \
+                                     ' Possible indicator types are "FileSha1", "FileSha256", "IpAddress", "DomainName", "Url".'
 DEFENDERATP_INVALID_ACTION = 'Please provide a valid "action" value. Possible action values are "Alert", "AlertAndBlock", "Allowed".'
 DEFENDERATP_INVALID_SEVERITY = 'Please provide a valid "severity" value. Possible severity values are "Informational", "Low", "Medium", "High".'
 DEFENDERATP_SUBMIT_INDICATOR_PARSE_ERR = 'Submitted indicator but not able to parse the response'
