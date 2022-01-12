@@ -1,0 +1,882 @@
+{
+	"info": {
+		"_postman_id": "64b9eb6b-0bf6-4fcc-a20b-f629e2b5fd6c",
+		"name": "Windows Defender ATP",
+		"description": "# Postman Collection of Endpoints for Windows Defender ATP App on Splunk SOAR.\n\n- ### Prerequisite\n\nThe below mentioned are the required fields to use this collection. So, make sure that all these fields are set before running the request.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| tenant_id  | Tenant ID ( in environment variables) |\n| client_id  | Client ID ( in environment variables) |\n| client_secret |Client Secret ( in environment variables) |\n| base_url | EWS URL ( in local variables) |",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/machineactions/{{event_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machineactions",
+						"{{event_id}}"
+					]
+				},
+				"description": "This rest call get status of the event on a machine.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| event_id  | Event ID |"
+			},
+			"response": []
+		},
+		{
+			"name": "Scan device",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Comment",
+							"value": "Test123",
+							"type": "text"
+						},
+						{
+							"key": "ScanType",
+							"value": "Quick",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/machineactions/{{device_id}}/runAntiVirusScan",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machineactions",
+						"{{device_id}}",
+						"runAntiVirusScan"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "This rest call scan a device for virus.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id  | Device ID |"
+			},
+			"response": []
+		},
+		{
+			"name": "List devices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/machines/?top=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						""
+					],
+					"query": [
+						{
+							"key": "top",
+							"value": "1"
+						}
+					]
+				},
+				"description": "This rest call list of recently seen devices\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| top | Limit |"
+			},
+			"response": []
+		},
+		{
+			"name": "Domain prevalence",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/domains/microsoft.com/stats?lookBackHours=720",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"domains",
+						"microsoft.com",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "lookBackHours",
+							"value": "720"
+						}
+					]
+				},
+				"description": "This rest call return statistics for the specified domain.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| lookBackHours | Hours to search back to get the statistics |"
+			},
+			"response": []
+		},
+		{
+			"name": "Ip prevalence",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/ips/8.8.8.8/stats?lookBackHours=720",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"ips",
+						"8.8.8.8",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "lookBackHours",
+							"value": "720"
+						}
+					]
+				},
+				"description": "This rest call return statistics for the specified IP.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| lookBackHours | Hours to search back to get the statistics |"
+			},
+			"response": []
+		},
+		{
+			"name": "File prevalence",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/files/{{file_id}}/stats?lookBackHours=720",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"{{file_id}}",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "lookBackHours",
+							"value": "720"
+						}
+					]
+				},
+				"description": "This rest call return statistics for the specified File.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| file_id | File hash |\n| lookBackHours | Hours to search back to get the statistics |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get file info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/files/{{file_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"{{file_id}}"
+					]
+				},
+				"description": "This rest call Retrieve  a file information by identifier SHA1, or SHA256.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| file_id | Identifier of the file |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get file related devices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/files/{{file_device_id}}/machines",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"{{file_device_id}}",
+						"machines"
+					]
+				},
+				"description": "This rest call retrieve a collection of devices related to a given file hash (SHA1).\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| file_device_id | Identifier of the file |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get user related devices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/users/{{user_id}}/machines",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}",
+						"machines"
+					]
+				},
+				"description": "This rest call retrieve a collection of devices related to a given user ID.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| user_id | ID of the user |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get domain related devices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/domains/{{domain}}/machines",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"domains",
+						"{{domain}}",
+						"machines"
+					]
+				},
+				"description": "This rest call retrieve a collection of devices that have communicated to or from a given domain address.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| domain | Domain |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get installed software",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id}}/software",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id}}",
+						"software"
+					]
+				},
+				"description": "This rest call retrieve a collection of installed software related to a given device ID.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id | Identifier of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "Restrict app execution",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Comment\": \"Testing comment from postman\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id}}/restrictCodeExecution",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id}}",
+						"restrictCodeExecution"
+					]
+				},
+				"description": "This rest call restrict execution of all applications on the device except a predefined set\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id | Identifier of the device |\n| comment | Comment |"
+			},
+			"response": []
+		},
+		{
+			"name": "List indicators",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/indicators?$top=10&$filter=severity eq 'Medium'",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"indicators"
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "10"
+						},
+						{
+							"key": "$filter",
+							"value": "severity eq 'Medium'"
+						}
+					]
+				},
+				"description": "This rest call retrieve a collection of all active Indicators.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| filter | Additional OData V4 filters to apply |\n| top | Limit |"
+			},
+			"response": []
+		},
+		{
+			"name": "Run query",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Query\": \"DeviceRegistryEvents | limit 12\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/advancedqueries/run",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"advancedqueries",
+						"run"
+					]
+				},
+				"description": "This rest call An advanced search query.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| Query | Query to fetch results |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get discovered vulnerabilities",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id}}/vulnerabilities",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id}}",
+						"vulnerabilities"
+					]
+				},
+				"description": "This rest call retrieve a collection of discovered vulnerabilities related to a given device ID.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id | Identifier of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "Remove app restriction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Comment\": \"Testing removing restrictions from postman\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id}}/unrestrictCodeExecution",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id}}",
+						"unrestrictCodeExecution"
+					]
+				},
+				"description": "This rest call enable execution of any application on the device.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id | Identifier of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get exposure score",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/exposureScore",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"exposureScore"
+					]
+				},
+				"description": "This rest call retrieve the organizational exposure score."
+			},
+			"response": []
+		},
+		{
+			"name": "Get secure score",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/configurationScore",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"configurationScore"
+					]
+				},
+				"description": "This rest call retrieve your Microsoft Secure Score for devices."
+			},
+			"response": []
+		},
+		{
+			"name": "Get file live response",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/machineactions/{{file_live_res_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machineactions",
+						"{{file_live_res_id}}"
+					]
+				},
+				"description": "This rest call download a file from a device using live response.\n\nIf you want to Download the file then add `/GetLiveResponseResultDownloadLink(index=0)` at the last of rest url.\n\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| file_live_res_id | ID of the event |"
+			},
+			"response": []
+		},
+		{
+			"name": "Run script live response",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/machineactions/{{live_script_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machineactions",
+						"{{live_script_id}}"
+					]
+				},
+				"description": "This rest call run a script from the library on a device using live response.\n\nIf you want to Download the file then add `/GetLiveResponseResultDownloadLink(index=0)` at the last of rest url.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| live_script_id | ID of the event |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get missing kbs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{kbs_id}}/getmissingkbs",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{kbs_id}}",
+						"getmissingkbs"
+					]
+				},
+				"description": "This rest call retrieve missing KBs (security updates) by given device ID.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| kbs_id |ID of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get alert",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/alerts/{{alert_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"alerts",
+						"{{alert_id}}"
+					]
+				},
+				"description": "This rest call retrieve specific Alert by its ID.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| alert_id | ID of the alert |"
+			},
+			"response": []
+		},
+		{
+			"name": "List sessions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id}}/logonusers",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id}}",
+						"logonusers"
+					]
+				},
+				"description": "This rest call list all logged in users on a machine.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id | ID of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "List alerts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/{{input_type}}/{{input_for_alert}}/alerts?$top=1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"{{input_type}}",
+						"{{input_for_alert}}",
+						"alerts"
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "1"
+						}
+					]
+				},
+				"description": "This rest call list all alerts of a given type.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| input_type | Type of input |\n| input_for_alert | Input filter of type Domain, File Hash and IP |"
+			},
+			"response": []
+		},
+		{
+			"name": "Quarantine file",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Comment\": \"Test for postman\",\n    \"Commands\": [\n        {\n            \"type\": \"PutFile\",\n            \"params\": [\n                {\n                    \"key\": \"FileName\",\n                    \"value\": \"logo_agari.svg\"\n                }\n            ]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id_for_file}}/StopAndQuarantineFile",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id_for_file}}",
+						"StopAndQuarantineFile"
+					]
+				},
+				"description": "This rest call Quarantine a file.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id_for_file | ID of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "Put file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Comment\": \"Test from postman\",\n    \"Commands\": [\n        {\n            \"type\": \"PutFile\",\n            \"params\": [\n                {\n                    \"key\": \"FileName\",\n                    \"value\": \"logo_agari.svg\"\n                }\n            ]\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id}}/runliveresponse",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id}}",
+						"runliveresponse"
+					]
+				},
+				"description": "This rest call put a file to a device using live response.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id | ID of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "Quarantine device",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Comment\": \"Test for postman\",\n    \"IsolationType\": \"Full\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id}}/isolate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id}}",
+						"isolate"
+					]
+				},
+				"description": "This rest call quarantine the device.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id | ID of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "Unquarantine device",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Comment\": \"Test for postman\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/machines/{{device_id}}/unisolate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"machines",
+						"{{device_id}}",
+						"unisolate"
+					]
+				},
+				"description": "This rest call unquarantine the device.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| device_id | ID of the device |"
+			},
+			"response": []
+		},
+		{
+			"name": "Update alert",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"status\": \"InProgress\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/alerts/{{alert_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"alerts",
+						"{{alert_id}}"
+					]
+				},
+				"description": "This rest call update properties of existing alert.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| alert_id | ID of the alert |"
+			},
+			"response": []
+		},
+		{
+			"name": "Submit indicator",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"indicatorValue\": \"1.2.3.4\",\n    \"indicatorType\": \"IpAddress\",\n    \"title\": \"Automation Indicator\",\n    \"action\": \"Allowed\",\n    \"description\": \"Automation Indicator\",\n    \"severity\": \"Informational\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/indicators",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"indicators"
+					]
+				},
+				"description": "This rest call submit or update new indicator entity.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| title |Indicator alert title |\n| description | Description of the indicator |\n| indicatorType | Type of the indicator |\n| indicatorValue | Identity of the Indicator entity |\n| action | action will be taken if the indicator will be discovered in the organization |"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete indicator",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/indicators/{{del_indicator_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"indicators",
+						"{{del_indicator_id}}"
+					]
+				},
+				"description": "This rest call delete an Indicator entity by ID.\n\nThe variable and its example value for the action are mentioned below.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| del_indicator_id |Indicator ID to delete |"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		},
+		{
+			"key": "device_id",
+			"value": ""
+		},
+		{
+			"key": "file_id",
+			"value": ""
+		},
+		{
+			"key": "file_device_id",
+			"value": ""
+		},
+		{
+			"key": "event_id",
+			"value": ""
+		},
+		{
+			"key": "file_live_res_id",
+			"value": ""
+		},
+		{
+			"key": "live_script_id",
+			"value": ""
+		},
+		{
+			"key": "kbs_id",
+			"value": ""
+		},
+		{
+			"key": "alert_id",
+			"value": ""
+		},
+		{
+			"key": "del_indicator_id",
+			"value": ""
+		},
+		{
+			"key": "device_id_for_file",
+			"value": ""
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "domain",
+			"value": ""
+		},
+		{
+			"key": "input_type",
+			"value": ""
+		},
+		{
+			"key": "input_for_alert",
+			"value": ""
+		}
+	]
+}
