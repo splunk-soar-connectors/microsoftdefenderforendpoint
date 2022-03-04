@@ -1554,6 +1554,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved file information")
 
+    def _handle_get_domain_related_devices(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_get_related_devices method")
+        return self._handle_get_related_devices(param, action_identifier)
+
     def _handle_get_file_related_devices(self, param):
         action_identifier = self.get_action_identifier()
         self.save_progress("In action handler for {}".format(action_identifier))
@@ -2481,7 +2487,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'delete_indicator': self._handle_delete_indicator,
             'submit_indicator': self._handle_submit_indicator,
             'run_query': self._handle_run_query,
-            'get_domain_related_devices': self._handle_get_related_devices,
+            'get_domain_related_devices': self._handle_get_domain_related_devices,
             'get_discovered_vulnerabilities': self._get_discovered_vulnerabilities,
             'get_exposure_score': self._handle_get_exposure_score,
             'get_secure_score': self._handle_get_secure_score,
