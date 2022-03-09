@@ -1,1 +1,1 @@
-* Updated Django version to address security vulnerability
+* Updated Django version to address security vulnerability [PAPP-23670]
