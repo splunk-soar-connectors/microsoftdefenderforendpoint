@@ -77,42 +77,14 @@
         </ul>
       </p>
 
-    <h2>Configure SIEM Integration on the Microsoft Defender Security Center</h2>
-      <ul>
-        <li>
-          <h3>SIEM Integration Configuration Link</h3>
-            <ul>
-              <li><a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/enable-siem-integration" target="_blank">Configure SIEM Integration</a></li>
-            </ul>
-        </li>
-        <li>
-          <h3>Prerequisites</h3>
-            <ul>
-              <li>The user who activates the setting must have permission to create an app in the Azure Active Directory (AAD).</li>
-              <li>During the initial activation, a pop-up screen is displayed for credentials to be entered. Make sure that you allow pop-ups for this site.</li>
-            </ul>
-        </li>
-        <li>
-          <h3>Steps</h3>
-            <ol>
-              <li>Login to <a href="https://securitycenter.microsoft.com/dashboard" target="_blank">Microsoft Defender Security Center</a>.</li>
-              <li>In the navigation pane, select Settings > APIs (section) > SIEM.</li>
-              <li>Select 'Enable SIEM connector' (this activates the SIEM connector access details section with pre-populated values and an application is created under your Azure Active Directory (AAD) tenant).</li>
-              <li>In the 'Choose the SIEM you want to configure and download details to file' section, select the 'Generic API' option.</li>
-              <li>Copy the individual pre-populated values displayed on the screen or click the 'Save details to file' button to download a file that contains all these values (these details are required to run the test connectivity action).</li>
-              <li> After enabling the SIEM connector on the Microsoft Defender Security Center, the app 'WindowsDefenderATPSiemConnector' will be created on the Microsoft Azure portal.</li>
-            </ol>
-        </li>
-      </ul>
-
     <h2>Configure and set up permissions of the app created on the Microsoft Azure portal</h2>
       <p>
         <ol>
           <li>Navigate to <a href="https://portal.azure.com" target="_blank">https://portal.azure.com</a>.</li>
-          <li>Log in with the same user which was used to enable the SIEM integration on Microsoft Defender Security Center.</li>
+          <li>Log in with a user that has permission to create an app in the Azure Active Directory (AAD).</li>
           <li>Select the 'Azure Active Directory'.</li>
           <li>Select the 'App registrations' menu from the left-side panel.</li>
-          <li>Select the 'WindowsDefenderATPSiemConnector' app.</li>
+          <li>Select the 'WindowsDefenderATP' app.</li>
           <li>Select the 'API Permissions' menu from the left-side panel.</li>
           <li>Click on 'Add a permission'.</li>
           <li>Under the 'Select an API' section, select 'APIs my organization uses'.</li>
