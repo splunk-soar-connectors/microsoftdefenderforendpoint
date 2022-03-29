@@ -79,15 +79,18 @@
 
     <h2>Configure and set up permissions of the app created on the Microsoft Azure portal</h2>
       <p>
-        <ol>
+        <ul>
           <h3>Create the app</h3>
+          <ol>
           <li>Navigate to <a href="https://portal.azure.com" target="_blank">https://portal.azure.com</a>.</li>
           <li>Log in with a user that has permission to create an app in the Azure Active Directory (AAD).</li>
           <li>Select the 'Azure Active Directory'.</li>
           <li>Select the 'App registrations' menu from the left-side panel.</li>
           <li>Select the 'New Registration' option at the top of the page.</li>
           <li>In the registration form, choose a name for your application and then click 'Register'.</li>
+          </ol>
           <h3>Add permissions</h3>
+          <ol>
           <li>Select the 'API Permissions' menu from the left-side panel.</li>
           <li>Click on 'Add a permission'.</li>
           <li>Under the 'Select an API' section, select 'APIs my organization uses'.</li>
@@ -150,15 +153,20 @@
                 </ul>
             </ul>
           </li>
+          </ol>
           <h3>Create a client secret</h3>
+          <ol>
           <li>Select the 'Certificates &amp; secrets' menu from the left-side panel.</li>
           <li>Select 'New client secret' button to open a pop-up window.</li>
           <li>Provide the description, select an appropriate option for deciding the client secret expiration time, and click on the 'Add' button.</li>
           <li>Click 'Copy to clipboard' to copy the generated secret value and paste it in a safe place. You will need it to configure the asset and will not be able to retrieve it later.</li>
+          </ol>
           <h3>Copy your application id and tenant id</h3>
+          <ol>
           <li>Select the 'Overview' menu from the left-side panel.</li>
           <li>Copy the <b>Application (client) ID</b> and <b>Directory (tenant) ID</b>. You will need these to configure the SOAR asset.
-        </ol>
+          </ol>
+        </ul>
       </p>
 
     <h2>Configure the Microsoft Defender ATP SOAR app's asset</h2>
