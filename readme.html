@@ -80,11 +80,14 @@
     <h2>Configure and set up permissions of the app created on the Microsoft Azure portal</h2>
       <p>
         <ol>
+          <h3>Create the app</h3>
           <li>Navigate to <a href="https://portal.azure.com" target="_blank">https://portal.azure.com</a>.</li>
           <li>Log in with a user that has permission to create an app in the Azure Active Directory (AAD).</li>
           <li>Select the 'Azure Active Directory'.</li>
           <li>Select the 'App registrations' menu from the left-side panel.</li>
-          <li>Select the 'WindowsDefenderATP' app.</li>
+          <li>Select the 'New Registration' option at the top of the page.</li>
+          <li>In the registration form, choose a name for your application and then click 'Register'.</li>
+          <h3>Add permissions</h3>
           <li>Select the 'API Permissions' menu from the left-side panel.</li>
           <li>Click on 'Add a permission'.</li>
           <li>Under the 'Select an API' section, select 'APIs my organization uses'.</li>
@@ -93,45 +96,45 @@
             <ul>
               <li><b>Application Permissions</b></li>
                 <ul>
+                  <li>AdvancedQuery.Read.All</li>
                   <li>Alert.ReadWrite.All</li>
                   <li>File.Read.All</li>
+                  <li>Ip.Read.All</li>
                   <li>Machine.Isolate</li>
+                  <li>Machine.LiveResponse</li>
                   <li>Machine.Offboard</li>
                   <li>Machine.Read.All</li>
                   <li>Machine.ReadWrite.All</li>
                   <li>Machine.RestrictExecution</li>
                   <li>Machine.Scan</li>
                   <li>Machine.StopAndQuarantine</li>
-                  <li>User.Read.All</li>
-                  <li>Software.Read.All</li>
-                  <li>URL.Read.All</li>
-                  <li>Ip.Read.All</li>
-                  <li>Ti.ReadWrite.All</li>
-                  <li>AdvancedQuery.Read.All</li>
-                  <li>Vulnerability.Read.All</li>
                   <li>Score.Read.All</li>
-                  <li>Machine.LiveResponse</li>
+                  <li>Software.Read.All</li>
+                  <li>Ti.ReadWrite.All</li>
+                  <li>Url.Read.All</li>
+                  <li>User.Read.All</li>
+                  <li>Vulnerability.Read.All</li>
                 </ul>
               <li><b>Delegated Permissions</b></li>
                 <ul>
                   <li>Alert.ReadWrite</li>
                   <li>File.Read.All</li>
+                  <li>Ip.Read.All</li>
                   <li>Machine.Isolate</li>
+                  <li>Machine.LiveResponse</li>
                   <li>Machine.Offboard</li>
                   <li>Machine.Read</li>
                   <li>Machine.ReadWrite</li>
                   <li>Machine.RestrictExecution</li>
                   <li>Machine.Scan</li>
                   <li>Machine.StopAndQuarantine</li>
-                  <li>User.Read.All</li>
+                  <li>Score.Read</li>
                   <li>Software.Read</li>
-                  <li>URL.Read.All</li>
-                  <li>Ip.Read.All</li>
                   <li>Ti.ReadWrite</li>
+                  <li>Url.Read.All</li>
+                  <li>User.Read.All</li>
                   <li>AdvancedQuery.Read</li>
                   <li>Vulnerability.Read</li>
-                  <li>Score.Read</li>
-                  <li>Machine.LiveResponse</li>
                 </ul>
             </ul>
           </li>
@@ -147,41 +150,36 @@
                 </ul>
             </ul>
           </li>
+          <h3>Create a client secret</h3>
+          <li>Select the 'Certificates &amp; secrets' menu from the left-side panel.</li>
+          <li>Select 'New client secret' button to open a pop-up window.</li>
+          <li>Provide the description, select an appropriate option for deciding the client secret expiration time, and click on the 'Add' button.</li>
+          <li>Click 'Copy to clipboard' to copy the generated secret value and paste it in a safe place. You will need it to configure the asset and will not be able to retrieve it later.</li>
+          <h3>Copy your application id and tenant id</h3>
+          <li>Select the 'Overview' menu from the left-side panel.</li>
+          <li>Copy the <b>Application (client) ID</b> and <b>Directory (tenant) ID</b>. You will need these to configure the SOAR asset.
         </ol>
       </p>
 
-    <h2>Configure the Microsoft Defender ATP Phantom app's asset</h2>
+    <h2>Configure the Microsoft Defender ATP SOAR app's asset</h2>
       <p>
         When creating an asset for the app,
         <ul>
           <li>Check the checkbox if you want to use Non Interactive authentication mechanism otherwise Interactive auth mechanism will be used.</li>
-          <li>Provide the client ID of the app created during the previous step of SIEM Integration in the 'Client ID' field.</li>
-          <li>Provide the client secret of the app created during the previous step of SIEM Integration in the 'Client Secret' field. If the client secret is not generated during the SIEM step, follow the below steps to generate the new client secret.
-            <ul>
-              <li>Navigate to <a href="https://portal.azure.com" target="_blank">https://portal.azure.com</a>.</li>
-              <li>Log in with the same user which was used to enable the SIEM integration on Microsoft Defender Security Center.</li>
-              <li>Select the 'Azure Active Directory'.</li>
-              <li>Select the 'App registrations' menu from the left-side panel.</li>
-              <li>Select the 'WindowsDefenderATPSiemConnector' app.</li>
-              <li>Click on the 'Certificates &amp; secrets' menu on the left-side panel.</li>
-              <li>Click on the 'New client secret' button to open a pop-up window.</li>
-              <li>Provide the description, select an appropriate option for deciding the client secret expiration time, and click on the 'Add' button to open a pop-up window.</li>
-              <li>Please save this client secret string displayed on the pop-up window to some secure place, as it cannot be retrieved after closing the pop-up window.</li>
-              <li>Provide the newly generated client secret string in the 'Client Secret' field of the asset.</li>
-            </ul>
-          </li>
+          <li>Provide the client ID of the app created during the previous step of app creation in the 'Client ID' field.</li>
+          <li>Provide the client secret of the app created during the previous step of app creation in the 'Client Secret' field.</li>
           <li>Provide the tenant ID of the app created during the previous step of SIEM Integration in the 'Tenant ID' field. For getting the value of tenant ID, navigate to the 'Azure Active Directory' on the Microsoft Azure portal; click on the 'App registrations' menu from the left-side panel; click on the earlier created 'WindowsDefenderATPSiemConnector' app. The value displayed in the 'Directory (tenant) ID' is the required tenant ID.</li>
           <li>Save the asset with the above values.</li>
           <li>After saving the asset, a new uneditable field will appear in the 'Asset Settings' tab of the configured asset for the ATP app on Phantom. Copy the URL mentioned in the 'POST incoming for Windows Defender ATP to this location' field. Add a suffix '/result' to the URL copied in the previous step. The resulting URL looks like the one mentioned below.</li>
           <pre>
-            https://&lt;phantom_host&gt;/rest/handler/windowsdefenderatp_&lt;appid&gt;/&lt;asset_name&gt;/result
+            https://&lt;soar_host&gt;/rest/handler/windowsdefenderatp_&lt;appid&gt;/&lt;asset_name&gt;/result
           </pre>
-          <li>Add the URL created in the earlier step into the 'Redirect URIs' section of the 'Authentication' menu for the registered app 'WindowsDefenderATPSiemConnector' on the Microsoft Azure portal. For the 'Redirect URIs' section, follow the below steps.</li>
+          <li>Add the URL created in the earlier step into the 'Redirect URIs' section of the 'Authentication' menu for the registered app that was created in the previous steps on the Microsoft Azure portal. For the 'Redirect URIs' section, follow the below steps.</li>
             <ol>
               <li>Below steps are required only in case of Interactive auth (i.e. If checkbox is unchecked)</li>
               <li>Navigate to the 'Azure Active Directory' on the Microsoft Azure portal.</li>
               <li>Click on the 'App registrations' menu from the left-side panel.</li>
-              <li>Click on the earlier created 'WindowsDefenderATPSiemConnector' app.</li>
+              <li>Click on the earlier created app. You can search for the app by name or client ID.</li>
               <li>Navigate to the 'Authentication' menu of the app on the left-side panel.</li>
               <li>Click on the 'Add a platform' button and select 'Web' from the displayed options.</li>
               <li>Enter the URL created in the earlier section in the 'Redirect URIs' text-box.</li>
