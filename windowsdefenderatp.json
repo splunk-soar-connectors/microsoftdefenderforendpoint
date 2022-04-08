@@ -10,7 +10,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2022 Splunk Inc.",
-    "app_version": "3.5.4",
+    "app_version": "3.6.0",
     "utctime_updated": "2022-01-20T07:17:07.000000Z",
     "package_name": "phantom_windowsdefenderatp",
     "main_module": "windowsdefenderatp_connector.py",
