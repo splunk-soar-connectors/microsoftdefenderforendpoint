@@ -1,1 +1,3 @@
+**Unreleased**
 * Updated Django version to address security vulnerability [PAPP-23670]
+* Updated documentation to address SIEMConnector API deprecation changes [PAPP-24378]
