@@ -748,7 +748,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             _save_app_state(self._state, self.get_asset_id(), self)
 
             self.save_progress(DEFENDERATP_AUTHORIZE_USER_MSG)
-            self.save_progress(url_for_authorize_request)
+            self.save_progress(url_for_authorize_request)  # nosemgrep
 
             # Wait time for authorization
             time.sleep(DEFENDERATP_AUTHORIZE_WAIT_TIME)
