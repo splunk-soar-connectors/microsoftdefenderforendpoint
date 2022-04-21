@@ -1,6 +1,6 @@
 # File: windowsdefenderatp_connector.py
 #
-# Copyright (c) 2019-2021 Splunk Inc.
+# Copyright (c) 2019-2022 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -748,7 +748,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             _save_app_state(self._state, self.get_asset_id(), self)
 
             self.save_progress(DEFENDERATP_AUTHORIZE_USER_MSG)
-            self.save_progress(url_for_authorize_request)
+            self.save_progress(url_for_authorize_request)  # nosemgrep
 
             # Wait time for authorization
             time.sleep(DEFENDERATP_AUTHORIZE_WAIT_TIME)
@@ -1447,14 +1447,31 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_prevalence(self, param):
+    def _handle_ip_prevalence(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_prevalence method")
+        return self._handle_prevalence(param, action_identifier)
+
+    def _handle_domain_prevalence(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_prevalence method")
+        return self._handle_prevalence(param, action_identifier)
+
+    def _handle_file_prevalence(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_prevalence method")
+        return self._handle_prevalence(param, action_identifier)
+
+    def _handle_prevalence(self, param, action_identifier):
         """ This function is used to handle the IP, Domain & File Prevalence action.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        action_identifier = self.get_action_identifier()
         self.save_progress("In action handler for: {0}".format(action_identifier))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
@@ -1537,7 +1554,25 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved file information")
 
-    def _handle_get_related_devices(self, param):
+    def _handle_get_domain_related_devices(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_get_related_devices method")
+        return self._handle_get_related_devices(param, action_identifier)
+
+    def _handle_get_file_related_devices(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_get_related_devices method")
+        return self._handle_get_related_devices(param, action_identifier)
+
+    def _handle_get_user_related_devices(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_get_related_devices method")
+        return self._handle_get_related_devices(param, action_identifier)
+
+    def _handle_get_related_devices(self, param, action_identifier):
         """ This function is used to handle the get file related devices, get user related devices and get domain related devices action.
 
         :param param: Dictionary of input parameters
@@ -1547,7 +1582,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        action_identifier = self.get_action_identifier()
         if action_identifier == "get_file_related_devices":
             file_hash = param[DEFENDERATP_JSON_FILE_HASH]
             endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_MACHINE_FILES_ENDPOINT
@@ -1614,7 +1648,19 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_app_execution(self, param):
+    def _handle_restrict_app_execution(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_app_execution method")
+        return self._handle_app_execution(param, action_identifier)
+
+    def _handle_remove_app_restriction(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_app_execution method")
+        return self._handle_app_execution(param, action_identifier)
+
+    def _handle_app_execution(self, param, action_identifier):
         """ This function is used to handle the restrict app execution and remove app restriction action.
 
         :param param: Dictionary of input parameters
@@ -1635,7 +1681,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if timeout > DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT:
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
-        action_identifier = self.get_action_identifier()
         if action_identifier == "restrict_app_execution":
             endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL,
                                          DEFENDERATP_RESTRICT_APP_EXECUTION_ENDPOINT.format(device_id=device_id))
@@ -1936,14 +1981,25 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_get_score(self, param):
+    def _handle_get_exposure_score(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_get_score method")
+        return self._handle_get_score(param, action_identifier)
+
+    def _handle_get_secure_score(self, param):
+        action_identifier = self.get_action_identifier()
+        self.save_progress("In action handler for {}".format(action_identifier))
+        self.debug_print("Calling _handle_get_score method")
+        return self._handle_get_score(param, action_identifier)
+
+    def _handle_get_score(self, param, action_identifier):
         """ This function is used to handle the get exposure score and get secure score action.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        action_identifier = self.get_action_identifier()
         self.save_progress("In action handler for {}".format(action_identifier))
 
         action_result = self.add_action_result(ActionResult(dict(param)))
@@ -2418,23 +2474,23 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'list_sessions': self._handle_list_sessions,
             'get_alert': self._handle_get_alert,
             'update_alert': self._handle_update_alert,
-            'ip_prevalence': self._handle_prevalence,
-            'domain_prevalence': self._handle_prevalence,
-            'file_prevalence': self._handle_prevalence,
+            'ip_prevalence': self._handle_ip_prevalence,
+            'domain_prevalence': self._handle_domain_prevalence,
+            'file_prevalence': self._handle_file_prevalence,
             'get_file_info': self._handle_get_file_info,
-            'get_file_related_devices': self._handle_get_related_devices,
-            'get_user_related_devices': self._handle_get_related_devices,
+            'get_file_related_devices': self._handle_get_file_related_devices,
+            'get_user_related_devices': self._handle_get_user_related_devices,
             'get_installed_software': self._handle_get_installed_software,
-            'restrict_app_execution': self._handle_app_execution,
-            'remove_app_restriction': self._handle_app_execution,
+            'restrict_app_execution': self._handle_restrict_app_execution,
+            'remove_app_restriction': self._handle_remove_app_restriction,
             'list_indicators': self._handle_list_indicators,
             'delete_indicator': self._handle_delete_indicator,
             'submit_indicator': self._handle_submit_indicator,
             'run_query': self._handle_run_query,
-            'get_domain_related_devices': self._handle_get_related_devices,
+            'get_domain_related_devices': self._handle_get_domain_related_devices,
             'get_discovered_vulnerabilities': self._get_discovered_vulnerabilities,
-            'get_exposure_score': self._handle_get_score,
-            'get_secure_score': self._handle_get_score,
+            'get_exposure_score': self._handle_get_exposure_score,
+            'get_secure_score': self._handle_get_secure_score,
             'get_file_live_response': self._handle_get_file_live_response,
             'put_file_live_response': self._handle_put_file_live_response,
             'run_script_live_response': self._handle_run_script_live_response,

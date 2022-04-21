@@ -1,6 +1,6 @@
 # File: windowsdefenderatp_consts.py
 #
-# Copyright (c) 2019-2021 Splunk Inc.
+# Copyright (c) 2019-2022 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ DEFENDERATP_PARAM_VALIDATION_FAILED_MSG = 'Parameter validation failed. Invalid 
 DEFENDERATP_INPUT_REQUIRED_MSG = 'Input is required for the given type'
 DEFENDERATP_CONFIG_TENANT_ID = 'tenant_id'
 DEFENDERATP_CONFIG_CLIENT_ID = 'client_id'
-DEFENDERATP_CONFIG_CLIENT_SECRET = 'client_secret'
+DEFENDERATP_CONFIG_CLIENT_SECRET = 'client_secret'  # pragma: allowlist secret
 DEFENDERATP_ALL_CONST = 'All'
 DEFENDERATP_IP_CONST = 'IP'
 DEFENDERATP_DOMAIN_CONST = 'Domain'

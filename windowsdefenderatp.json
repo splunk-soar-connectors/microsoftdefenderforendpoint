@@ -9,17 +9,17 @@
     "product_name": "Windows Defender ATP",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2019-2021 Splunk Inc.",
-    "app_version": "3.5.2",
-    "utctime_updated": "2021-12-28T13:13:35.000000Z",
+    "license": "Copyright (c) 2019-2022 Splunk Inc.",
+    "app_version": "3.6.0",
+    "utctime_updated": "2022-01-20T07:17:07.000000Z",
     "package_name": "phantom_windowsdefenderatp",
     "main_module": "windowsdefenderatp_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "5.0.0",
+    "min_phantom_version": "5.2.0",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
-        "Cloud November 2020 Release"
+        "Cloud April 11, 2022"
     ],
     "contributors": [
         {
@@ -7442,51 +7442,99 @@
         "wheel": [
             {
                 "module": "Django",
-                "input_file": "wheels/Django-3.2.5-py3-none-any.whl"
+                "input_file": "wheels/py3/Django-3.2.13-py3-none-any.whl"
             },
             {
                 "module": "asgiref",
-                "input_file": "wheels/asgiref-3.4.1-py3-none-any.whl"
+                "input_file": "wheels/py3/asgiref-3.4.1-py3-none-any.whl"
             },
             {
                 "module": "beautifulsoup4",
-                "input_file": "wheels/beautifulsoup4-4.9.1-py3-none-any.whl"
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/certifi-2021.10.8-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/certifi-2021.10.8-py2.py3-none-any.whl"
             },
             {
                 "module": "chardet",
-                "input_file": "wheels/chardet-3.0.4-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
             },
             {
                 "module": "idna",
-                "input_file": "wheels/idna-2.10-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/pytz-2021.3-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2022.1-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
-                "input_file": "wheels/requests-2.25.0-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
             },
             {
                 "module": "soupsieve",
-                "input_file": "wheels/soupsieve-2.3-py3-none-any.whl"
+                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
             },
             {
                 "module": "sqlparse",
-                "input_file": "wheels/sqlparse-0.4.2-py3-none-any.whl"
+                "input_file": "wheels/py3/sqlparse-0.4.2-py3-none-any.whl"
             },
             {
                 "module": "typing_extensions",
-                "input_file": "wheels/typing_extensions-3.10.0.2-py3-none-any.whl"
+                "input_file": "wheels/py3/typing_extensions-4.1.1-py3-none-any.whl"
             },
             {
                 "module": "urllib3",
-                "input_file": "wheels/urllib3-1.26.7-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/urllib3-1.26.9-py2.py3-none-any.whl"
+            }
+        ]
+    },
+    "pip39_dependencies": {
+        "wheel": [
+            {
+                "module": "Django",
+                "input_file": "wheels/py3/Django-3.2.13-py3-none-any.whl"
+            },
+            {
+                "module": "asgiref",
+                "input_file": "wheels/py3/asgiref-3.5.0-py3-none-any.whl"
+            },
+            {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
+            },
+            {
+                "module": "certifi",
+                "input_file": "wheels/shared/certifi-2021.10.8-py2.py3-none-any.whl"
+            },
+            {
+                "module": "chardet",
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
+            },
+            {
+                "module": "pytz",
+                "input_file": "wheels/shared/pytz-2022.1-py2.py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
+            },
+            {
+                "module": "sqlparse",
+                "input_file": "wheels/py3/sqlparse-0.4.2-py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/shared/urllib3-1.26.9-py2.py3-none-any.whl"
             }
         ]
     }
