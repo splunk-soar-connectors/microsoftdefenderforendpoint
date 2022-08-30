@@ -249,7 +249,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         self._access_token = None
         self._refresh_token = None
         self._client_secret = None
+        self._environment = None
         self._non_interactive = None
+        self._graph_url = None
+        self._login_url = None
+        self._resource_url = None
 
     def _process_empty_response(self, response, action_result):
         """ This function is used to process empty response.
@@ -480,14 +484,14 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 'grant_type': DEFENDERATP_REFRESH_TOKEN_STRING,
                 'refresh_token': self._refresh_token,
                 'client_secret': self._client_secret,
-                'resource': DEFENDERATP_RESOURCE_URL
+                'resource': self._resource_url
             }
         else:
             token_data = {
                 'client_id': self._client_id,
                 'grant_type': DEFENDERATP_CLIENT_CREDENTIALS_STRING,
                 'client_secret': self._client_secret,
-                'resource': DEFENDERATP_RESOURCE_URL
+                'resource': self._resource_url
             }
 
         if not self._access_token:
@@ -637,7 +641,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status phantom.APP_ERROR/phantom.APP_SUCCESS
         """
 
-        req_url = '{}{}'.format(DEFENDERATP_LOGIN_BASE_URL, DEFENDERATP_SERVER_TOKEN_URL.format(tenant_id=quote(self._tenant)))
+        req_url = '{}{}'.format(self._login_url, DEFENDERATP_SERVER_TOKEN_URL.format(tenant_id=quote(self._tenant)))
 
         ret_val, resp_json = self._make_rest_call(action_result=action_result, endpoint=req_url,
                                                   data=urlencode(data), method="post")
@@ -718,6 +722,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress(DEFENDERATP_MAKING_CONNECTION_MSG)
 
+        self.save_progress(f"Login URL: {self._login_url}")
+        self.save_progress(f"Graph URL: {self._graph_url}")
+        self.save_progress(f"Resource URL: {self._resource_url}")
+
         if not self._state:
             self._state = {}
 
@@ -738,8 +746,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             # Authorization URL used to make request for getting code which is used to generate access token
             authorization_url = DEFENDERATP_AUTHORIZE_URL.format(tenant_id=quote(self._tenant), client_id=quote(self._client_id),
                                                                 redirect_uri=redirect_uri, state=self.get_asset_id(),
-                                                                response_type='code', resource=DEFENDERATP_RESOURCE_URL)
-            authorization_url = '{}{}'.format(DEFENDERATP_LOGIN_BASE_URL, authorization_url)
+                                                                response_type='code', resource=self._resource_url)
+            authorization_url = '{}{}'.format(self._login_url, authorization_url)
 
             self._state['authorization_url'] = authorization_url
 
@@ -787,7 +795,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 'grant_type': 'authorization_code',
                 'redirect_uri': redirect_uri,
                 'code': current_code,
-                'resource': DEFENDERATP_RESOURCE_URL,
+                'resource': self._resource_url,
                 'client_secret': self._client_secret
             }
         else:
@@ -795,7 +803,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 'client_id': self._client_id,
                 'grant_type': DEFENDERATP_CLIENT_CREDENTIALS_STRING,
                 'client_secret': self._client_secret,
-                'resource': DEFENDERATP_RESOURCE_URL
+                'resource': self._resource_url
             }
         # for first time access, new access token is generated
         ret_val = self._generate_new_access_token(action_result=action_result, data=data)
@@ -807,7 +815,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         self.save_progress(DEFENDERATP_ALERTS_INFO_MSG)
 
-        url = '{}{}'.format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_ALERTS_ENDPOINT)
+        url = '{}{}'.format(self._graph_url, DEFENDERATP_ALERTS_ENDPOINT)
         params = {
             '$top': 1
         }
@@ -829,7 +837,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :param timeout: timeout period for status check
         :return: status (success/failed), response
         """
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_MACHINEACTIONS_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINEACTIONS_ENDPOINT
                                    .format(action_id=action_id))
 
         if timeout < 5:
@@ -879,7 +887,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if timeout > DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT:
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_ISOLATE_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ISOLATE_ENDPOINT
                                    .format(device_id=device_id))
 
         data = {
@@ -931,7 +939,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if timeout > DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT:
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_UNISOLATE_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_UNISOLATE_ENDPOINT
                                    .format(device_id=device_id))
 
         data = {
@@ -973,7 +981,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         event_id = param[DEFENDERATP_EVENT_ID]
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_MACHINEACTIONS_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINEACTIONS_ENDPOINT
                                    .format(action_id=event_id))
 
         # make rest call
@@ -1020,7 +1028,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         endpoint = DEFENDERATP_SCAN_DEVICE_ENDPOINT.format(device_id=device_id)
 
-        url = '{0}{1}'.format(DEFENDERATP_MSGRAPH_API_BASE_URL, endpoint)
+        url = '{0}{1}'.format(self._graph_url, endpoint)
 
         request_data = {
             "Comment": comment,
@@ -1072,7 +1080,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if timeout > DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT:
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_FILE_QUARANTINE_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_FILE_QUARANTINE_ENDPOINT
                                    .format(device_id=device_id))
 
         data = {
@@ -1116,7 +1124,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         file_hash = param[DEFENDERATP_JSON_FILE_HASH]
         comment = param[DEFENDERATP_JSON_COMMENT]
 
-        endpoint = '{0}{1}'.format(DEFENDERATP_MSGRAPH_API_BASE_URL,
+        endpoint = '{0}{1}'.format(self._graph_url,
                                    DEFENDERATP_UNBLOCK_HASH_ENDPOINT.format(file_hash=file_hash))
 
         request_data = {
@@ -1145,7 +1153,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         file_hash = param[DEFENDERATP_JSON_FILE_HASH]
         comment = param[DEFENDERATP_JSON_COMMENT]
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_FILE_BLOCK_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_FILE_BLOCK_ENDPOINT
                                    .format(file_hash=file_hash))
 
         data = {
@@ -1221,7 +1229,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     self.debug_print("Validation for the valid sha1, sha256, and md5 hash returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
 
-        url = "{0}{1}?$top={2}&{3}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, endpoint, limit, query)
+        url = "{0}{1}?$top={2}&{3}".format(self._graph_url, endpoint, limit, query)
 
         # make rest call
         ret_val, response = self._update_request(endpoint=url, action_result=action_result)
@@ -1310,7 +1318,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     self.debug_print("Validation for the valid sha1, sha256, and md5 hash returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
 
-        url = "{0}{1}?$top={2}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, endpoint, limit)
+        url = "{0}{1}?$top={2}".format(self._graph_url, endpoint, limit)
 
         # make rest call
         ret_val, response = self._update_request(endpoint=url, action_result=action_result)
@@ -1344,7 +1352,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         alert_id = param[DEFENDERATP_ALERT_ID]
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_ALERTS_ID_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT
                                    .format(input=alert_id))
 
         # make rest call
@@ -1397,7 +1405,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if comment:
             request_body["comment"] = comment
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_ALERTS_ID_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT
                                    .format(input=alert_id))
 
         # make rest call
@@ -1428,7 +1436,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_SESSIONS_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_SESSIONS_ENDPOINT
                                    .format(device_id=device_id))
 
         # make rest call
@@ -1499,7 +1507,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_LOOK_BACK_HOURS)
 
         # URL
-        url = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, endpoint)
+        url = "{0}{1}".format(self._graph_url, endpoint)
 
         # Prepare request params
         params = {
@@ -1532,7 +1540,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         file_hash = param[DEFENDERATP_JSON_FILE_HASH]
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_FILE_INFO_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_FILE_INFO_ENDPOINT
                                    .format(file_hash=file_hash))
 
         # make rest call
@@ -1584,17 +1592,17 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         if action_identifier == "get_file_related_devices":
             file_hash = param[DEFENDERATP_JSON_FILE_HASH]
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_MACHINE_FILES_ENDPOINT
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINE_FILES_ENDPOINT
                                    .format(file_hash=file_hash))
 
         elif action_identifier == "get_domain_related_devices":
             domain = param[DEFENDERATP_DOMAIN_PARAM_CONST]
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_DOMAIN_MACHINES_ENDPOINT
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_DOMAIN_MACHINES_ENDPOINT
                                    .format(input=domain))
 
         elif action_identifier == "get_user_related_devices":
             user_id = param[DEFENDERATP_JSON_USER_ID]
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_USER_FILES_ENDPOINT
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_USER_FILES_ENDPOINT
                                    .format(file_hash=user_id))
 
         else:
@@ -1628,7 +1636,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_INSTALLED_SOFTWARE_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_INSTALLED_SOFTWARE_ENDPOINT
                                    .format(device_id=device_id))
 
         # make rest call
@@ -1682,12 +1690,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
         if action_identifier == "restrict_app_execution":
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL,
+            endpoint = "{0}{1}".format(self._graph_url,
                                          DEFENDERATP_RESTRICT_APP_EXECUTION_ENDPOINT.format(device_id=device_id))
             app_restriction_summary = 'restrict_app_execution_status'
 
         elif action_identifier == "remove_app_restriction":
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL,
+            endpoint = "{0}{1}".format(self._graph_url,
                                          DEFENDERATP_REMOVE_APP_RESTRICTION_ENDPOINT.format(device_id=device_id))
             app_restriction_summary = 'remove_app_restriction_status'
 
@@ -1745,7 +1753,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if filter:
             endpoint = "{}&$filter={}".format(endpoint, filter.replace("&", "%26"))
 
-        url = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, endpoint)
+        url = "{0}{1}".format(self._graph_url, endpoint)
 
         # make rest call
         ret_val, response = self._update_request(endpoint=url, action_result=action_result)
@@ -1778,7 +1786,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         indicator_id = param[DEFENDERATP_JSON_INDICATOR_ID]
-        endpoint = "{0}{1}/{2}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_LIST_INDICATORS_ENDPOINT, indicator_id)
+        endpoint = "{0}{1}/{2}".format(self._graph_url, DEFENDERATP_LIST_INDICATORS_ENDPOINT, indicator_id)
 
         # make rest call
         ret_val, _ = self._update_request(endpoint=endpoint, action_result=action_result, method="delete")
@@ -1889,7 +1897,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if severity:
             data.update({"severity": severity})
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_LIST_INDICATORS_ENDPOINT)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIST_INDICATORS_ENDPOINT)
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, data=json.dumps(data), method="post")
@@ -1928,7 +1936,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "Query": query
         }
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_RUN_QUERY_ENDPOINT)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_RUN_QUERY_ENDPOINT)
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, data=json.dumps(data), method="post")
@@ -1961,7 +1969,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL,
+        endpoint = "{0}{1}".format(self._graph_url,
                                      DEFENDERATP_VULNERABILITIES_ENDPOINT.format(device_id=device_id))
 
         # make rest call
@@ -2005,11 +2013,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         if action_identifier == "get_exposure_score":
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_EXPOSURE_ENDPOINT)
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_EXPOSURE_ENDPOINT)
             action_score_summary_key = 'exposure_score'
 
         elif action_identifier == "get_secure_score":
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_SECURE_ENDPOINT)
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_SECURE_ENDPOINT)
             action_score_summary_key = 'secure_score'
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -2077,7 +2085,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
     def _get_live_response_result(self, action_id, action_result):
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL,
+        endpoint = "{0}{1}".format(self._graph_url,
                                      DEFENDERATP_LIVE_RESPONSE_RESULT_ENDPOINT.format(action_id=action_id))
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -2093,7 +2101,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
     def _validate_event_id(self, event_id, command, action_result, summary):
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_MACHINEACTIONS_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINEACTIONS_ENDPOINT
                                 .format(action_id=event_id))
 
         # make rest call
@@ -2160,7 +2168,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 summary['file_status'] = action_result.get_message()
                 return action_result.set_status(phantom.APP_ERROR)
 
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_LIVE_RESPONSE_ENDPOINT
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIVE_RESPONSE_ENDPOINT
                                         .format(device_id=device_id))
 
             data = {
@@ -2260,7 +2268,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_LIVE_RESPONSE_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIVE_RESPONSE_ENDPOINT
                                    .format(device_id=device_id))
 
         data = {
@@ -2350,7 +2358,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             if timeout > DEFENDERATP_RUN_SCRIPT_MAX_LIMIT:
                 timeout = DEFENDERATP_RUN_SCRIPT_MAX_LIMIT
 
-            endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_LIVE_RESPONSE_ENDPOINT
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIVE_RESPONSE_ENDPOINT
                                     .format(device_id=device_id))
 
             data = {
@@ -2434,7 +2442,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
-        endpoint = "{0}{1}".format(DEFENDERATP_MSGRAPH_API_BASE_URL, DEFENDERATP_MISSING_KBS_ENDPOINT
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MISSING_KBS_ENDPOINT
                                    .format(device_id=device_id))
 
         # make rest call
@@ -2530,6 +2538,22 @@ class WindowsDefenderAtpConnector(BaseConnector):
         self._tenant = config[DEFENDERATP_CONFIG_TENANT_ID]
         self._client_id = config[DEFENDERATP_CONFIG_CLIENT_ID]
         self._client_secret = config[DEFENDERATP_CONFIG_CLIENT_SECRET]
+        self._environment = config[DEFENDERATP_CONFIG_ENVIRONMENT]
+
+        self._login_url = DEFENDERATP_LOGIN_BASE_URL
+        self._resource_url = DEFENDERATP_RESOURCE_URL
+        self._graph_url = DEFENDERATP_MSGRAPH_API_BASE_URL
+
+        if self._environment == "GCC":
+            self._login_url = DEFENDERATP_LOGIN_GCC_BASE_URL
+            self._resource_url = DEFENDERATP_RESOURCE_GCC_URL
+            self._graph_url = DEFENDERATP_MSGRAPH_API_GCC_BASE_URL
+
+        elif self._environment == "GCC High":
+            self._login_url = DEFENDERATP_LOGIN_GCC_HIGH_BASE_URL
+            self._resource_url = DEFENDERATP_RESOURCE_GCC_HIGH_URL
+            self._graph_url = DEFENDERATP_MSGRAPH_API_GCC_HIGH_BASE_URL
+
 
         try:
             self._access_token = self._state.get(DEFENDERATP_TOKEN_STRING, {}).get(DEFENDERATP_ACCESS_TOKEN_STRING)

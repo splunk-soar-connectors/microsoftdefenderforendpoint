@@ -16,11 +16,21 @@ DEFENDERATP_PHANTOM_BASE_URL = '{phantom_base_url}rest'
 DEFENDERATP_PHANTOM_SYS_INFO_URL = '/system_info'
 DEFENDERATP_PHANTOM_ASSET_INFO_URL = '/asset/{asset_id}'
 DEFENDERATP_LOGIN_BASE_URL = 'https://login.microsoftonline.com'
+DEFENDERATP_LOGIN_GCC_BASE_URL = 'https://login.microsoftonline.com'
+DEFENDERATP_LOGIN_GCC_HIGH_BASE_URL = 'https://login.microsoftonline.us'
+
 DEFENDERATP_SERVER_TOKEN_URL = '/{tenant_id}/oauth2/token'
 DEFENDERATP_AUTHORIZE_URL = '/{tenant_id}/oauth2/authorize?client_id={client_id}&redirect_uri={redirect_uri}' \
                             '&response_type={response_type}&state={state}&resource={resource}'
 DEFENDERATP_RESOURCE_URL = 'https://api.securitycenter.windows.com'
+
+DEFENDERATP_RESOURCE_GCC_URL = 'https://api-gcc.securitycenter.microsoft.us'
+DEFENDERATP_RESOURCE_GCC_HIGH_URL = 'https://api-gov.securitycenter.microsoft.us'
+
 DEFENDERATP_MSGRAPH_API_BASE_URL = 'https://api.securitycenter.windows.com/api'
+DEFENDERATP_MSGRAPH_API_GCC_BASE_URL = 'https://api-gcc.securitycenter.microsoft.us/api'
+DEFENDERATP_MSGRAPH_API_GCC_HIGH_BASE_URL = 'https://api-gov.securitycenter.microsoft.us/api'
+
 DEFENDERATP_MACHINES_ENDPOINT = '/machines'
 DEFENDERATP_DOMAIN_MACHINES_ENDPOINT = '/domains/{input}/machines'
 DEFENDERATP_FILE_MACHINES_ENDPOINT = '/files/{input}/machines'
@@ -80,6 +90,7 @@ DEFENDERATP_INPUT_REQUIRED_MSG = 'Input is required for the given type'
 DEFENDERATP_CONFIG_TENANT_ID = 'tenant_id'
 DEFENDERATP_CONFIG_CLIENT_ID = 'client_id'
 DEFENDERATP_CONFIG_CLIENT_SECRET = 'client_secret'  # pragma: allowlist secret
+DEFENDERATP_CONFIG_ENVIRONMENT = 'environment'
 DEFENDERATP_ALL_CONST = 'All'
 DEFENDERATP_IP_CONST = 'IP'
 DEFENDERATP_DOMAIN_CONST = 'Domain'

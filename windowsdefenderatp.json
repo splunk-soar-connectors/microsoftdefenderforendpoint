@@ -55,6 +55,13 @@
             "data_type": "boolean",
             "default": false,
             "order": 4
+        },
+        "environment": {
+            "description": "Azure environment to connect to",
+            "data_type": "string",
+            "default": "Public",
+            "value_list": ["Public", "GCC", "GCC High"],
+            "order": 5
         }
     },
     "actions": [
