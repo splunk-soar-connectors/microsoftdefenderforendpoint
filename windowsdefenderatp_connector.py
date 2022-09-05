@@ -98,7 +98,7 @@ def _load_app_state(asset_id, app_connector=None):
             state = json.loads(state_file_data)
     except Exception as e:
         if app_connector:
-            app_connector.debug_print('In _load_app_state: Exception: {0}'.format(str(e)))
+            app_connector.error_print('In _load_app_state: Exception: {0}'.format(str(e)))
 
     if app_connector:
         app_connector.debug_print('Loaded state: ', state)
@@ -438,7 +438,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             else:
                 error_text = "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)
         except Exception:
-            self.debug_print("Error occurred while parsing error message")
+            self.error_print("Error occurred while parsing error message")
             error_text = PARSE_ERR_MSG
 
         return error_text
@@ -555,14 +555,16 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)), resp_json)
 
         try:
+            raise Exception("The make exception is working")
             response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
+            
         except Exception as e:
             try:
-                self.debug_print("make_rest_call exception...")
-                self.debug_print("Exception Message - {}".format(e))
-                self.debug_print("make_rest_call exception ends...")
+                self.error_print("make_rest_call exception...")
+                self.error_print("Exception Message - {}".format(e))
+                self.error_print("make_rest_call exception ends...")
             except Exception:
-                self.debug_print("Error occurred while logging the make_rest_call exception message")
+                self.error_print("Error occurred while logging the make_rest_call exception message")
 
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}"
                                                    .format(self._get_error_message_from_exception(e))), resp_json)
@@ -1213,7 +1215,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                                                         .format(DEFENDERATP_DOMAIN_CONST))
                 except Exception:
                     endpoint = DEFENDERATP_DOMAIN_MACHINES_ENDPOINT.format(input=input)
-                    self.debug_print("Validation for the valid domain returned an exception."
+                    self.error_print("Validation for the valid domain returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
 
             # Check for valid File hash
@@ -1226,7 +1228,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                                                         .format(DEFENDERATP_FILE_HASH_CONST))
                 except Exception:
                     endpoint = DEFENDERATP_FILE_MACHINES_ENDPOINT.format(input=input)
-                    self.debug_print("Validation for the valid sha1, sha256, and md5 hash returned an exception."
+                    self.error_print("Validation for the valid sha1, sha256, and md5 hash returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
 
         url = "{0}{1}?$top={2}&{3}".format(self._graph_url, endpoint, limit, query)
@@ -1302,7 +1304,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                                                         .format(DEFENDERATP_DOMAIN_CONST))
                 except Exception:
                     endpoint = DEFENDERATP_DOMAIN_ALERTS_ENDPOINT.format(input=input)
-                    self.debug_print("Validation for the valid domain returned an exception."
+                    self.error_print("Validation for the valid domain returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
 
             # Check for valid File hash
@@ -1315,7 +1317,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                                                         .format(DEFENDERATP_FILE_HASH_CONST))
                 except Exception:
                     endpoint = DEFENDERATP_FILE_ALERTS_ENDPOINT.format(input=input)
-                    self.debug_print("Validation for the valid sha1, sha256, and md5 hash returned an exception."
+                    self.error_print("Validation for the valid sha1, sha256, and md5 hash returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
 
         url = "{0}{1}?$top={2}".format(self._graph_url, endpoint, limit)
@@ -1810,7 +1812,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             # Check for the time is in valid format or not
             time = datetime.strptime(date, DEFENDERATP_DATE_FORMAT)
         except Exception as e:
-            self.debug_print(f"Invalid date string received. Error occurred while checking date format. Error: {str(e)}")
+            self.error_print(f"Invalid date string received. Error occurred while checking date format. Error: {str(e)}")
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_TIME_ERR.format("expiration time")), None
 
         # Checking for future date
@@ -1862,7 +1864,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 if not isinstance(rbac_group_names_list, list):
                     return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_LIST_JSON_ERR.format("rbac_group_names"))
             except Exception as e:
-                self.debug_print("Exception occurred while checking rbac_group_names: {}".format(self._get_error_message_from_exception(e)))
+                self.error_print("Exception occurred while checking rbac_group_names: {}".format(self._get_error_message_from_exception(e)))
                 return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_LIST_JSON_ERR.format("rbac_group_names"))
             # Remove empty values from the list
             rbac_group_names_list = list(filter(None, rbac_group_names_list))
