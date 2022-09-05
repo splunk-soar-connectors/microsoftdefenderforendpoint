@@ -2554,7 +2554,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
             self._resource_url = DEFENDERATP_RESOURCE_GCC_HIGH_URL
             self._graph_url = DEFENDERATP_MSGRAPH_API_GCC_HIGH_BASE_URL
 
-
         try:
             self._access_token = self._state.get(DEFENDERATP_TOKEN_STRING, {}).get(DEFENDERATP_ACCESS_TOKEN_STRING)
             if not self._non_interactive:
