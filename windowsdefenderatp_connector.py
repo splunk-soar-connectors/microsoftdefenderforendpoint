@@ -555,9 +555,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)), resp_json)
 
         try:
-            raise Exception("The make exception is working")
             response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
-            
+
         except Exception as e:
             try:
                 self.error_print("make_rest_call exception...")
