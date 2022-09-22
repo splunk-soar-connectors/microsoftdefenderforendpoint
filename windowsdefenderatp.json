@@ -16,7 +16,7 @@
     "main_module": "windowsdefenderatp_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "5.3.0",
+    "min_phantom_version": "5.3.3",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
         "Cloud April 11, 2022"
@@ -61,7 +61,11 @@
             "data_type": "string",
             "required": true,
             "default": "Public",
-            "value_list": ["Public", "GCC", "GCC High"],
+            "value_list": [
+                "Public",
+                "GCC",
+                "GCC High"
+            ],
             "order": 5
         }
     },

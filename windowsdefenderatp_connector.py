@@ -35,6 +35,7 @@ except Exception:
 import grp
 import ipaddress
 import pwd
+import encryption_helper
 from datetime import datetime
 
 import phantom.app as phantom
@@ -255,6 +256,89 @@ class WindowsDefenderAtpConnector(BaseConnector):
         self._login_url = None
         self._resource_url = None
 
+    def decrypt_state(self, state, salt):
+        """
+        Decrypts the state.
+
+        :param state: state dictionary
+        :param salt: salt used for decryption
+        :return: decrypted state
+        """
+        if not state.get("is_encrypted"):
+            return state
+
+        access_token = state.get("token", {}).get("access_token")
+        if access_token:
+            state["token"]["access_token"] = encryption_helper.decrypt(access_token, salt)
+
+        refresh_token = state.get("token", {}).get("refresh_token")
+        if refresh_token:
+            state["token"]["refresh_token"] = encryption_helper.decrypt(refresh_token, salt)
+
+        code = state.get("code")
+        if code:
+            state["code"] = encryption_helper.decrypt(code, salt)
+
+        return state
+
+    def encrypt_state(self, state, salt):
+        """
+        Encrypts the state.
+
+        :param state: state dictionary
+        :param salt: salt used for encryption
+        :return: encrypted state
+        """
+
+        access_token = state.get("token", {}).get("access_token")
+        if access_token:
+            state["token"]["access_token"] = encryption_helper.encrypt(access_token, salt)
+
+        refresh_token = state.get("token", {}).get("refresh_token")
+        if refresh_token:
+            state["token"]["refresh_token"] = encryption_helper.encrypt(refresh_token, salt)
+
+        code = state.get("code")
+        if code:
+            state["code"] = encryption_helper.encrypt(code, salt)
+
+        state["is_encrypted"] = True
+
+        return state
+
+    def load_state(self):
+        """
+        Load the contents of the state file to the state dictionary and decrypt it.
+
+        :return: loaded state
+        """
+        state = super().load_state()
+        try:
+            state = self.decrypt_state(state, self.get_asset_id())
+        except Exception as e:
+            self._dump_error_log(e, "Error while loading state file.")
+            state = None
+
+        return state
+
+    def save_state(self, state):
+        """
+        Encrypt and save the current state dictionary to the the state file.
+
+        :param state: state dictionary
+        :return: status
+        """
+        try:
+            state = self.encrypt_state(state, self.get_asset_id())
+        except Exception as e:
+            self._dump_error_log(e, "Error While saving state file.")
+            return phantom.APP_ERROR
+
+        return super().save_state(state)
+
+    def _dump_error_log(self, error, message="Exception occurred."):
+        self.error_print(message, dump_object=error)
+
     def _process_empty_response(self, response, action_result):
         """ This function is used to process empty response.
 
@@ -289,7 +373,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             split_lines = error_text.split('\n')
             split_lines = [x.strip() for x in split_lines if x.strip()]
             error_text = '\n'.join(split_lines)
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error while processing HTML response.")
             error_text = "Cannot parse error details"
 
         if not error_text:
@@ -313,6 +398,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             # Process a json response
             resp_json = response.json()
         except Exception as e:
+            self._dump_error_log(e, "Error while processing JSON response.")
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}"
                                                    .format(self._get_error_message_from_exception(e))), None)
 
@@ -394,7 +480,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     return action_result.set_status(phantom.APP_ERROR, VALID_INTEGER_MSG.format(key)), None
 
                 parameter = int(parameter)
-            except Exception:
+            except Exception as e:
+                self._dump_error_log(e, "Error while validating integer parameter")
                 return action_result.set_status(phantom.APP_ERROR, VALID_INTEGER_MSG.format(key)), None
 
             # Negative value validation
@@ -416,7 +503,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         # Defining default values
         error_code = ERR_CODE_MSG
         error_msg = ERR_MSG_UNAVAILABLE
-
+        self._dump_error_log(e, "Traceback: ")
         try:
             if e.args:
                 if len(e.args) > 1:
@@ -428,7 +515,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             else:
                 error_code = ERR_CODE_MSG
                 error_msg = ERR_MSG_UNAVAILABLE
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error while parsing error message.")
             error_code = ERR_CODE_MSG
             error_msg = ERR_MSG_UNAVAILABLE
 
@@ -437,8 +525,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 error_text = "Error Message: {0}".format(error_msg)
             else:
                 error_text = "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)
-        except Exception:
-            self.error_print("Error occurred while parsing error message")
+        except Exception as e:
+            self._dump_error_log(e, "Error while parsing error message.")
             error_text = PARSE_ERR_MSG
 
         return error_text
@@ -458,6 +546,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         try:
             ipaddress.ip_address(ip_address_input)
         except Exception:
+            self._dump_error_log(e, "Error while validating IPv6.")
             return False
 
         return True
@@ -551,7 +640,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         try:
             request_func = getattr(requests, method)
-        except AttributeError:
+        except AttributeError as e:
+            self._dump_error_log(e, "Error occure while creating request object")
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)), resp_json)
 
         try:
@@ -560,10 +650,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
         except Exception as e:
             try:
                 self.error_print("make_rest_call exception...")
-                self.error_print("Exception Message - {}".format(e))
+                self._dump_error_log(e, "Exception Message")
                 self.error_print("make_rest_call exception ends...")
-            except Exception:
-                self.error_print("Error occurred while logging the make_rest_call exception message")
+            except Exception as e:
+                self._dump_error_log(e, "Error occurred while logging the make_rest_call exception message")
 
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}"
                                                    .format(self._get_error_message_from_exception(e))), resp_json)
@@ -660,15 +750,16 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Error occurred while generating access token {}".format(err))
 
         try:
-            self.save_state(self._state)
+            # self.save_state(self._state)
             _save_app_state(self._state, self.get_asset_id(), self)
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error occurred while parsing the state file.")
             return action_result.set_status(
                 phantom.APP_ERROR,
                 "Error occurred while parsing the state file. Please delete the state file and run the test connectivity again."
             )
 
-        self._state = self.load_state()
+        # self._state = self.load_state()
 
         # Scenario -
         #
@@ -780,9 +871,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
             current_code = self._state['code']
             try:
-                self.save_state(self._state)
+                # self.save_state(self._state)
                 _save_app_state(self._state, self.get_asset_id(), self)
-            except Exception:
+            except Exception as e:
+                self._dump_error_log(e, "Error occurred while saving token in state file.")
                 return action_result.set_status(
                     phantom.APP_ERROR,
                     status_message="Error occurred while saving token in state file. Please delete the state file and run again."
@@ -1212,7 +1304,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     else:
                         return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_PARAM_VALIDATION_FAILED_MSG
                                                         .format(DEFENDERATP_DOMAIN_CONST))
-                except Exception:
+                except Exception as e:
+                    self._dump_error_log(e, "Error while validating domain.")
                     endpoint = DEFENDERATP_DOMAIN_MACHINES_ENDPOINT.format(input=input)
                     self.error_print("Validation for the valid domain returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
@@ -1225,7 +1318,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     else:
                         return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_PARAM_VALIDATION_FAILED_MSG
                                                         .format(DEFENDERATP_FILE_HASH_CONST))
-                except Exception:
+                except Exception as e:
+                    self._dump_error_log(e, "Error occured while validating sha1, sha256, and md5 hash.")
                     endpoint = DEFENDERATP_FILE_MACHINES_ENDPOINT.format(input=input)
                     self.error_print("Validation for the valid sha1, sha256, and md5 hash returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
@@ -1289,7 +1383,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             if input_type == DEFENDERATP_IP_CONST:
                 try:
                     ipaddress.ip_address(UnicodeDammit(input).unicode_markup)
-                except Exception:
+                except Exception as e:
+                    self._dump_error_log(e, "Error occured while validating IP parameter.")
                     return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_PARAM_VALIDATION_FAILED_MSG
                                                     .format(DEFENDERATP_IP_CONST))
                 endpoint = DEFENDERATP_IP_ALERTS_ENDPOINT.format(input=input)
@@ -1301,7 +1396,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     else:
                         return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_PARAM_VALIDATION_FAILED_MSG
                                                         .format(DEFENDERATP_DOMAIN_CONST))
-                except Exception:
+                except Exception as e:
+                    self._dump_error_log(e, "Error occured while validating domain parameter.")
                     endpoint = DEFENDERATP_DOMAIN_ALERTS_ENDPOINT.format(input=input)
                     self.error_print("Validation for the valid domain returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
@@ -1314,7 +1410,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     else:
                         return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_PARAM_VALIDATION_FAILED_MSG
                                                         .format(DEFENDERATP_FILE_HASH_CONST))
-                except Exception:
+                except Exception as e:
+                    self._dump_error_log(e, "Error occured while validating hash file.")
                     endpoint = DEFENDERATP_FILE_ALERTS_ENDPOINT.format(input=input)
                     self.error_print("Validation for the valid sha1, sha256, and md5 hash returned an exception."
                                      " Hence, ignoring the validation and continuing the action execution")
@@ -1811,7 +1908,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             # Check for the time is in valid format or not
             time = datetime.strptime(date, DEFENDERATP_DATE_FORMAT)
         except Exception as e:
-            self.error_print(f"Invalid date string received. Error occurred while checking date format. Error: {str(e)}")
+            self._dump_error_log(e, "Error occured while  checking date format")
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_TIME_ERR.format("expiration time")), None
 
         # Checking for future date
@@ -1863,7 +1960,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 if not isinstance(rbac_group_names_list, list):
                     return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_LIST_JSON_ERR.format("rbac_group_names"))
             except Exception as e:
-                self.error_print("Exception occurred while checking rbac_group_names: {}".format(self._get_error_message_from_exception(e)))
+                self._dump_error_log(e, "Error occured while checking rbac_group_names")
                 return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_LIST_JSON_ERR.format("rbac_group_names"))
             # Remove empty values from the list
             rbac_group_names_list = list(filter(None, rbac_group_names_list))
@@ -2054,7 +2151,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         try:
             os.makedirs(local_dir)
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error occured while creating directory.")
             return "Error while creating directory", None
 
         gzip_file_path = "{0}/{1}".format(local_dir, gzip_filename)
@@ -2068,7 +2166,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             # Extracting .gz file
             with gzip.open(gzip_file_path, 'rb') as f_in, open(file_path, 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error occured while extracting .gz file.")
             # For other type of files add the content in the actual file
             with open(file_path, 'wb') as f_out:
                 f_out.write(content)
@@ -2076,7 +2175,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         try:
             # Adding file to vault
             success, _, vault_id = ph_rules.vault_add(file_location=file_path, container=self.get_container_id(), file_name=filename)
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error occured while adding the file to vault")
             return "Error: Unable to add the file to vault", None
 
         if not success:
@@ -2122,7 +2222,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 command_type = commands[0].get('command', {}).get('type')
                 if not command_type or command_type != command:
                     return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_COMMAND_ERR.format(command)), event_id, None
-            except Exception:
+            except Exception as e:
+                self._dump_error_log(e, "Error occured while getting command type.")
                 return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_COMMAND_ERR.format(command)), event_id, None
             if status == DEFENDERATP_STATUS_FAILED:
                 event_id = None
@@ -2235,7 +2336,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         try:
             file_name = result.headers.get("Content-Disposition")
             file_name = unquote(str(re.findall("filename=(.+)", file_name)[0]).strip('"').rsplit('.gz', 1)[0])
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error occured while finding filename from header.")
             summary['live_response_result'] = "Error occurred while getting the file name"
             return action_result.set_status(phantom.APP_ERROR)
 
@@ -2526,7 +2628,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         # Fetching the Python major version
         try:
             self._python_version = int(sys.version_info[0])
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error occured while getting the Phantom server's Python major version")
             return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version")
 
         self._state = self.load_state()
@@ -2559,7 +2662,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             self._access_token = self._state.get(DEFENDERATP_TOKEN_STRING, {}).get(DEFENDERATP_ACCESS_TOKEN_STRING)
             if not self._non_interactive:
                 self._refresh_token = self._state.get(DEFENDERATP_TOKEN_STRING, {}).get(DEFENDERATP_REFRESH_TOKEN_STRING)
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error occured while parsing the state file.")
             return self.set_status(
                 phantom.APP_ERROR,
                 "Error occurred while parsing the state file. Please delete the state file and run the test connectivity again")
@@ -2579,7 +2683,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         try:
             self.save_state(self._state)
             _save_app_state(self._state, self.get_asset_id(), self)
-        except Exception:
+        except Exception as e:
+            self._dump_error_log(e, "Error occured while saving state file.")
             return phantom.APP_ERROR
 
         return phantom.APP_SUCCESS
