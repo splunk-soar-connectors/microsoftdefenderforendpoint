@@ -35,9 +35,9 @@ except Exception:
 import grp
 import ipaddress
 import pwd
-import encryption_helper
 from datetime import datetime
 
+import encryption_helper
 import phantom.app as phantom
 import requests
 from bs4 import BeautifulSoup, UnicodeDammit
