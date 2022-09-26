@@ -74,6 +74,10 @@ DEFENDERATP_TOKEN_EXPIRED = 'Status Code: 401'
 DEFENDERATP_TOKEN_NOT_AVAILABLE_MSG = 'Token not available. Please run test connectivity first'
 DEFENDERATP_BASE_URL_NOT_FOUND_MSG = 'Phantom Base URL not found in System Settings. ' \
                                      'Please specify this value in System Settings'
+DEFENDERATP_STATE_FILE_CORRUPT_ERR = (
+    "Error occurred while loading the state file due to its unexpected format. "
+    "Resetting the state file with the default format. Please try again."
+)
 DEFENDERATP_TEST_CONNECTIVITY_FAILED_MSG = 'Test connectivity failed'
 DEFENDERATP_TEST_CONNECTIVITY_PASSED_MSG = 'Test connectivity passed'
 DEFENDERATP_AUTHORIZE_USER_MSG = 'Please authorize user in a separate tab using URL'
