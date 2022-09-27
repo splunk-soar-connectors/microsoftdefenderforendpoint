@@ -307,6 +307,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: loaded state
         """
         state = super().load_state()
+        if not isinstance(state, dict):
+            self.debug_print("Resetting the state file with the default format")
+            state = {"app_version": self.get_app_json().get("app_version")}
+            return state
         try:
             state = self.decrypt_state(state, self.get_asset_id())
         except Exception as e:
@@ -493,34 +497,25 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: error message
         """
 
-        # Defining default values
         error_code = ERR_CODE_MSG
         error_msg = ERR_MSG_UNAVAILABLE
+
         self._dump_error_log(e, "Traceback: ")
+
         try:
-            if e.args:
+            if hasattr(e, "args"):
                 if len(e.args) > 1:
                     error_code = e.args[0]
                     error_msg = e.args[1]
                 elif len(e.args) == 1:
-                    error_code = ERR_CODE_MSG
                     error_msg = e.args[0]
-            else:
-                error_code = ERR_CODE_MSG
-                error_msg = ERR_MSG_UNAVAILABLE
         except Exception as e:
-            self._dump_error_log(e, "Error while parsing error message.")
-            error_code = ERR_CODE_MSG
-            error_msg = ERR_MSG_UNAVAILABLE
+            self._dump_error_log(e, "Error occurred while fetching exception information.")
 
-        try:
-            if error_code in ERR_CODE_MSG:
-                error_text = "Error Message: {0}".format(error_msg)
-            else:
-                error_text = "Error Code: {0}. Error Message: {1}".format(error_code, error_msg)
-        except Exception as e:
-            self._dump_error_log(e, "Error while parsing error message.")
-            error_text = PARSE_ERR_MSG
+        if not error_code:
+            error_text = "Error Message: {}".format(error_msg)
+        else:
+            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_msg)
 
         return error_text
 
@@ -538,7 +533,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         try:
             ipaddress.ip_address(ip_address_input)
-        except Exception:
+        except Exception as e:
             self._dump_error_log(e, "Error while validating IPv6.")
             return False
 
@@ -641,13 +636,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
 
         except Exception as e:
-            try:
-                self.error_print("make_rest_call exception...")
-                self._dump_error_log(e, "Exception Message")
-                self.error_print("make_rest_call exception ends...")
-            except Exception as e:
-                self._dump_error_log(e, "Error occurred while logging the make_rest_call exception message")
-
+            self.error_log("Error occurred while logging the make_rest_call exception message")
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}"
                                                    .format(self._get_error_message_from_exception(e))), resp_json)
 
@@ -2622,10 +2611,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return self.set_status(phantom.APP_ERROR, "Error occurred while getting the Phantom server's Python major version")
 
         self._state = self.load_state()
-        if not isinstance(self._state, dict):
-            self.debug_print("Resetting the state file with the default format")
-            self._state = {"app_version": self.get_app_json().get("app_version")}
-            return self.set_status(phantom.APP_ERROR, DEFENDERATP_STATE_FILE_CORRUPT_ERR)
 
         self.set_validator('ipv6', self._is_ipv6)
 
@@ -2636,7 +2621,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         self._tenant = config[DEFENDERATP_CONFIG_TENANT_ID]
         self._client_id = config[DEFENDERATP_CONFIG_CLIENT_ID]
         self._client_secret = config[DEFENDERATP_CONFIG_CLIENT_SECRET]
-        self._environment = config[DEFENDERATP_CONFIG_ENVIRONMENT]
+        self._environment = config.get(DEFENDERATP_CONFIG_ENVIRONMENT, "Public")
 
         self._login_url = DEFENDERATP_LOGIN_BASE_URL
         self._resource_url = DEFENDERATP_RESOURCE_URL
