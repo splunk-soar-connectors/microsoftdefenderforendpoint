@@ -392,7 +392,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
             # Process a json response
             resp_json = response.json()
         except Exception as e:
-            self._dump_error_log(e, "Error while processing JSON response.")
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}"
                                                    .format(self._get_error_message_from_exception(e))), None)
 
@@ -708,7 +707,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         ret_val, asset_name = self._get_asset_name(action_result)
         if phantom.is_fail(ret_val):
             return action_result.get_status(), None
-        phantom_base_url = phantom_base_url.rstrip("//")
+        phantom_base_url = phantom_base_url.rstrip("/")
         self.save_progress('Using Phantom base URL as: {0}'.format(phantom_base_url))
         app_json = self.get_app_json()
         app_name = app_json['name']
@@ -744,7 +743,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Error occurred while generating access token {}".format(err))
 
         try:
-            # self.save_state(self._state)
             _save_app_state(self._state, self.get_asset_id(), self)
         except Exception as e:
             self._dump_error_log(e, "Error occurred while parsing the state file.")
@@ -752,8 +750,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 phantom.APP_ERROR,
                 "Error occurred while parsing the state file. Please delete the state file and run the test connectivity again."
             )
-
-        # self._state = self.load_state()
 
         # Scenario -
         #
@@ -865,7 +861,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
             current_code = self._state['code']
             try:
-                # self.save_state(self._state)
                 _save_app_state(self._state, self.get_asset_id(), self)
             except Exception as e:
                 self._dump_error_log(e, "Error occurred while saving token in state file.")
