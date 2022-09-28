@@ -57,7 +57,7 @@
             "order": 4
         },
         "environment": {
-            "description": "Azure environment to connect to",
+            "description": "Azure environment to connect",
             "data_type": "string",
             "required": true,
             "default": "Public",
