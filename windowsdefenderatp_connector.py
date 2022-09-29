@@ -639,7 +639,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
 
         except Exception as e:
-            self.error_log("Error occurred while logging the make_rest_call exception message")
+            self._dump_error_log("Error occurred while logging the make_rest_call exception message")
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}"
                                                    .format(self._get_error_message_from_exception(e))), resp_json)
 
