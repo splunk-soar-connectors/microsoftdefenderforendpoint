@@ -539,6 +539,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return True
 
+    def replace_null_values(self, data):
+        return json.loads(json.dumps(data).replace('\\u0000', '\\\\u0000'))
+
     def _update_request(self, action_result, endpoint, headers=None, params=None, data=None, method='get'):
         """ This function is used to update the headers with access_token before making REST call.
 
@@ -2505,6 +2508,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         try:
             # Process a json response
             resp_json = result.json()
+            resp_json = self.replace_null_values(resp_json)
         except Exception as e:
             summary['live_response_result'] = "Unable to parse JSON response. Error: {0}".format(self._get_error_message_from_exception(e))
             return action_result.set_status(phantom.APP_ERROR)
