@@ -10,7 +10,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2022 Splunk Inc.",
-    "app_version": "3.6.1",
+    "app_version": "3.7.0",
     "utctime_updated": "2022-10-06T07:32:27.000000Z",
     "package_name": "phantom_windowsdefenderatp",
     "main_module": "windowsdefenderatp_connector.py",
@@ -19,7 +19,7 @@
     "min_phantom_version": "5.3.3",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
-        "Cloud April 11, 2022"
+        "Cloud September 30, 2022"
     ],
     "contributors": [
         {
