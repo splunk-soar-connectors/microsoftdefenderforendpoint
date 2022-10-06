@@ -1,3 +1,1 @@
 **Unreleased**
-* Added new asset configuration to allow for GCC / GCC High environments [PAPP-27308]
-* Added encryption for the sensitive values stored in the state file
