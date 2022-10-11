@@ -743,19 +743,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 "Error occurred while parsing the state file. Please delete the state file and run the test connectivity again."
             )
 
-        # Scenario -
-        #
-        # If the corresponding state file doesn't have correct owner, owner group or permissions,
-        # the newly generated token is not being saved to state file and automatic workflow for token has been stopped.
-        # So we have to check that token from response and token which are saved
-        # to state file after successful generation of new token are same or not.
-
-        if self._access_token != self._state.get(DEFENDERATP_TOKEN_STRING, {}).get(DEFENDERATP_ACCESS_TOKEN_STRING):
-            message = "Error occurred while saving the newly generated access token (in place of the expired token) in the state file."\
-                      " Please check the owner, owner group, and the permissions of the state file. The Phantom user should have "\
-                      "the correct access rights and ownership for the corresponding state file (refer to readme file for more information)"
-            return action_result.set_status(phantom.APP_ERROR, message)
-
         return phantom.APP_SUCCESS
 
     def _wait(self, action_result):
