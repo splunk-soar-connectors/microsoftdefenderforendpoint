@@ -192,7 +192,7 @@ def _handle_rest_request(request, path_parts):
     # To handle response from microsoft login page
     if call_type == 'result':
         return_val = _handle_login_response(request)
-        asset_id = request.GET.get('state')
+        asset_id = request.GET.get('state')  # nosemgrep
         if asset_id and asset_id.isalnum():
             app_dir = os.path.dirname(os.path.abspath(__file__))
             auth_status_file_path = '{0}/{1}_{2}'.format(app_dir, asset_id, DEFENDERATP_TC_FILE)
