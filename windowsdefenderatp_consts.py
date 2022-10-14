@@ -16,11 +16,21 @@ DEFENDERATP_PHANTOM_BASE_URL = '{phantom_base_url}rest'
 DEFENDERATP_PHANTOM_SYS_INFO_URL = '/system_info'
 DEFENDERATP_PHANTOM_ASSET_INFO_URL = '/asset/{asset_id}'
 DEFENDERATP_LOGIN_BASE_URL = 'https://login.microsoftonline.com'
+DEFENDERATP_LOGIN_GCC_BASE_URL = 'https://login.microsoftonline.com'
+DEFENDERATP_LOGIN_GCC_HIGH_BASE_URL = 'https://login.microsoftonline.us'
+
 DEFENDERATP_SERVER_TOKEN_URL = '/{tenant_id}/oauth2/token'
 DEFENDERATP_AUTHORIZE_URL = '/{tenant_id}/oauth2/authorize?client_id={client_id}&redirect_uri={redirect_uri}' \
                             '&response_type={response_type}&state={state}&resource={resource}'
 DEFENDERATP_RESOURCE_URL = 'https://api.securitycenter.windows.com'
+
+DEFENDERATP_RESOURCE_GCC_URL = 'https://api-gcc.securitycenter.microsoft.us'
+DEFENDERATP_RESOURCE_GCC_HIGH_URL = 'https://api-gov.securitycenter.microsoft.us'
+
 DEFENDERATP_MSGRAPH_API_BASE_URL = 'https://api.securitycenter.windows.com/api'
+DEFENDERATP_MSGRAPH_API_GCC_BASE_URL = 'https://api-gcc.securitycenter.microsoft.us/api'
+DEFENDERATP_MSGRAPH_API_GCC_HIGH_BASE_URL = 'https://api-gov.securitycenter.microsoft.us/api'
+
 DEFENDERATP_MACHINES_ENDPOINT = '/machines'
 DEFENDERATP_DOMAIN_MACHINES_ENDPOINT = '/domains/{input}/machines'
 DEFENDERATP_FILE_MACHINES_ENDPOINT = '/files/{input}/machines'
@@ -64,6 +74,10 @@ DEFENDERATP_TOKEN_EXPIRED = 'Status Code: 401'
 DEFENDERATP_TOKEN_NOT_AVAILABLE_MSG = 'Token not available. Please run test connectivity first'
 DEFENDERATP_BASE_URL_NOT_FOUND_MSG = 'Phantom Base URL not found in System Settings. ' \
                                      'Please specify this value in System Settings'
+DEFENDERATP_STATE_FILE_CORRUPT_ERR = (
+    "Error occurred while loading the state file due to its unexpected format. "
+    "Resetting the state file with the default format. Please try again."
+)
 DEFENDERATP_TEST_CONNECTIVITY_FAILED_MSG = 'Test connectivity failed'
 DEFENDERATP_TEST_CONNECTIVITY_PASSED_MSG = 'Test connectivity passed'
 DEFENDERATP_AUTHORIZE_USER_MSG = 'Please authorize user in a separate tab using URL'
@@ -80,6 +94,7 @@ DEFENDERATP_INPUT_REQUIRED_MSG = 'Input is required for the given type'
 DEFENDERATP_CONFIG_TENANT_ID = 'tenant_id'
 DEFENDERATP_CONFIG_CLIENT_ID = 'client_id'
 DEFENDERATP_CONFIG_CLIENT_SECRET = 'client_secret'  # pragma: allowlist secret
+DEFENDERATP_CONFIG_ENVIRONMENT = 'environment'
 DEFENDERATP_ALL_CONST = 'All'
 DEFENDERATP_IP_CONST = 'IP'
 DEFENDERATP_DOMAIN_CONST = 'Domain'

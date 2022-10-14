@@ -2,11 +2,11 @@
 # Windows Defender ATP
 
 Publisher: Splunk  
-Connector Version: 3\.6\.0  
+Connector Version: 3\.7\.0  
 Product Vendor: Microsoft  
 Product Name: Windows Defender ATP  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.2\.0  
+Minimum Product Version: 5\.3\.3  
 
 This app integrates with Windows Defender Advanced Threat Protection\(ATP\) to execute various containment, corrective, generic and investigative actions
 
@@ -77,6 +77,8 @@ default ports used by Splunk SOAR.
 -   Client Secret - It is the secret string used by the application to prove its identity when
     requesting a token. It can be generated for the configured application on the Microsoft Azure
     Active Directory.
+-   Environment - Cloud services are provided by Azure and used to connect with Public, Government
+    Community Cloud (GCC) or GCC High Azure cloud services.
 -   Non Interactive Auth - It is used to determine the authentication method. If it is checked then
     non interactive auth will be used otherwise interactive auth will be used. Whenever this
     checkbox is toggled then the test connectivity action must be run again.
@@ -444,6 +446,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **client\_id** |  required  | string | Client ID
 **client\_secret** |  required  | password | Client Secret
 **non\_interactive** |  optional  | boolean | Non Interactive Auth
+**environment** |  required  | string | Azure environment to connect
 
 ### Supported Actions  
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using the supplied configuration  
