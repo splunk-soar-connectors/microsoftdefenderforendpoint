@@ -42,6 +42,7 @@ DEFENDERATP_IP_ALERTS_ENDPOINT = '/ips/{input}/alerts'
 DEFENDERATP_DOMAIN_ALERTS_ENDPOINT = '/domains/{input}/alerts'
 DEFENDERATP_FILE_ALERTS_ENDPOINT = '/files/{input}/alerts'
 DEFENDERATP_ISOLATE_ENDPOINT = '/machines/{device_id}/isolate'
+DEFENDERATP_MACHINES_TAGS_ENDPOINT = '/machines/{device_id}/tags'
 DEFENDERATP_UNISOLATE_ENDPOINT = '/machines/{device_id}/unisolate'
 DEFENDERATP_SESSIONS_ENDPOINT = '/machines/{device_id}/logonusers'
 DEFENDERATP_FILE_QUARANTINE_ENDPOINT = '/machines/{device_id}/StopAndQuarantineFile'
@@ -104,6 +105,8 @@ DEFENDERATP_JSON_TIMEOUT = 'timeout'
 DEFENDERATP_JSON_INPUT = 'input'
 DEFENDERATP_JSON_QUERY = 'query'
 DEFENDERATP_JSON_DEVICE_ID = 'device_id'
+DEFENDERATP_JSON_TAG = 'tag'
+DEFENDERATP_JSON_OPERATION = 'operation'
 DEFENDERATP_JSON_SCAN_TYPE = 'scan_type'
 DEFENDERATP_JSON_COMMENT = 'comment'
 DEFENDERATP_JSON_FILE_HASH = 'file_hash'
@@ -164,6 +167,7 @@ TYPE_VALUE_LIST = ["Full", "Selective"]
 SCAN_TYPE_VALUE_LIST = ["Quick", "Full"]
 INPUT_TYPE_VALUE_LIST_DEVICES = ["All", "Domain", "File Hash"]
 INDICATOR_SEVERITY_LIST = ["", "Informational", "Low", "Medium", "High"]
+TAG_OPERATION_VALUE_LIST = ["Add", "Remove"] 
 
 # Constants relating to 'Indicators'
 DEFENDERATP_DATE_FORMAT = '%Y-%m-%dT%H:%M:%SZ'

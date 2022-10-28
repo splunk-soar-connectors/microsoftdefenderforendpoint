@@ -10,7 +10,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2022 Splunk Inc.",
-    "app_version": "3.7.0",
+    "app_version": "3.7.0-tags.1",
     "utctime_updated": "2022-10-06T07:32:27.000000Z",
     "package_name": "phantom_windowsdefenderatp",
     "main_module": "windowsdefenderatp_connector.py",
@@ -5862,6 +5862,259 @@
                 "height": 5,
                 "view": "windowsdefenderatp_view.display_devices",
                 "title": "Get Domain Devices"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "update device tag",
+            "description": "Add or remove a tag from a given device",
+            "type": "generic",
+            "identifier": "update_device_tag",
+            "read_only": false,
+            "parameters": {
+                "device_id": {
+                    "description": "ID of the device",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "defender atp device id"
+                    ],
+                    "order": 0
+                },
+                "operation": {
+                    "value_list": [
+                        "Add",
+                        "Remove"
+                    ],
+                    "data_type": "string",
+                    "default": "Add",
+                    "required": true,
+                    "description": "Determines whether the provided tag is added or removed"
+                },
+                "tag": {
+                    "data_type": "string",
+                    "required": true,
+                    "description": "Value of the tag to add or remove from the machine"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.device_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.tag",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.operation",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.aadDeviceId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.agentVersion",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.5850.17763.404"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string",
+                    "example_values": [
+                        "desktop-ph2a1ro"
+                    ],
+                    "contains": [
+                        "domain"
+                    ],
+                    "column_name": "Computer Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.exposureLevel",
+                    "data_type": "string",
+                    "example_values": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.firstSeen",
+                    "data_type": "string",
+                    "example_values": [
+                        "2019-04-16T00:27:12.2677222Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.groupName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.healthStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Active"
+                    ],
+                    "column_name": "Health Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "ae2e5bda4bb22ec9c321680079d03e5e4cdff400"
+                    ],
+                    "contains": [
+                        "defender atp device id"
+                    ],
+                    "column_name": "Device ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.isAadJoined",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastExternalIpAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "204.107.141.240"
+                    ],
+                    "contains": [
+                        "ip"
+                    ],
+                    "column_name": "Last External IP Address",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.lastIpAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.1.66.140"
+                    ],
+                    "contains": [
+                        "ip"
+                    ],
+                    "column_name": "Last IP Address",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.lastSeen",
+                    "data_type": "string",
+                    "example_values": [
+                        "2019-05-03T05:23:45.9643247Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.machineTags",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test Tag -21"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osBuild",
+                    "data_type": "numeric",
+                    "example_values": [
+                        17763
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osPlatform",
+                    "data_type": "string",
+                    "example_values": [
+                        "Windows10"
+                    ],
+                    "column_name": "OS",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.osProcessor",
+                    "data_type": "string",
+                    "example_values": [
+                        "x64"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osVersion",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupId",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string",
+                    "example_values": [
+                        "GROUP1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskScore",
+                    "data_type": "string",
+                    "example_values": [
+                        "None"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.systemProductName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string",
+                    "example_values": [
+                        "1809"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total devices: 1"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table",
+                "width": 10,
+                "height": 5
             },
             "versions": "EQ(*)"
         },

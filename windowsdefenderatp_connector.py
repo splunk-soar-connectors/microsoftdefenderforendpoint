@@ -1062,6 +1062,46 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_update_device_tag(self, param):
+        """ This function is used to handle the update device tag action.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_id = param[DEFENDERATP_JSON_DEVICE_ID]
+        tag = param[DEFENDERATP_JSON_TAG]
+        operation = param[DEFENDERATP_JSON_OPERATION]
+
+        if operation not in TAG_OPERATION_VALUE_LIST:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Please provide valid input from {} in 'operation' action parameter".format(TAG_OPERATION_VALUE_LIST))
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINES_TAGS_ENDPOINT 
+                                   .format(device_id=device_id))
+
+        data = {
+            'Action': operation,
+            'Value': tag
+        }
+
+        # make rest call
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method='post',
+                                                 data=json.dumps(data))
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+        summary = action_result.update_summary({})
+        summary['tag'] = tag
+        summary['operation'] = operation
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_scan_device(self, param):
         """ This function is used to handle the scan device action.
 
@@ -2574,7 +2614,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'get_file_live_response': self._handle_get_file_live_response,
             'put_file_live_response': self._handle_put_file_live_response,
             'run_script_live_response': self._handle_run_script_live_response,
-            'get_missing_kbs': self._handle_get_missing_kbs
+            'get_missing_kbs': self._handle_get_missing_kbs,
+            'update_device_tag': self._handle_update_device_tag
         }
 
         action = self.get_action_identifier()
