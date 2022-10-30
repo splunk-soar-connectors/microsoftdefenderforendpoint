@@ -10,7 +10,7 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2022 Splunk Inc.",
-    "app_version": "3.7.0-tags.1",
+    "app_version": "3.7.0",
     "utctime_updated": "2022-10-06T07:32:27.000000Z",
     "package_name": "phantom_windowsdefenderatp",
     "main_module": "windowsdefenderatp_connector.py",
@@ -5890,12 +5890,14 @@
                     "data_type": "string",
                     "default": "Add",
                     "required": true,
-                    "description": "Determines whether the provided tag is added or removed"
+                    "description": "Determines whether the provided tag is added or removed",
+                    "order": 1
                 },
                 "tag": {
                     "data_type": "string",
                     "required": true,
-                    "description": "Value of the tag to add or remove from the machine"
+                    "description": "Value of the tag to add or remove from the machine",
+                    "order": 2
                 }
             },
             "output": [
@@ -5941,9 +5943,7 @@
                     ],
                     "contains": [
                         "domain"
-                    ],
-                    "column_name": "Computer Name",
-                    "column_order": 3
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.exposureLevel",
@@ -5969,8 +5969,7 @@
                     "example_values": [
                         "Active"
                     ],
-                    "column_name": "Health Status",
-                    "column_order": 1
+                    "column_name": "Health Status"
                 },
                 {
                     "data_path": "action_result.data.*.id",
@@ -6000,9 +5999,7 @@
                     ],
                     "contains": [
                         "ip"
-                    ],
-                    "column_name": "Last External IP Address",
-                    "column_order": 4
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.lastIpAddress",
@@ -6012,9 +6009,7 @@
                     ],
                     "contains": [
                         "ip"
-                    ],
-                    "column_name": "Last IP Address",
-                    "column_order": 5
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.lastSeen",
@@ -6044,7 +6039,7 @@
                         "Windows10"
                     ],
                     "column_name": "OS",
-                    "column_order": 2
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.osProcessor",
