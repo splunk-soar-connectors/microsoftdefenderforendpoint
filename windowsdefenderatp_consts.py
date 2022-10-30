@@ -167,7 +167,7 @@ TYPE_VALUE_LIST = ["Full", "Selective"]
 SCAN_TYPE_VALUE_LIST = ["Quick", "Full"]
 INPUT_TYPE_VALUE_LIST_DEVICES = ["All", "Domain", "File Hash"]
 INDICATOR_SEVERITY_LIST = ["", "Informational", "Low", "Medium", "High"]
-TAG_OPERATION_VALUE_LIST = ["Add", "Remove"] 
+TAG_OPERATION_VALUE_LIST = ["Add", "Remove"]
 
 # Constants relating to 'Indicators'
 DEFENDERATP_DATE_FORMAT = '%Y-%m-%dT%H:%M:%SZ'

@@ -1080,7 +1080,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(
                 phantom.APP_ERROR, "Please provide valid input from {} in 'operation' action parameter".format(TAG_OPERATION_VALUE_LIST))
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINES_TAGS_ENDPOINT 
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINES_TAGS_ENDPOINT
                                    .format(device_id=device_id))
 
         data = {
