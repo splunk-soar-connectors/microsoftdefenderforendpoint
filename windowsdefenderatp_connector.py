@@ -497,25 +497,25 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: error message
         """
 
-        error_code = ERR_CODE_MSG
-        error_msg = ERR_MSG_UNAVAILABLE
+        err_code = ERR_CODE_MSG
+        err_msg = ERR_MSG_UNAVAILABLE
 
         self._dump_error_log(e, "Traceback: ")
 
         try:
             if hasattr(e, "args"):
                 if len(e.args) > 1:
-                    error_code = e.args[0]
-                    error_msg = e.args[1]
+                    err_code = e.args[0]
+                    err_msg = e.args[1]
                 elif len(e.args) == 1:
-                    error_msg = e.args[0]
+                    err_msg = e.args[0]
         except Exception as e:
             self._dump_error_log(e, "Error occurred while fetching exception information.")
 
-        if not error_code:
-            error_text = "Error Message: {}".format(error_msg)
+        if not err_code:
+            error_text = "Error Message: {}".format(err_msg)
         else:
-            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_msg)
+            error_text = "Error Code: {}. Error Message: {}".format(err_code, err_msg)
 
         return error_text
 
@@ -781,7 +781,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         """
 
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress(DEFENDERATP_MAKING_CONNECTION_MSG)
+        self.save_progress(DEFENDERATP_MAKING_CONNECTIVITY_MSG)
 
         self.save_progress(f"Login URL: {self._login_url}")
         self.save_progress(f"Graph URL: {self._graph_url}")
