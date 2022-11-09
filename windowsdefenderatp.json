@@ -7714,7 +7714,7 @@
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/py3/certifi-2022.9.14-py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2022.9.24-py3-none-any.whl"
             },
             {
                 "module": "chardet",
@@ -7726,7 +7726,7 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2022.2.1-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2022.6-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
@@ -7738,7 +7738,7 @@
             },
             {
                 "module": "sqlparse",
-                "input_file": "wheels/py3/sqlparse-0.4.2-py3-none-any.whl"
+                "input_file": "wheels/py3/sqlparse-0.4.3-py3-none-any.whl"
             },
             {
                 "module": "typing_extensions",
@@ -7766,7 +7766,7 @@
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/py3/certifi-2022.9.14-py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2022.9.24-py3-none-any.whl"
             },
             {
                 "module": "chardet",
@@ -7778,7 +7778,7 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2022.2.1-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2022.6-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
@@ -7790,7 +7790,7 @@
             },
             {
                 "module": "sqlparse",
-                "input_file": "wheels/py3/sqlparse-0.4.2-py3-none-any.whl"
+                "input_file": "wheels/py3/sqlparse-0.4.3-py3-none-any.whl"
             },
             {
                 "module": "urllib3",
