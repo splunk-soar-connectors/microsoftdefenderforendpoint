@@ -783,9 +783,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress(DEFENDERATP_MAKING_CONNECTIVITY_MSG)
 
-        self.save_progress(f"Login URL: {self._login_url}")
-        self.save_progress(f"Graph URL: {self._graph_url}")
-        self.save_progress(f"Resource URL: {self._resource_url}")
+        self.save_progress("Login URL: {}".format(self._login_url))
+        self.save_progress("Graph URL: {}".format(self._graph_url))
+        self.save_progress("Resource URL: {}".format(self._resource_url))
 
         if not self._state:
             self._state = {}
