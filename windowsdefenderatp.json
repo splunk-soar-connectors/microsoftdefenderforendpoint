@@ -1,7 +1,7 @@
 {
     "appid": "e85407b7-91f0-4019-8fa4-0d29bca741d5",
     "name": "Windows Defender ATP",
-    "description": "This app integrates with Windows Defender Advanced Threat Protection(ATP) to execute various containment, corrective, generic and investigative actions",
+    "description": "This app integrates with Windows Defender Advanced Threat Protection(ATP) to execute various containment, corrective, generic, and investigative actions",
     "type": "endpoint",
     "product_vendor": "Microsoft",
     "logo": "logo_windowsdefenderatp.svg",
@@ -10,16 +10,16 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2022 Splunk Inc.",
-    "app_version": "3.7.0",
+    "app_version": "3.8.0",
     "utctime_updated": "2022-10-06T07:32:27.000000Z",
     "package_name": "phantom_windowsdefenderatp",
     "main_module": "windowsdefenderatp_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "5.3.3",
+    "min_phantom_version": "5.3.5",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
-        "Cloud September 30, 2022"
+        "Cloud November 11, 2022"
     ],
     "contributors": [
         {
@@ -1675,7 +1675,7 @@
                     "order": 0
                 },
                 "input": {
-                    "description": "Input filter of type Domain, File Hash and IP",
+                    "description": "Input filter of type Domain, File Hash, and IP",
                     "data_type": "string",
                     "primary": true,
                     "contains": [
@@ -1803,7 +1803,7 @@
                     "data_path": "action_result.data.*.description",
                     "data_type": "string",
                     "example_values": [
-                        "Malware and unwanted software are undesirable applications that perform annoying, disruptive or harmful actions on affected machines. Some of these undesirable applications can replicate and spread from one machine to another. Others can able to receive commands from remote attackers and perform activities associated with cyber attacks. This detection might indicate that Windows Defender has stopped the malware from delivering its payload. However, it is prudent to check the machine for signs of infection."
+                        "Malware and unwanted software are undesirable applications that perform annoying, disruptive, or harmful actions on affected machines. Some of these undesirable applications can replicate and spread from one machine to another. Others can able to receive commands from remote attackers and perform activities associated with cyber attacks. This detection might indicate that Windows Defender has stopped the malware from delivering its payload. However, it is prudent to check the machine for signs of infection."
                     ]
                 },
                 {
@@ -5917,12 +5917,25 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.tag",
-                    "data_type": "string"
+                    "data_path": "action_result.parameter.operation",
+                    "data_type": "string",
+                    "example_values": [
+                        "Add"
+                    ]
                 },
                 {
-                    "data_path": "action_result.parameter.operation",
-                    "data_type": "string"
+                    "data_path": "action_result.parameter.tag",
+                    "data_type": "string",
+                    "example_values": [
+                        "test-tag"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.@odata.context",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://api.securitycenter.windows.com/api/$metadata#Machines/$entity"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.aadDeviceId",
@@ -5943,6 +5956,20 @@
                     ],
                     "contains": [
                         "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.defenderAvStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "NotSupported"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.deviceValue",
+                    "data_type": "string",
+                    "example_values": [
+                        "Normal"
                     ]
                 },
                 {
@@ -5969,7 +5996,8 @@
                     "example_values": [
                         "Active"
                     ],
-                    "column_name": "Health Status"
+                    "column_name": "Health Status",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.id",
@@ -5982,6 +6010,34 @@
                     ],
                     "column_name": "Device ID",
                     "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.ipAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.0.2.15"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.macAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "002248242A86"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.operationalStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Up"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "Ethernet"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.isAadJoined",
@@ -6023,6 +6079,34 @@
                     "data_type": "string",
                     "example_values": [
                         "Test Tag -21"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managedBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managedByStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.onboardingStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Onboarded"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osArchitecture",
+                    "data_type": "string",
+                    "example_values": [
+                        "64-bit"
                     ]
                 },
                 {
@@ -6082,6 +6166,24 @@
                     "data_type": "string",
                     "example_values": [
                         "1809"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.vmMetadata",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.operation",
+                    "data_type": "string",
+                    "example_values": [
+                        "Add"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.tag",
+                    "data_type": "string",
+                    "example_values": [
+                        "test-tag"
                     ]
                 },
                 {
