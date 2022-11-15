@@ -2594,6 +2594,27 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.comments.*.comment",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "Automation"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-04-08T18:03:45.6064942Z"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.computerDnsName",
                     "data_type": "string"
                 },
@@ -2708,6 +2729,10 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.evidence.*.registryValueName",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.evidence.*.registryValueType",
                     "data_type": "string"
                 },
@@ -2769,6 +2794,20 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string",
+                    "example_values": [
+                        "TestUser"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
+                    "data_type": "string",
+                    "example_values": [
+                        "WINATPC2"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.machineId",
                     "data_type": "string",
                     "contains": [
@@ -2782,6 +2821,20 @@
                 {
                     "data_path": "action_result.data.*.relatedUser",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.domainName",
+                    "data_type": "string",
+                    "example_values": [
+                        "WINATPC1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "TestUser"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.resolvedTime",
@@ -6412,6 +6465,20 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.managedBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managedByStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.onboardingStatus",
                     "data_type": "string",
                     "example_values": [
@@ -6592,6 +6659,9 @@
                 {
                     "data_path": "action_result.parameter.device_id",
                     "data_type": "string",
+                    "example_values": [
+                        "7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768"
+                    ],
                     "contains": [
                         "defender atp device id"
                     ]
@@ -7032,6 +7102,13 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.@odata.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "#microsoft.windowsDefenderATP.api.PublicVulnerabilityDto"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.cvssV3",
                     "data_type": "numeric",
                     "example_values": [
@@ -7383,6 +7460,13 @@
                     ],
                     "contains": [
                         "defender atp event id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.remove_app_restriction_status",
+                    "data_type": "string",
+                    "example_values": [
+                        "Pending"
                     ]
                 },
                 {
