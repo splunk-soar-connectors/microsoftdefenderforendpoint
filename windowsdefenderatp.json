@@ -2901,7 +2901,7 @@
         {
             "action": "update alert",
             "description": "Update properties of existing Alert",
-            "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/update-alert\" target=\"_blank\">Get Alert Information by ID API Documentation</a>), user can update alerts that available in the API. See List Alerts for more information.; rate limitations for this action are 100 calls per minute and 1500 calls per hour.",
+            "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/update-alert\" target=\"_blank\">Get Alert Information by ID API Documentation</a>), user can update alerts that available in the API. See List Alerts for more information. Also, previously supported alert determination values ('Apt' and 'SecurityPersonnel') have been deprecated and no longer available via the API; rate limitations for this action are 100 calls per minute and 1500 calls per hour.",
             "type": "investigate",
             "identifier": "update_alert",
             "read_only": false,
@@ -2951,9 +2951,7 @@
                     "order": 4,
                     "value_list": [
                         "NotAvailable",
-                        "Apt",
                         "Malware",
-                        "SecurityPersonnel",
                         "SecurityTesting",
                         "UnwantedSoftware",
                         "Other"
@@ -6614,7 +6612,7 @@
         },
         {
             "action": "update device tag",
-            "description": "Add or remove a tag from a given device",
+            "description": "Add or remove a tag from a given device (Maximum: 200 characters)",
             "type": "generic",
             "identifier": "update_device_tag",
             "read_only": false,
