@@ -11,7 +11,7 @@
     <h2>Defender ATP Instance Minimum Version Compatibility</h2>
       <p>
         <ul>
-          <li>With this major version 2.0.0 of the Windows Defender ATP app on Phantom, we declare support for (on and above) the cloud 'November-December 2019' GA release for the ATP instances. This app has been tested and certified on the mentioned GA release of the Defender ATP and its APIs.</li>
+          <li>With this major version 2.0.0 of the Windows Defender ATP app on Splunk SOAR, we declare support for (on and above) the cloud 'November-December 2019' GA release for the ATP instances. This app has been tested and certified on the mentioned GA release of the Defender ATP and its APIs.</li>
         </ul>
       </p>
 
@@ -229,14 +229,14 @@
               <li>Run the test connectivity action for Interactive method.</li>
               <ul>
                 <li>Internally, the connectivity creates a URL for hitting the /authorize endpoint for the generation of the authorization code and displays it on the connectivity pop-up window. The user is requested to hit this URL in a browser new tab and complete the authorization request successfully resulting in the generation of an authorization code.</li>
-                <li>The authorization code generated in the above step is used by the connectivity to make the next API call to generate the [access_token] and [refresh_token] pair. The generated authorization code, [access_token], and [refresh_token] are stored in the state file of the app on the Phantom server.</li>
+                <li>The authorization code generated in the above step is used by the connectivity to make the next API call to generate the [access_token] and [refresh_token] pair. The generated authorization code, [access_token], and [refresh_token] are stored in the state file of the app on the Splunk SOAR server.</li>
                 <li>The authorization code can be used only once to generate the pair of [access_token] and [refresh_token]. If the [access_token] expires, then the [refresh_token] is used internally automatically by the application to re-generate the [access_token] by making the corresponding API call. This entire autonomous workflow will seamlessly work until the [refresh_token] does not get expired. Once the [refresh_token] expires, the user will have to run the test connectivity action once again to generate the authorization code followed by the generation of an entirely fresh pair of [access_token] and [refresh_token]. The default expiration time for the [access_token] is 1 hour and that of the [refresh_token] is 90 days. For more details visit <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-configurable-token-lifetimes" target="_blank">AD Configurable Token Lifetimes</a></li>
                 <li>The successful run of the Test Connectivity ensures that a valid pair of [access_token] and [refresh_token] has been generated and stored in the app's state file. These tokens will be used in all the actions' execution flow to authorize their API calls to the Defender ATP instance.</li>
               </ul>
               <li>Run the test connectivity action for Non Interactive method.</li>
               <ul>
                 <li>Internally, the application authenticates to Azure AD token issuance endpoint and requests an [access_token] then it will generate the [access_token].</li>
-                <li>The [access_token] generated in the above step is used by the test connectivity to make the next API call to verify the [access_token]. The generated [access_token] is stored in the state file of the app on the Phantom server.</li>
+                <li>The [access_token] generated in the above step is used by the test connectivity to make the next API call to verify the [access_token]. The generated [access_token] is stored in the state file of the app on the Splunk SOAR server.</li>
                 <li>If the [access_token] expires, then application will automatically re-generate the [access_token] by making the corresponding API call.</li>
                 <li>The successful run of the Test Connectivity ensures that a valid [access_token] has been generated and stored in the app's state file. This token will be used in all the actions execution flow to authorize their API calls to the Defender ATP instance.</li>
               </ul>
@@ -254,16 +254,16 @@
         </ul>
         <h4>State file permissions</h4>
         <ul>
-          <li>File rights: rw-rw-r-- (664) (The phantom user should have read and write access for the state file)</li>
-          <li>File owner: Appropriate phantom user</li>
+          <li>File rights: rw-rw-r-- (664) (The Splunk SOAR user should have read and write access for the state file)</li>
+          <li>File owner: Appropriate Splunk SOAR user</li>
         </ul>
       </p>
 
     <h2>Notes</h2>
     <p>
       <ul>
-        <li>&lt;appid&gt; - The app ID will be available in the Redirect URI which gets populated in the field 'POST incoming for Windows Defender ATP to this location' when the Defender ATP Phantom app asset is configured e.g. https://&lt;phantom_host&gt;/rest/handler/windowsdefenderatp_&lt;appid&gt;/&lt;asset_name&gt;/result</li>
-        <li>&lt;asset_id&gt; - The asset ID will be available on the created asset's Phantom web URL e.g. https://&lt;phantom_host&gt;/apps/&lt;app_number&gt;/asset/&lt;asset_id&gt;/</li>
+        <li>&lt;appid&gt; - The app ID will be available in the Redirect URI which gets populated in the field 'POST incoming for Windows Defender ATP to this location' when the Defender ATP Splunk SOAR app asset is configured e.g. https://&lt;splunk_soar_host&gt;/rest/handler/windowsdefenderatp_&lt;appid&gt;/&lt;asset_name&gt;/result</li>
+        <li>&lt;asset_id&gt; - The asset ID will be available on the created asset's Splunk SOAR web URL e.g. https://&lt;splunk_soar_host&gt;/apps/&lt;app_number&gt;/asset/&lt;asset_id&gt;/</li>
       </ul>
     </p>
 

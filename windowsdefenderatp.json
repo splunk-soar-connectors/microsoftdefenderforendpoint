@@ -1,7 +1,7 @@
 {
     "appid": "e85407b7-91f0-4019-8fa4-0d29bca741d5",
     "name": "Windows Defender ATP",
-    "description": "This app integrates with Windows Defender Advanced Threat Protection(ATP) to execute various containment, corrective, generic and investigative actions",
+    "description": "This app integrates with Windows Defender Advanced Threat Protection(ATP) to execute various containment, corrective, generic, and investigative actions",
     "type": "endpoint",
     "product_vendor": "Microsoft",
     "logo": "logo_windowsdefenderatp.svg",
@@ -10,16 +10,16 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2022 Splunk Inc.",
-    "app_version": "3.7.0",
+    "app_version": "3.8.0",
     "utctime_updated": "2022-10-06T07:32:27.000000Z",
     "package_name": "phantom_windowsdefenderatp",
     "main_module": "windowsdefenderatp_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "5.3.3",
+    "min_phantom_version": "5.3.5",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
-        "Cloud September 30, 2022"
+        "Cloud November 11, 2022"
     ],
     "contributors": [
         {
@@ -219,6 +219,10 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.externalId",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "example_values": [
@@ -250,6 +254,13 @@
                 {
                     "data_path": "action_result.data.*.relatedFileInfo",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.requestSource",
+                    "data_type": "string",
+                    "example_values": [
+                        "PublicApi"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.requestor",
@@ -284,6 +295,14 @@
                     ],
                     "column_name": "Quarantine Status",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.troubleshootInfo",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.type",
@@ -457,6 +476,10 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.externalId",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "example_values": [
@@ -490,6 +513,13 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.requestSource",
+                    "data_type": "string",
+                    "example_values": [
+                        "PublicApi"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.requestor",
                     "data_type": "string",
                     "example_values": [
@@ -519,6 +549,14 @@
                     ],
                     "column_name": "Unquarantine Status",
                     "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.troubleshootInfo",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.type",
@@ -635,6 +673,46 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.commands.*.command.params.*.key",
+                    "data_type": "string",
+                    "example_values": [
+                        "Path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.commands.*.command.params.*.value",
+                    "data_type": "string",
+                    "example_values": [
+                        "C:\\share\\1.eml"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.commands.*.command.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "GetFile"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.commands.*.commandStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.commands.*.endTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.commands.*.index",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.commands.*.startTime",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.computerDnsName",
                     "data_type": "string",
                     "example_values": [
@@ -661,6 +739,10 @@
                     "example_values": [
                         0
                     ]
+                },
+                {
+                    "data_path": "action_result.data.*.externalId",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.fileInstances",
@@ -719,6 +801,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.requestSource",
+                    "data_type": "string",
+                    "example_values": [
+                        "PublicApi"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.requestor",
                     "data_type": "string",
                     "example_values": [
@@ -761,6 +850,14 @@
                     ],
                     "column_name": "Event Status",
                     "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.troubleshootInfo",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.type",
@@ -946,6 +1043,10 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.externalId",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "example_values": [
@@ -981,6 +1082,13 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.requestSource",
+                    "data_type": "string",
+                    "example_values": [
+                        "PublicApi"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.requestor",
                     "data_type": "string",
                     "example_values": [
@@ -1014,6 +1122,14 @@
                     ],
                     "column_name": "Scan Status",
                     "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.troubleshootInfo",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.type",
@@ -1207,6 +1323,10 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.externalId",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.fileId",
                     "data_type": "string",
                     "example_values": [
@@ -1274,6 +1394,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.requestSource",
+                    "data_type": "string",
+                    "example_values": [
+                        "PublicApi"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.requestor",
                     "data_type": "string",
                     "example_values": [
@@ -1312,6 +1439,14 @@
                     ],
                     "column_name": "Quarantine Status",
                     "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.troubleshootInfo",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.type",
@@ -1477,6 +1612,20 @@
                     "column_order": 3
                 },
                 {
+                    "data_path": "action_result.data.*.defenderAvStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "NotSupported"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.deviceValue",
+                    "data_type": "string",
+                    "example_values": [
+                        "Normal"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.exposureLevel",
                     "data_type": "string",
                     "example_values": [
@@ -1514,6 +1663,34 @@
                     ],
                     "column_name": "Device ID",
                     "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.ipAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.0.2.15"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.macAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "002248242A86"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.operationalStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Up"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "Ethernet"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.isAadJoined",
@@ -1559,6 +1736,28 @@
                     "data_type": "string",
                     "example_values": [
                         "Test Tag -21"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managedBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.managedByStatus",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.onboardingStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Onboarded"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osArchitecture",
+                    "data_type": "string",
+                    "example_values": [
+                        "64-bit"
                     ]
                 },
                 {
@@ -1621,6 +1820,35 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.vmMetadata",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.vmMetadata.cloudProvider",
+                    "data_type": "string",
+                    "example_values": [
+                        "Azure"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.vmMetadata.resourceId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.vmMetadata.subscriptionId",
+                    "data_type": "string",
+                    "example_values": [
+                        "1b922e46-8595-4749-997a-1205e714cd91"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.vmMetadata.vmId",
+                    "data_type": "string",
+                    "example_values": [
+                        "79980585-d655-43f7-80d9-5b9d34b2e30d"
+                    ]
+                },
+                {
                     "data_path": "action_result.summary.total_devices",
                     "data_type": "numeric",
                     "example_values": [
@@ -1675,7 +1903,7 @@
                     "order": 0
                 },
                 "input": {
-                    "description": "Input filter of type Domain, File Hash and IP",
+                    "description": "Input filter of type Domain, File Hash, and IP",
                     "data_type": "string",
                     "primary": true,
                     "contains": [
@@ -1803,7 +2031,7 @@
                     "data_path": "action_result.data.*.description",
                     "data_type": "string",
                     "example_values": [
-                        "Malware and unwanted software are undesirable applications that perform annoying, disruptive or harmful actions on affected machines. Some of these undesirable applications can replicate and spread from one machine to another. Others can able to receive commands from remote attackers and perform activities associated with cyber attacks. This detection might indicate that Windows Defender has stopped the malware from delivering its payload. However, it is prudent to check the machine for signs of infection."
+                        "Malware and unwanted software are undesirable applications that perform annoying, disruptive, or harmful actions on affected machines. Some of these undesirable applications can replicate and spread from one machine to another. Others can able to receive commands from remote attackers and perform activities associated with cyber attacks. This detection might indicate that Windows Defender has stopped the malware from delivering its payload. However, it is prudent to check the machine for signs of infection."
                     ]
                 },
                 {
@@ -1814,7 +2042,127 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.detectorId",
+                    "data_type": "string",
+                    "example_values": [
+                        "5c6b7d86-c91f-4f8c-8aec-9d2086f46527"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.determination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.aadUserId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.detectionStatus",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.entityType",
+                    "data_type": "string",
+                    "example_values": [
+                        "Url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.evidenceCreationTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-06-10T06:26:09.5133333Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.fileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.filePath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.ipAddress",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFilePath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCommandLine",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryHive",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValue",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha1",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha256",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.url",
+                    "data_type": "string",
+                    "example_values": [
+                        "google.com"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userPrincipalName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userSid",
                     "data_type": "string"
                 },
                 {
@@ -1870,6 +2218,20 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
+                    "data_type": "string",
+                    "example_values": [
+                        "WINATPC1"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.machineId",
                     "data_type": "string",
                     "example_values": [
@@ -1880,10 +2242,35 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string",
+                    "example_values": [
+                        "UnassignedGroup"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.recommendedAction",
                     "data_type": "string",
                     "example_values": [
                         "Collect artifacts and determine scope Review the machine timeline for suspicious activities that may have occurred before and after the time of the alert, and record additional related artifacts (files, IPs/URLs) Look for the presence of relevant artifacts on other systems. Identify commonalities and differences between potentially compromised systems. Submit relevant files for deep analysis and review resulting in detailed behavioral information. Submit undetected files to the MMPC malware portal Initiate containment & mitigation Contact the user to verify intent and initiate local remediation actions as needed. Update AV signatures and run a full scan. The scan might reveal and remove previously-undetected malware components. Ensure that the machine has the latest security updates. In particular, ensure that you have installed the latest software, web browser, and Operating System versions. If credential theft is suspected, reset all relevant users' passwords. Block communication with relevant URLs or IPs at the organization's perimeter."
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.domainName",
+                    "data_type": "string",
+                    "example_values": [
+                        "WINATPC1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test"
                     ]
                 },
                 {
@@ -1913,6 +2300,10 @@
                     "example_values": [
                         "Fuery"
                     ]
+                },
+                {
+                    "data_path": "action_result.data.*.threatName",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.title",
@@ -2203,6 +2594,27 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.comments.*.comment",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "Automation"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-04-08T18:03:45.6064942Z"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.computerDnsName",
                     "data_type": "string"
                 },
@@ -2317,6 +2729,10 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.evidence.*.registryValueName",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.evidence.*.registryValueType",
                     "data_type": "string"
                 },
@@ -2378,6 +2794,20 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string",
+                    "example_values": [
+                        "TestUser"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
+                    "data_type": "string",
+                    "example_values": [
+                        "WINATPC2"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.machineId",
                     "data_type": "string",
                     "contains": [
@@ -2391,6 +2821,20 @@
                 {
                     "data_path": "action_result.data.*.relatedUser",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.domainName",
+                    "data_type": "string",
+                    "example_values": [
+                        "WINATPC1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.userName",
+                    "data_type": "string",
+                    "example_values": [
+                        "TestUser"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.resolvedTime",
@@ -2457,7 +2901,7 @@
         {
             "action": "update alert",
             "description": "Update properties of existing Alert",
-            "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/update-alert\" target=\"_blank\">Get Alert Information by ID API Documentation</a>), user can update alerts that available in the API. See List Alerts for more information.; rate limitations for this action are 100 calls per minute and 1500 calls per hour.",
+            "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/update-alert\" target=\"_blank\">Get Alert Information by ID API Documentation</a>), user can update alerts that available in the API. See List Alerts for more information. Also, previously supported alert determination values ('Apt' and 'SecurityPersonnel') have been deprecated and no longer available via the API; rate limitations for this action are 100 calls per minute and 1500 calls per hour.",
             "type": "investigate",
             "identifier": "update_alert",
             "read_only": false,
@@ -2507,9 +2951,7 @@
                     "order": 4,
                     "value_list": [
                         "NotAvailable",
-                        "Apt",
                         "Malware",
-                        "SecurityPersonnel",
                         "SecurityTesting",
                         "UnwantedSoftware",
                         "Other"
@@ -2778,6 +3220,20 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
+                    "data_type": "string",
+                    "example_values": [
+                        "WINATPC2"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.machineId",
                     "data_type": "string",
                     "contains": [
@@ -2786,6 +3242,10 @@
                 },
                 {
                     "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser",
                     "data_type": "string"
                 },
                 {
@@ -3715,6 +4175,14 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.managedBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.managedByStatus",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.onboardingStatus",
                     "data_type": "string",
                     "example_values": [
@@ -4018,6 +4486,14 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.managedBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.managedByStatus",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.onboardingStatus",
                     "data_type": "string",
                     "example_values": [
@@ -4200,6 +4676,10 @@
                     "column_order": 6
                 },
                 {
+                    "data_path": "action_result.data.*.category",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.exposedMachines",
                     "data_type": "numeric",
                     "example_values": [
@@ -4234,6 +4714,14 @@
                     ],
                     "column_name": "Installed Machines",
                     "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.*.isNormalized",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.name",
@@ -4520,6 +5008,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.summary.restrict_app_execution_status",
+                    "data_type": "string",
+                    "example_values": [
+                        "Succeeded"
+                    ]
+                },
+                {
                     "data_path": "action_result.summary.restriction_status",
                     "data_type": "string",
                     "example_values": [
@@ -4633,6 +5128,34 @@
                 {
                     "data_path": "action_result.data.*.certificateInfo",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo.issuer",
+                    "data_type": "string",
+                    "example_values": [
+                        "E=test@DS1234.testing.net, CN=localhost, OU=QA, O=System, L=ABC, S=UT, C=US"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo.serial",
+                    "data_type": "string",
+                    "example_values": [
+                        "123CE453421A81E2DB9A6A08C3440DBD06"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo.sha256",
+                    "data_type": "string",
+                    "example_values": [
+                        "1234edd57a56d859cd9b18c3b20308917ea2fa5b2013f00d5c98d5a8a9be1234"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo.subject",
+                    "data_type": "string",
+                    "example_values": [
+                        "E=test@DS1234.testing.net, CN=localhost, OU=QA, O=System, L=ABC, S=UT, C=US"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.createdBy",
@@ -5376,6 +5899,13 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.ActionType",
+                    "data_type": "string",
+                    "example_values": [
+                        "RegistryKeyDeleted"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.AntivirusEnabled",
                     "data_type": "string",
                     "example_values": [
@@ -5395,6 +5925,10 @@
                     "example_values": [
                         "N/A"
                     ]
+                },
+                {
+                    "data_path": "action_result.data.*.AppGuardContainerId",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.BehaviorMonitoring",
@@ -5462,6 +5996,49 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountDomain",
+                    "data_type": "string",
+                    "example_values": [
+                        "nt authority"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountName",
+                    "data_type": "string",
+                    "example_values": [
+                        "system"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountObjectId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountSid",
+                    "data_type": "string",
+                    "example_values": [
+                        "S-1-5-18"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountUpn",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessCommandLine",
+                    "data_type": "string",
+                    "example_values": [
+                        "svchost.exe -k netsvcs -p -s wlidsvc"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessCreationTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-09-13T12:18:40.7867576Z"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.InitiatingProcessFileName",
                     "data_type": "string",
                     "example_values": [
@@ -5469,6 +6046,125 @@
                     ],
                     "contains": [
                         "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessFileSize",
+                    "data_type": "numeric",
+                    "example_values": [
+                        59952
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessFolderPath",
+                    "data_type": "string",
+                    "example_values": [
+                        "c:\\windows\\system32\\test.exe"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessId",
+                    "data_type": "numeric",
+                    "example_values": [
+                        7656
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessIntegrityLevel",
+                    "data_type": "string",
+                    "example_values": [
+                        "System"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessMD5",
+                    "data_type": "string",
+                    "example_values": [
+                        "cd10cb894be1234fca0bf0e2b0c27c16"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessParentCreationTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-07-15T08:34:44.3266266Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessParentFileName",
+                    "data_type": "string",
+                    "example_values": [
+                        "services.exe"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessParentId",
+                    "data_type": "numeric",
+                    "example_values": [
+                        756
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessSHA1",
+                    "data_type": "string",
+                    "example_values": [
+                        "1f912d4bec338ef10b7c9f12346286f8acc4eb97"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessSHA256",
+                    "data_type": "string",
+                    "example_values": [
+                        "f3feb95e7bcfb0766a694d93fca29eda7e2ca977c2395b4be75242814eb6d881"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessTokenElevation",
+                    "data_type": "string",
+                    "example_values": [
+                        "TokenElevationTypeDefault"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoCompanyName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Microsoft Corporation"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoFileDescription",
+                    "data_type": "string",
+                    "example_values": [
+                        "Host Process for Windows Services"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoInternalFileName",
+                    "data_type": "string",
+                    "example_values": [
+                        "svchost.exe"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoOriginalFileName",
+                    "data_type": "string",
+                    "example_values": [
+                        "svchost.exe"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoProductName",
+                    "data_type": "string",
+                    "example_values": [
+                        "Microsoft\u00ae Windows\u00ae Operating System"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoProductVersion",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.0.19041.1566"
                     ]
                 },
                 {
@@ -5486,10 +6182,45 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.PreviousRegistryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.PreviousRegistryValueData",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.PreviousRegistryValueName",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.RealtimeProtection",
                     "data_type": "string",
                     "example_values": [
                         "N/A"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.RegistryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RegistryValueData",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RegistryValueName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RegistryValueType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.ReportId",
+                    "data_type": "numeric",
+                    "example_values": [
+                        641555
                     ]
                 },
                 {
@@ -5732,6 +6463,20 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.managedBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managedByStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
                     "data_path": "action_result.data.*.onboardingStatus",
                     "data_type": "string",
                     "example_values": [
@@ -5866,6 +6611,453 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "update device tag",
+            "description": "Add or remove a tag from a given device (Maximum: 200 characters)",
+            "type": "generic",
+            "identifier": "update_device_tag",
+            "read_only": false,
+            "parameters": {
+                "device_id": {
+                    "description": "ID of the device",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "defender atp device id"
+                    ],
+                    "order": 0
+                },
+                "operation": {
+                    "value_list": [
+                        "Add",
+                        "Remove"
+                    ],
+                    "data_type": "string",
+                    "default": "Add",
+                    "required": true,
+                    "description": "Determines whether the provided tag is added or removed",
+                    "order": 1
+                },
+                "tag": {
+                    "data_type": "string",
+                    "required": true,
+                    "description": "Value of the tag to add or remove from the machine",
+                    "order": 2
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.device_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768"
+                    ],
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.operation",
+                    "data_type": "string",
+                    "example_values": [
+                        "Add"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.tag",
+                    "data_type": "string",
+                    "example_values": [
+                        "test-tag"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.@odata.context",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://api.securitycenter.windows.com/api/$metadata#Machines/$entity"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.@odata.context",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://api.securitycenter.windows.com/api/$metadata#Machines/$entity"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.aadDeviceId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.agentVersion",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.5850.17763.404"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string",
+                    "example_values": [
+                        "desktop-ph2a1ro"
+                    ],
+                    "contains": [
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.defenderAvStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "NotSupported"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.defenderAvStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "NotSupported"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.deviceValue",
+                    "data_type": "string",
+                    "example_values": [
+                        "Normal"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.deviceValue",
+                    "data_type": "string",
+                    "example_values": [
+                        "Normal"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.exposureLevel",
+                    "data_type": "string",
+                    "example_values": [
+                        "Medium"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.firstSeen",
+                    "data_type": "string",
+                    "example_values": [
+                        "2019-04-16T00:27:12.2677222Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.groupName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.healthStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Active"
+                    ],
+                    "column_name": "Health Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "ae2e5bda4bb22ec9c321680079d03e5e4cdff400"
+                    ],
+                    "contains": [
+                        "defender atp device id"
+                    ],
+                    "column_name": "Device ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.ipAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.0.2.15"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.ipAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.0.2.15"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.macAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "002248242A86"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.macAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "001238242A86"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.operationalStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Up"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.operationalStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Up"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "Ethernet"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.ipAddresses.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "Ethernet"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.isAadJoined",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastExternalIpAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "204.107.141.240"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastIpAddress",
+                    "data_type": "string",
+                    "example_values": [
+                        "10.1.66.140"
+                    ],
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.lastSeen",
+                    "data_type": "string",
+                    "example_values": [
+                        "2019-05-03T05:23:45.9643247Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.machineTags",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test Tag -21"
+                    ],
+                    "column_name": "Tag(s)",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.managedBy",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managedBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.managedByStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.managedByStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unknown"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.onboardingStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Onboarded"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.onboardingStatus",
+                    "data_type": "string",
+                    "example_values": [
+                        "Onboarded"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osArchitecture",
+                    "data_type": "string",
+                    "example_values": [
+                        "64-bit"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osArchitecture",
+                    "data_type": "string",
+                    "example_values": [
+                        "64-bit"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osBuild",
+                    "data_type": "numeric",
+                    "example_values": [
+                        17763
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osPlatform",
+                    "data_type": "string",
+                    "example_values": [
+                        "Windows10"
+                    ],
+                    "column_name": "OS",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.osProcessor",
+                    "data_type": "string",
+                    "example_values": [
+                        "x64"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.osVersion",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupId",
+                    "data_type": "numeric",
+                    "example_values": [
+                        0
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string",
+                    "example_values": [
+                        "GROUP1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.riskScore",
+                    "data_type": "string",
+                    "example_values": [
+                        "None"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.systemProductName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string",
+                    "example_values": [
+                        "1809"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.vmMetadata",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.vmMetadata",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.operation",
+                    "data_type": "string",
+                    "example_values": [
+                        "Add"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.operation",
+                    "data_type": "string",
+                    "example_values": [
+                        "Add"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.tag",
+                    "data_type": "string",
+                    "example_values": [
+                        "test-new-ac"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.tag",
+                    "data_type": "string",
+                    "example_values": [
+                        "test-tag"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total devices: 1"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table",
+                "width": 10,
+                "height": 5
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get discovered vulnerabilities",
             "description": "Retrieve a collection of discovered vulnerabilities related to a given device ID",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-discovered-vulnerabilities?view=o365-worldwide\" target=\"_blank\">Get discovered vulnerabilities API Documentation</a>), rate limitations for this API are 50 calls per minute and 1500 calls per hour.",
@@ -5904,6 +7096,17 @@
                     ],
                     "column_name": "Device ID",
                     "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.@odata.type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.@odata.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "#microsoft.windowsDefenderATP.api.PublicVulnerabilityDto"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.cvssV3",
@@ -6257,6 +7460,13 @@
                     ],
                     "contains": [
                         "defender atp event id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.remove_app_restriction_status",
+                    "data_type": "string",
+                    "example_values": [
+                        "Pending"
                     ]
                 },
                 {
@@ -7278,6 +8488,10 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.summary.event_id_status",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.summary.live_response_result",
                     "data_type": "string"
                 },
@@ -7454,7 +8668,7 @@
         "wheel": [
             {
                 "module": "Django",
-                "input_file": "wheels/py3/Django-3.2.15-py3-none-any.whl"
+                "input_file": "wheels/py3/Django-3.2.16-py3-none-any.whl"
             },
             {
                 "module": "asgiref",
@@ -7466,7 +8680,7 @@
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/py3/certifi-2022.9.14-py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2022.9.24-py3-none-any.whl"
             },
             {
                 "module": "chardet",
@@ -7478,7 +8692,7 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2022.2.1-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2022.6-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
@@ -7490,7 +8704,7 @@
             },
             {
                 "module": "sqlparse",
-                "input_file": "wheels/py3/sqlparse-0.4.2-py3-none-any.whl"
+                "input_file": "wheels/py3/sqlparse-0.4.3-py3-none-any.whl"
             },
             {
                 "module": "typing_extensions",
@@ -7506,7 +8720,7 @@
         "wheel": [
             {
                 "module": "Django",
-                "input_file": "wheels/py3/Django-3.2.15-py3-none-any.whl"
+                "input_file": "wheels/py3/Django-3.2.16-py3-none-any.whl"
             },
             {
                 "module": "asgiref",
@@ -7518,7 +8732,7 @@
             },
             {
                 "module": "certifi",
-                "input_file": "wheels/py3/certifi-2022.9.14-py3-none-any.whl"
+                "input_file": "wheels/py3/certifi-2022.9.24-py3-none-any.whl"
             },
             {
                 "module": "chardet",
@@ -7530,7 +8744,7 @@
             },
             {
                 "module": "pytz",
-                "input_file": "wheels/shared/pytz-2022.2.1-py2.py3-none-any.whl"
+                "input_file": "wheels/shared/pytz-2022.6-py2.py3-none-any.whl"
             },
             {
                 "module": "requests",
@@ -7542,7 +8756,7 @@
             },
             {
                 "module": "sqlparse",
-                "input_file": "wheels/py3/sqlparse-0.4.2-py3-none-any.whl"
+                "input_file": "wheels/py3/sqlparse-0.4.3-py3-none-any.whl"
             },
             {
                 "module": "urllib3",

@@ -497,25 +497,25 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: error message
         """
 
-        error_code = ERR_CODE_MSG
-        error_msg = ERR_MSG_UNAVAILABLE
+        err_code = ERR_CODE_MSG
+        err_msg = ERR_MSG_UNAVAILABLE
 
         self._dump_error_log(e, "Traceback: ")
 
         try:
             if hasattr(e, "args"):
                 if len(e.args) > 1:
-                    error_code = e.args[0]
-                    error_msg = e.args[1]
+                    err_code = e.args[0]
+                    err_msg = e.args[1]
                 elif len(e.args) == 1:
-                    error_msg = e.args[0]
+                    err_msg = e.args[0]
         except Exception as e:
             self._dump_error_log(e, "Error occurred while fetching exception information.")
 
-        if not error_code:
-            error_text = "Error Message: {}".format(error_msg)
+        if not err_code:
+            error_text = "Error Message: {}".format(err_msg)
         else:
-            error_text = "Error Code: {}. Error Message: {}".format(error_code, error_msg)
+            error_text = "Error Code: {}. Error Message: {}".format(err_code, err_msg)
 
         return error_text
 
@@ -781,11 +781,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         """
 
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress(DEFENDERATP_MAKING_CONNECTION_MSG)
+        self.save_progress(DEFENDERATP_MAKING_CONNECTIVITY_MSG)
 
-        self.save_progress(f"Login URL: {self._login_url}")
-        self.save_progress(f"Graph URL: {self._graph_url}")
-        self.save_progress(f"Resource URL: {self._resource_url}")
+        self.save_progress("Login URL: {}".format(self._login_url))
+        self.save_progress("Graph URL: {}".format(self._graph_url))
+        self.save_progress("Resource URL: {}".format(self._resource_url))
 
         if not self._state:
             self._state = {}
@@ -1059,6 +1059,46 @@ class WindowsDefenderAtpConnector(BaseConnector):
         except Exception as e:
             err = self._get_error_message_from_exception(e)
             return action_result.set_status(phantom.APP_ERROR, "Error occurred while processing the response {}".format(err))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_update_device_tag(self, param):
+        """ This function is used to handle the update device tag action.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_id = param[DEFENDERATP_JSON_DEVICE_ID]
+        tag = param[DEFENDERATP_JSON_TAG]
+        operation = param[DEFENDERATP_JSON_OPERATION]
+
+        if operation not in TAG_OPERATION_VALUE_LIST:
+            return action_result.set_status(
+                phantom.APP_ERROR, "Please provide valid input from {} in 'operation' action parameter".format(TAG_OPERATION_VALUE_LIST))
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINES_TAGS_ENDPOINT
+                                   .format(device_id=device_id))
+
+        data = {
+            'Action': operation,
+            'Value': tag
+        }
+
+        # make rest call
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method='post',
+                                                 data=json.dumps(data))
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+        summary = action_result.update_summary({})
+        summary['tag'] = tag
+        summary['operation'] = operation
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -2574,7 +2614,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'get_file_live_response': self._handle_get_file_live_response,
             'put_file_live_response': self._handle_put_file_live_response,
             'run_script_live_response': self._handle_run_script_live_response,
-            'get_missing_kbs': self._handle_get_missing_kbs
+            'get_missing_kbs': self._handle_get_missing_kbs,
+            'update_device_tag': self._handle_update_device_tag
         }
 
         action = self.get_action_identifier()
