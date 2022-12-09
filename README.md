@@ -2,13 +2,13 @@
 # Windows Defender ATP
 
 Publisher: Splunk  
-Connector Version: 3\.7\.0  
+Connector Version: 3\.8\.0  
 Product Vendor: Microsoft  
 Product Name: Windows Defender ATP  
 Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.3\.3  
+Minimum Product Version: 5\.3\.5  
 
-This app integrates with Windows Defender Advanced Threat Protection\(ATP\) to execute various containment, corrective, generic and investigative actions
+This app integrates with Windows Defender Advanced Threat Protection\(ATP\) to execute various containment, corrective, generic, and investigative actions
 
 [comment]: # " File: README.md"
 [comment]: # "  Copyright (c) 2019-2022 Splunk Inc."
@@ -17,9 +17,9 @@ This app integrates with Windows Defender Advanced Threat Protection\(ATP\) to e
 [comment]: # ""
 ## Defender ATP Instance Minimum Version Compatibility
 
--   With this major version 2.0.0 of the Windows Defender ATP app on Phantom, we declare support for
-    (on and above) the cloud 'November-December 2019' GA release for the ATP instances. This app has
-    been tested and certified on the mentioned GA release of the Defender ATP and its APIs.
+-   With this major version 2.0.0 of the Windows Defender ATP app on Splunk SOAR, we declare support
+    for (on and above) the cloud 'November-December 2019' GA release for the ATP instances. This app
+    has been tested and certified on the mentioned GA release of the Defender ATP and its APIs.
 
 ## Playbook Backward Compatibility
 
@@ -287,7 +287,7 @@ When creating an asset for the app,
         -   The authorization code generated in the above step is used by the connectivity to make
             the next API call to generate the \[access_token\] and \[refresh_token\] pair. The
             generated authorization code, \[access_token\], and \[refresh_token\] are stored in the
-            state file of the app on the Phantom server.
+            state file of the app on the Splunk SOAR server.
         -   The authorization code can be used only once to generate the pair of \[access_token\]
             and \[refresh_token\]. If the \[access_token\] expires, then the \[refresh_token\] is
             used internally automatically by the application to re-generate the \[access_token\] by
@@ -312,7 +312,7 @@ When creating an asset for the app,
             requests an \[access_token\] then it will generate the \[access_token\].
         -   The \[access_token\] generated in the above step is used by the test connectivity to
             make the next API call to verify the \[access_token\]. The generated \[access_token\] is
-            stored in the state file of the app on the Phantom server.
+            stored in the state file of the app on the Splunk SOAR server.
         -   If the \[access_token\] expires, then application will automatically re-generate the
             \[access_token\] by making the corresponding API call.
         -   The successful run of the Test Connectivity ensures that a valid \[access_token\] has
@@ -331,18 +331,18 @@ Please check the permissions for the state file as mentioned below.
 
 #### State file permissions
 
--   File rights: rw-rw-r-- (664) (The phantom user should have read and write access for the state
-    file)
--   File owner: Appropriate phantom user
+-   File rights: rw-rw-r-- (664) (The Splunk SOAR user should have read and write access for the
+    state file)
+-   File owner: Appropriate Splunk SOAR user
 
 ## Notes
 
 -   \<appid> - The app ID will be available in the Redirect URI which gets populated in the field
-    'POST incoming for Windows Defender ATP to this location' when the Defender ATP Phantom app
+    'POST incoming for Windows Defender ATP to this location' when the Defender ATP Splunk SOAR app
     asset is configured e.g.
-    https://\<phantom_host>/rest/handler/windowsdefenderatp\_\<appid>/\<asset_name>/result
--   \<asset_id> - The asset ID will be available on the created asset's Phantom web URL e.g.
-    https://\<phantom_host>/apps/\<app_number>/asset/\<asset_id>/
+    https://\<splunk_soar_host>/rest/handler/windowsdefenderatp\_\<appid>/\<asset_name>/result
+-   \<asset_id> - The asset ID will be available on the created asset's Splunk SOAR web URL e.g.
+    https://\<splunk_soar_host>/apps/\<app_number>/asset/\<asset_id>/
 
 ## get file (live response) action workflow
 
@@ -473,6 +473,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [delete indicator](#action-delete-indicator) - Delete an Indicator entity by ID  
 [run query](#action-run-query) - An advanced search query  
 [get domain devices](#action-get-domain-devices) - Retrieve a collection of devices that have communicated to or from a given domain address  
+[update device tag](#action-update-device-tag) - Add or remove a tag from a given device \(Maximum\: 200 characters\)  
 [get discovered vulnerabilities](#action-get-discovered-vulnerabilities) - Retrieve a collection of discovered vulnerabilities related to a given device ID  
 [remove app restriction](#action-remove-app-restriction) - Enable execution of any application on the device  
 [get exposure score](#action-get-exposure-score) - Retrieve the organizational exposure score  
@@ -526,14 +527,18 @@ action\_result\.data\.\*\.computerDnsName | string |
 action\_result\.data\.\*\.creationDateTimeUtc | string | 
 action\_result\.data\.\*\.error | string | 
 action\_result\.data\.\*\.errorHResult | numeric | 
+action\_result\.data\.\*\.externalId | string | 
 action\_result\.data\.\*\.id | string |  `defender atp event id` 
 action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
 action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
 action\_result\.data\.\*\.relatedFileInfo | string | 
+action\_result\.data\.\*\.requestSource | string | 
 action\_result\.data\.\*\.requestor | string |  `email` 
 action\_result\.data\.\*\.requestorComment | string | 
 action\_result\.data\.\*\.scope | string | 
 action\_result\.data\.\*\.status | string | 
+action\_result\.data\.\*\.title | string | 
+action\_result\.data\.\*\.troubleshootInfo | string | 
 action\_result\.data\.\*\.type | string | 
 action\_result\.summary\.event\_id | string |  `defender atp event id` 
 action\_result\.summary\.quarantine\_status | string | 
@@ -571,14 +576,18 @@ action\_result\.data\.\*\.computerDnsName | string |
 action\_result\.data\.\*\.creationDateTimeUtc | string | 
 action\_result\.data\.\*\.error | string | 
 action\_result\.data\.\*\.errorHResult | numeric | 
+action\_result\.data\.\*\.externalId | string | 
 action\_result\.data\.\*\.id | string |  `defender atp event id` 
 action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
 action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
 action\_result\.data\.\*\.relatedFileInfo | string | 
+action\_result\.data\.\*\.requestSource | string | 
 action\_result\.data\.\*\.requestor | string |  `email` 
 action\_result\.data\.\*\.requestorComment | string | 
 action\_result\.data\.\*\.scope | string | 
 action\_result\.data\.\*\.status | string | 
+action\_result\.data\.\*\.title | string | 
+action\_result\.data\.\*\.troubleshootInfo | string | 
 action\_result\.data\.\*\.type | string | 
 action\_result\.summary\.event\_id | string |  `defender atp event id` 
 action\_result\.summary\.unquarantine\_status | string | 
@@ -606,10 +615,18 @@ action\_result\.data\.\*\.\@odata\.context | string |  `url`
 action\_result\.data\.\*\.cancellationComment | string | 
 action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
 action\_result\.data\.\*\.cancellationRequestor | string | 
+action\_result\.data\.\*\.commands\.\*\.command\.params\.\*\.key | string | 
+action\_result\.data\.\*\.commands\.\*\.command\.params\.\*\.value | string | 
+action\_result\.data\.\*\.commands\.\*\.command\.type | string | 
+action\_result\.data\.\*\.commands\.\*\.commandStatus | string | 
+action\_result\.data\.\*\.commands\.\*\.endTime | string | 
+action\_result\.data\.\*\.commands\.\*\.index | numeric | 
+action\_result\.data\.\*\.commands\.\*\.startTime | string | 
 action\_result\.data\.\*\.computerDnsName | string | 
 action\_result\.data\.\*\.creationDateTimeUtc | string | 
 action\_result\.data\.\*\.error | string | 
 action\_result\.data\.\*\.errorHResult | numeric | 
+action\_result\.data\.\*\.externalId | string | 
 action\_result\.data\.\*\.fileInstances | string | 
 action\_result\.data\.\*\.id | string |  `defender atp event id` 
 action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
@@ -617,11 +634,14 @@ action\_result\.data\.\*\.machineId | string |  `defender atp device id`
 action\_result\.data\.\*\.relatedFileInfo | string | 
 action\_result\.data\.\*\.relatedFileInfo\.fileIdentifier | string |  `sha1` 
 action\_result\.data\.\*\.relatedFileInfo\.fileIdentifierType | string | 
+action\_result\.data\.\*\.requestSource | string | 
 action\_result\.data\.\*\.requestor | string |  `email` 
 action\_result\.data\.\*\.requestorComment | string | 
 action\_result\.data\.\*\.scope | string | 
 action\_result\.data\.\*\.sha1 | string |  `sha1` 
 action\_result\.data\.\*\.status | string | 
+action\_result\.data\.\*\.title | string | 
+action\_result\.data\.\*\.troubleshootInfo | string | 
 action\_result\.data\.\*\.type | string | 
 action\_result\.summary\.event\_status | string | 
 action\_result\.message | string | 
@@ -660,14 +680,18 @@ action\_result\.data\.\*\.computerDnsName | string |
 action\_result\.data\.\*\.creationDateTimeUtc | string | 
 action\_result\.data\.\*\.error | string | 
 action\_result\.data\.\*\.errorHResult | numeric | 
+action\_result\.data\.\*\.externalId | string | 
 action\_result\.data\.\*\.id | string |  `defender atp event id` 
 action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
 action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
 action\_result\.data\.\*\.relatedFileInfo | string | 
+action\_result\.data\.\*\.requestSource | string | 
 action\_result\.data\.\*\.requestor | string |  `email` 
 action\_result\.data\.\*\.requestorComment | string | 
 action\_result\.data\.\*\.scope | string | 
 action\_result\.data\.\*\.status | string | 
+action\_result\.data\.\*\.title | string | 
+action\_result\.data\.\*\.troubleshootInfo | string | 
 action\_result\.data\.\*\.type | string | 
 action\_result\.summary\.event\_id | string |  `defender atp event id` 
 action\_result\.summary\.scan\_status | string | 
@@ -707,6 +731,7 @@ action\_result\.data\.\*\.computerDnsName | string |
 action\_result\.data\.\*\.creationDateTimeUtc | string | 
 action\_result\.data\.\*\.error | string | 
 action\_result\.data\.\*\.errorHResult | numeric | 
+action\_result\.data\.\*\.externalId | string | 
 action\_result\.data\.\*\.fileId | string |  `sha1` 
 action\_result\.data\.\*\.fileInstances\.\*\.filePath | string |  `file path` 
 action\_result\.data\.\*\.fileInstances\.\*\.status | string | 
@@ -715,11 +740,14 @@ action\_result\.data\.\*\.lastUpdateDateTimeUtc | string |
 action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
 action\_result\.data\.\*\.relatedFileInfo\.fileIdentifier | string |  `sha1` 
 action\_result\.data\.\*\.relatedFileInfo\.fileIdentifierType | string | 
+action\_result\.data\.\*\.requestSource | string | 
 action\_result\.data\.\*\.requestor | string |  `email` 
 action\_result\.data\.\*\.requestorComment | string | 
 action\_result\.data\.\*\.scope | string | 
 action\_result\.data\.\*\.sha1 | string |  `sha1` 
 action\_result\.data\.\*\.status | string | 
+action\_result\.data\.\*\.title | string | 
+action\_result\.data\.\*\.troubleshootInfo | string | 
 action\_result\.data\.\*\.type | string | 
 action\_result\.summary\.event\_id | string |  `defender atp event id` 
 action\_result\.summary\.quarantine\_status | string | 
@@ -754,16 +782,26 @@ action\_result\.parameter\.query | string |
 action\_result\.data\.\*\.aadDeviceId | string | 
 action\_result\.data\.\*\.agentVersion | string | 
 action\_result\.data\.\*\.computerDnsName | string |  `domain` 
+action\_result\.data\.\*\.defenderAvStatus | string | 
+action\_result\.data\.\*\.deviceValue | string | 
 action\_result\.data\.\*\.exposureLevel | string | 
 action\_result\.data\.\*\.firstSeen | string | 
 action\_result\.data\.\*\.groupName | string | 
 action\_result\.data\.\*\.healthStatus | string | 
 action\_result\.data\.\*\.id | string |  `defender atp device id` 
+action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
 action\_result\.data\.\*\.isAadJoined | boolean | 
 action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
 action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
 action\_result\.data\.\*\.lastSeen | string | 
 action\_result\.data\.\*\.machineTags | string | 
+action\_result\.data\.\*\.managedBy | string | 
+action\_result\.data\.\*\.managedByStatus | string | 
+action\_result\.data\.\*\.onboardingStatus | string | 
+action\_result\.data\.\*\.osArchitecture | string | 
 action\_result\.data\.\*\.osBuild | numeric | 
 action\_result\.data\.\*\.osPlatform | string | 
 action\_result\.data\.\*\.osProcessor | string | 
@@ -773,6 +811,11 @@ action\_result\.data\.\*\.rbacGroupName | string |
 action\_result\.data\.\*\.riskScore | string | 
 action\_result\.data\.\*\.systemProductName | string | 
 action\_result\.data\.\*\.version | string | 
+action\_result\.data\.\*\.vmMetadata | string | 
+action\_result\.data\.\*\.vmMetadata\.cloudProvider | string | 
+action\_result\.data\.\*\.vmMetadata\.resourceId | string | 
+action\_result\.data\.\*\.vmMetadata\.subscriptionId | string | 
+action\_result\.data\.\*\.vmMetadata\.vmId | string | 
 action\_result\.summary\.total\_devices | numeric | 
 action\_result\.message | string | 
 summary\.total\_objects | numeric | 
@@ -790,7 +833,7 @@ Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/windows/securi
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **input\_type** |  optional  | Type of input \(Default\: All\) | string | 
-**input** |  optional  | Input filter of type Domain, File Hash and IP | string |  `domain`  `sha1`  `sha256`  `md5`  `ip` 
+**input** |  optional  | Input filter of type Domain, File Hash, and IP | string |  `domain`  `sha1`  `sha256`  `md5`  `ip` 
 **limit** |  optional  | Maximum number of alerts to return \(Maximum\: 10,000\) | numeric | 
 
 #### Action Output
@@ -811,7 +854,34 @@ action\_result\.data\.\*\.comments\.\*\.createdTime | string |
 action\_result\.data\.\*\.computerDnsName | string | 
 action\_result\.data\.\*\.description | string | 
 action\_result\.data\.\*\.detectionSource | string | 
+action\_result\.data\.\*\.detectorId | string | 
 action\_result\.data\.\*\.determination | string | 
+action\_result\.data\.\*\.evidence\.\*\.aadUserId | string | 
+action\_result\.data\.\*\.evidence\.\*\.accountName | string | 
+action\_result\.data\.\*\.evidence\.\*\.detectionStatus | string | 
+action\_result\.data\.\*\.evidence\.\*\.domainName | string | 
+action\_result\.data\.\*\.evidence\.\*\.entityType | string | 
+action\_result\.data\.\*\.evidence\.\*\.evidenceCreationTime | string | 
+action\_result\.data\.\*\.evidence\.\*\.fileName | string | 
+action\_result\.data\.\*\.evidence\.\*\.filePath | string | 
+action\_result\.data\.\*\.evidence\.\*\.ipAddress | string | 
+action\_result\.data\.\*\.evidence\.\*\.parentProcessCreationTime | string | 
+action\_result\.data\.\*\.evidence\.\*\.parentProcessFileName | string | 
+action\_result\.data\.\*\.evidence\.\*\.parentProcessFilePath | string | 
+action\_result\.data\.\*\.evidence\.\*\.parentProcessId | string | 
+action\_result\.data\.\*\.evidence\.\*\.processCommandLine | string | 
+action\_result\.data\.\*\.evidence\.\*\.processCreationTime | string | 
+action\_result\.data\.\*\.evidence\.\*\.processId | string | 
+action\_result\.data\.\*\.evidence\.\*\.registryHive | string | 
+action\_result\.data\.\*\.evidence\.\*\.registryKey | string | 
+action\_result\.data\.\*\.evidence\.\*\.registryValue | string | 
+action\_result\.data\.\*\.evidence\.\*\.registryValueName | string | 
+action\_result\.data\.\*\.evidence\.\*\.registryValueType | string | 
+action\_result\.data\.\*\.evidence\.\*\.sha1 | string | 
+action\_result\.data\.\*\.evidence\.\*\.sha256 | string | 
+action\_result\.data\.\*\.evidence\.\*\.url | string | 
+action\_result\.data\.\*\.evidence\.\*\.userPrincipalName | string | 
+action\_result\.data\.\*\.evidence\.\*\.userSid | string | 
 action\_result\.data\.\*\.firstEventTime | string | 
 action\_result\.data\.\*\.id | string |  `defender atp alert id` 
 action\_result\.data\.\*\.incidentId | numeric | 
@@ -819,12 +889,19 @@ action\_result\.data\.\*\.investigationId | numeric |
 action\_result\.data\.\*\.investigationState | string | 
 action\_result\.data\.\*\.lastEventTime | string | 
 action\_result\.data\.\*\.lastUpdateTime | string | 
+action\_result\.data\.\*\.loggedOnUsers\.\*\.accountName | string | 
+action\_result\.data\.\*\.loggedOnUsers\.\*\.domainName | string | 
 action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
+action\_result\.data\.\*\.rbacGroupName | string | 
 action\_result\.data\.\*\.recommendedAction | string | 
+action\_result\.data\.\*\.relatedUser | string | 
+action\_result\.data\.\*\.relatedUser\.domainName | string | 
+action\_result\.data\.\*\.relatedUser\.userName | string | 
 action\_result\.data\.\*\.resolvedTime | string | 
 action\_result\.data\.\*\.severity | string | 
 action\_result\.data\.\*\.status | string | 
 action\_result\.data\.\*\.threatFamilyName | string | 
+action\_result\.data\.\*\.threatName | string | 
 action\_result\.data\.\*\.title | string | 
 action\_result\.summary\.total\_alerts | numeric | 
 action\_result\.message | string | 
@@ -891,6 +968,9 @@ action\_result\.data\.\*\.alertCreationTime | string |
 action\_result\.data\.\*\.assignedTo | string | 
 action\_result\.data\.\*\.category | string | 
 action\_result\.data\.\*\.classification | string | 
+action\_result\.data\.\*\.comments\.\*\.comment | string | 
+action\_result\.data\.\*\.comments\.\*\.createdBy | string | 
+action\_result\.data\.\*\.comments\.\*\.createdTime | string | 
 action\_result\.data\.\*\.computerDnsName | string | 
 action\_result\.data\.\*\.description | string | 
 action\_result\.data\.\*\.detectionSource | string | 
@@ -915,6 +995,7 @@ action\_result\.data\.\*\.evidence\.\*\.processId | string |  `pid`
 action\_result\.data\.\*\.evidence\.\*\.registryHive | string | 
 action\_result\.data\.\*\.evidence\.\*\.registryKey | string | 
 action\_result\.data\.\*\.evidence\.\*\.registryValue | string | 
+action\_result\.data\.\*\.evidence\.\*\.registryValueName | string | 
 action\_result\.data\.\*\.evidence\.\*\.registryValueType | string | 
 action\_result\.data\.\*\.evidence\.\*\.sha1 | string |  `sha1` 
 action\_result\.data\.\*\.evidence\.\*\.sha256 | string |  `sha256` 
@@ -928,9 +1009,13 @@ action\_result\.data\.\*\.investigationId | numeric |
 action\_result\.data\.\*\.investigationState | string | 
 action\_result\.data\.\*\.lastEventTime | string | 
 action\_result\.data\.\*\.lastUpdateTime | string | 
+action\_result\.data\.\*\.loggedOnUsers\.\*\.accountName | string | 
+action\_result\.data\.\*\.loggedOnUsers\.\*\.domainName | string | 
 action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
 action\_result\.data\.\*\.rbacGroupName | string | 
 action\_result\.data\.\*\.relatedUser | string | 
+action\_result\.data\.\*\.relatedUser\.domainName | string | 
+action\_result\.data\.\*\.relatedUser\.userName | string | 
 action\_result\.data\.\*\.resolvedTime | string | 
 action\_result\.data\.\*\.severity | string | 
 action\_result\.data\.\*\.status | string | 
@@ -948,7 +1033,7 @@ Update properties of existing Alert
 Type: **investigate**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/update\-alert" target="\_blank">Get Alert Information by ID API Documentation</a>\), user can update alerts that available in the API\. See List Alerts for more information\.; rate limitations for this action are 100 calls per minute and 1500 calls per hour\.
+Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/update\-alert" target="\_blank">Get Alert Information by ID API Documentation</a>\), user can update alerts that available in the API\. See List Alerts for more information\. Also, previously supported alert determination values \('Apt' and 'SecurityPersonnel'\) have been deprecated and no longer available via the API; rate limitations for this action are 100 calls per minute and 1500 calls per hour\.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
@@ -1016,8 +1101,11 @@ action\_result\.data\.\*\.investigationId | numeric |
 action\_result\.data\.\*\.investigationState | string | 
 action\_result\.data\.\*\.lastEventTime | string | 
 action\_result\.data\.\*\.lastUpdateTime | string | 
+action\_result\.data\.\*\.loggedOnUsers\.\*\.accountName | string | 
+action\_result\.data\.\*\.loggedOnUsers\.\*\.domainName | string | 
 action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
 action\_result\.data\.\*\.rbacGroupName | string | 
+action\_result\.data\.\*\.relatedUser | string | 
 action\_result\.data\.\*\.relatedUser\.domainName | string |  `domain` 
 action\_result\.data\.\*\.relatedUser\.userName | string |  `user name` 
 action\_result\.data\.\*\.resolvedTime | string | 
@@ -1205,6 +1293,8 @@ action\_result\.data\.\*\.isAadJoined | boolean |
 action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
 action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
 action\_result\.data\.\*\.lastSeen | string | 
+action\_result\.data\.\*\.managedBy | string | 
+action\_result\.data\.\*\.managedByStatus | string | 
 action\_result\.data\.\*\.onboardingStatus | string | 
 action\_result\.data\.\*\.osArchitecture | string | 
 action\_result\.data\.\*\.osBuild | numeric | 
@@ -1260,6 +1350,8 @@ action\_result\.data\.\*\.isAadJoined | boolean |
 action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
 action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
 action\_result\.data\.\*\.lastSeen | string | 
+action\_result\.data\.\*\.managedBy | string | 
+action\_result\.data\.\*\.managedByStatus | string | 
 action\_result\.data\.\*\.onboardingStatus | string | 
 action\_result\.data\.\*\.osArchitecture | string | 
 action\_result\.data\.\*\.osBuild | numeric | 
@@ -1297,10 +1389,12 @@ DATA PATH | TYPE | CONTAINS
 action\_result\.status | string | 
 action\_result\.parameter\.device\_id | string |  `defender atp device id` 
 action\_result\.data\.\*\.activeAlert | boolean | 
+action\_result\.data\.\*\.category | string | 
 action\_result\.data\.\*\.exposedMachines | numeric | 
 action\_result\.data\.\*\.id | string | 
 action\_result\.data\.\*\.impactScore | numeric | 
 action\_result\.data\.\*\.installedMachines | numeric | 
+action\_result\.data\.\*\.isNormalized | boolean | 
 action\_result\.data\.\*\.name | string | 
 action\_result\.data\.\*\.publicExploit | boolean | 
 action\_result\.data\.\*\.vendor | string | 
@@ -1354,6 +1448,7 @@ action\_result\.data\.\*\.title | string |
 action\_result\.data\.\*\.troubleshootInfo | string | 
 action\_result\.data\.\*\.type | string | 
 action\_result\.summary\.event\_id | string |  `defender atp event id` 
+action\_result\.summary\.restrict\_app\_execution\_status | string | 
 action\_result\.summary\.restriction\_status | string | 
 action\_result\.message | string | 
 summary\.total\_objects | numeric | 
@@ -1385,6 +1480,10 @@ action\_result\.data\.\*\.application | string |
 action\_result\.data\.\*\.bypassDurationHours | string | 
 action\_result\.data\.\*\.category | numeric | 
 action\_result\.data\.\*\.certificateInfo | string | 
+action\_result\.data\.\*\.certificateInfo\.issuer | string | 
+action\_result\.data\.\*\.certificateInfo\.serial | string | 
+action\_result\.data\.\*\.certificateInfo\.sha256 | string | 
+action\_result\.data\.\*\.certificateInfo\.subject | string | 
 action\_result\.data\.\*\.createdBy | string | 
 action\_result\.data\.\*\.createdByDisplayName | string | 
 action\_result\.data\.\*\.createdBySource | string | 
@@ -1524,9 +1623,11 @@ DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
 action\_result\.status | string | 
 action\_result\.parameter\.query | string | 
+action\_result\.data\.\*\.ActionType | string | 
 action\_result\.data\.\*\.AntivirusEnabled | string | 
 action\_result\.data\.\*\.AntivirusReporting | string | 
 action\_result\.data\.\*\.AntivirusSignatureVersion | string | 
+action\_result\.data\.\*\.AppGuardContainerId | string | 
 action\_result\.data\.\*\.BehaviorMonitoring | string | 
 action\_result\.data\.\*\.CloudProtection | string | 
 action\_result\.data\.\*\.DeviceId | string |  `defender atp device id` 
@@ -1535,10 +1636,42 @@ action\_result\.data\.\*\.DomainName | string |  `domain`
 action\_result\.data\.\*\.DurationAtLeast | string | 
 action\_result\.data\.\*\.FileName | string |  `file name` 
 action\_result\.data\.\*\.ImpairedCommunications | string | 
+action\_result\.data\.\*\.InitiatingProcessAccountDomain | string | 
+action\_result\.data\.\*\.InitiatingProcessAccountName | string | 
+action\_result\.data\.\*\.InitiatingProcessAccountObjectId | string | 
+action\_result\.data\.\*\.InitiatingProcessAccountSid | string | 
+action\_result\.data\.\*\.InitiatingProcessAccountUpn | string | 
+action\_result\.data\.\*\.InitiatingProcessCommandLine | string | 
+action\_result\.data\.\*\.InitiatingProcessCreationTime | string | 
 action\_result\.data\.\*\.InitiatingProcessFileName | string |  `file name` 
+action\_result\.data\.\*\.InitiatingProcessFileSize | numeric | 
+action\_result\.data\.\*\.InitiatingProcessFolderPath | string | 
+action\_result\.data\.\*\.InitiatingProcessId | numeric | 
+action\_result\.data\.\*\.InitiatingProcessIntegrityLevel | string | 
+action\_result\.data\.\*\.InitiatingProcessMD5 | string | 
+action\_result\.data\.\*\.InitiatingProcessParentCreationTime | string | 
+action\_result\.data\.\*\.InitiatingProcessParentFileName | string | 
+action\_result\.data\.\*\.InitiatingProcessParentId | numeric | 
+action\_result\.data\.\*\.InitiatingProcessSHA1 | string | 
+action\_result\.data\.\*\.InitiatingProcessSHA256 | string | 
+action\_result\.data\.\*\.InitiatingProcessTokenElevation | string | 
+action\_result\.data\.\*\.InitiatingProcessVersionInfoCompanyName | string | 
+action\_result\.data\.\*\.InitiatingProcessVersionInfoFileDescription | string | 
+action\_result\.data\.\*\.InitiatingProcessVersionInfoInternalFileName | string | 
+action\_result\.data\.\*\.InitiatingProcessVersionInfoOriginalFileName | string | 
+action\_result\.data\.\*\.InitiatingProcessVersionInfoProductName | string | 
+action\_result\.data\.\*\.InitiatingProcessVersionInfoProductVersion | string | 
 action\_result\.data\.\*\.LastTimestamp | string | 
 action\_result\.data\.\*\.PUAProtection | string | 
+action\_result\.data\.\*\.PreviousRegistryKey | string | 
+action\_result\.data\.\*\.PreviousRegistryValueData | string | 
+action\_result\.data\.\*\.PreviousRegistryValueName | string | 
 action\_result\.data\.\*\.RealtimeProtection | string | 
+action\_result\.data\.\*\.RegistryKey | string | 
+action\_result\.data\.\*\.RegistryValueData | string | 
+action\_result\.data\.\*\.RegistryValueName | string | 
+action\_result\.data\.\*\.RegistryValueType | string | 
+action\_result\.data\.\*\.ReportId | numeric | 
 action\_result\.data\.\*\.SensorDataCollection | string | 
 action\_result\.data\.\*\.SensorEnabled | string | 
 action\_result\.data\.\*\.TamperProtection | string | 
@@ -1584,6 +1717,8 @@ action\_result\.data\.\*\.isAadJoined | boolean |
 action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
 action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
 action\_result\.data\.\*\.lastSeen | string | 
+action\_result\.data\.\*\.managedBy | string | 
+action\_result\.data\.\*\.managedByStatus | string | 
 action\_result\.data\.\*\.onboardingStatus | string | 
 action\_result\.data\.\*\.osArchitecture | string | 
 action\_result\.data\.\*\.osBuild | numeric | 
@@ -1600,6 +1735,80 @@ action\_result\.data\.\*\.vmMetadata\.resourceId | string |
 action\_result\.data\.\*\.vmMetadata\.subscriptionId | string | 
 action\_result\.data\.\*\.vmMetadata\.vmId | string | 
 action\_result\.summary\.total\_devices | numeric | 
+action\_result\.message | string | 
+summary\.total\_objects | numeric | 
+summary\.total\_objects\_successful | numeric |   
+
+## action: 'update device tag'
+Add or remove a tag from a given device \(Maximum\: 200 characters\)
+
+Type: **generic**  
+Read only: **False**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
+**operation** |  required  | Determines whether the provided tag is added or removed | string | 
+**tag** |  required  | Value of the tag to add or remove from the machine | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS
+--------- | ---- | --------
+action\_result\.status | string | 
+action\_result\.parameter\.device\_id | string |  `defender atp device id` 
+action\_result\.parameter\.operation | string | 
+action\_result\.parameter\.tag | string | 
+action\_result\.data\.\*\.\@odata\.context | string | 
+action\_result\.data\.\*\.\@odata\.context | string | 
+action\_result\.data\.\*\.aadDeviceId | string | 
+action\_result\.data\.\*\.agentVersion | string | 
+action\_result\.data\.\*\.computerDnsName | string |  `domain` 
+action\_result\.data\.\*\.defenderAvStatus | string | 
+action\_result\.data\.\*\.defenderAvStatus | string | 
+action\_result\.data\.\*\.deviceValue | string | 
+action\_result\.data\.\*\.deviceValue | string | 
+action\_result\.data\.\*\.exposureLevel | string | 
+action\_result\.data\.\*\.firstSeen | string | 
+action\_result\.data\.\*\.groupName | string | 
+action\_result\.data\.\*\.healthStatus | string | 
+action\_result\.data\.\*\.id | string |  `defender atp device id` 
+action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
+action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
+action\_result\.data\.\*\.isAadJoined | boolean | 
+action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
+action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
+action\_result\.data\.\*\.lastSeen | string | 
+action\_result\.data\.\*\.machineTags | string | 
+action\_result\.data\.\*\.managedBy | string | 
+action\_result\.data\.\*\.managedBy | string | 
+action\_result\.data\.\*\.managedByStatus | string | 
+action\_result\.data\.\*\.managedByStatus | string | 
+action\_result\.data\.\*\.onboardingStatus | string | 
+action\_result\.data\.\*\.onboardingStatus | string | 
+action\_result\.data\.\*\.osArchitecture | string | 
+action\_result\.data\.\*\.osArchitecture | string | 
+action\_result\.data\.\*\.osBuild | numeric | 
+action\_result\.data\.\*\.osPlatform | string | 
+action\_result\.data\.\*\.osProcessor | string | 
+action\_result\.data\.\*\.osVersion | string | 
+action\_result\.data\.\*\.rbacGroupId | numeric | 
+action\_result\.data\.\*\.rbacGroupName | string | 
+action\_result\.data\.\*\.riskScore | string | 
+action\_result\.data\.\*\.systemProductName | string | 
+action\_result\.data\.\*\.version | string | 
+action\_result\.data\.\*\.vmMetadata | string | 
+action\_result\.data\.\*\.vmMetadata | string | 
+action\_result\.summary\.operation | string | 
+action\_result\.summary\.operation | string | 
+action\_result\.summary\.tag | string | 
+action\_result\.summary\.tag | string | 
 action\_result\.message | string | 
 summary\.total\_objects | numeric | 
 summary\.total\_objects\_successful | numeric |   
@@ -1622,6 +1831,8 @@ DATA PATH | TYPE | CONTAINS
 --------- | ---- | --------
 action\_result\.status | string | 
 action\_result\.parameter\.device\_id | string |  `defender atp device id` 
+action\_result\.data\.\*\.\@odata\.type | string | 
+action\_result\.data\.\*\.\@odata\.type | string | 
 action\_result\.data\.\*\.cvssV3 | numeric | 
 action\_result\.data\.\*\.description | string | 
 action\_result\.data\.\*\.exploitInKit | numeric | 
@@ -1684,6 +1895,7 @@ action\_result\.data\.\*\.title | string |
 action\_result\.data\.\*\.troubleshootInfo | string | 
 action\_result\.data\.\*\.type | string | 
 action\_result\.summary\.event\_id | string |  `defender atp event id` 
+action\_result\.summary\.remove\_app\_restriction\_status | string | 
 action\_result\.summary\.restriction\_status | string | 
 action\_result\.message | string | 
 summary\.total\_objects | numeric | 
@@ -1889,6 +2101,7 @@ action\_result\.data\.\*\.script\_errors | string |
 action\_result\.data\.\*\.script\_name | string | 
 action\_result\.data\.\*\.script\_output | string | 
 action\_result\.summary\.event\_id | string |  `defender atp event id` 
+action\_result\.summary\.event\_id\_status | string | 
 action\_result\.summary\.live\_response\_result | string | 
 action\_result\.summary\.script\_status | string | 
 action\_result\.message | string | 
