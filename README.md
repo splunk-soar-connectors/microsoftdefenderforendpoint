@@ -2,13 +2,13 @@
 # Windows Defender ATP
 
 Publisher: Splunk  
-Connector Version: 3\.8\.0  
+Connector Version: 3.8.1  
 Product Vendor: Microsoft  
 Product Name: Windows Defender ATP  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.3\.5  
+Product Version Supported (regex): ".\*"  
+Minimum Product Version: 5.3.5  
 
-This app integrates with Windows Defender Advanced Threat Protection\(ATP\) to execute various containment, corrective, generic, and investigative actions
+This app integrates with Windows Defender Advanced Threat Protection(ATP) to execute various containment, corrective, generic, and investigative actions
 
 [comment]: # " File: README.md"
 [comment]: # "  Copyright (c) 2019-2022 Splunk Inc."
@@ -24,8 +24,8 @@ This app integrates with Windows Defender Advanced Threat Protection\(ATP\) to e
 ## Playbook Backward Compatibility
 
 -   The existing action parameters have been modified in the actions given below. Hence, it is
-    requested to the end-user to please update their existing playbooks by re-inserting \| modifying
-    \| deleting the corresponding action blocks, or by providing appropriate values to these action
+    requested to the end-user to please update their existing playbooks by re-inserting | modifying
+    | deleting the corresponding action blocks, or by providing appropriate values to these action
     parameters to ensure the correct functioning of the playbooks created on the earlier versions of
     the app.
 
@@ -175,7 +175,7 @@ default ports used by Splunk SOAR.
 22. Copy the **Application (client) ID** and **Directory (tenant) ID** . You will need these to
     configure the SOAR asset.
 
-</div>
+
 
 ## Configure the Windows Defender ATP SOAR app's asset
 
@@ -442,10 +442,10 @@ The below configuration variables are required for this Connector to operate.  T
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**tenant\_id** |  required  | string | Tenant ID
-**client\_id** |  required  | string | Client ID
-**client\_secret** |  required  | password | Client Secret
-**non\_interactive** |  optional  | boolean | Non Interactive Auth
+**tenant_id** |  required  | string | Tenant ID
+**client_id** |  required  | string | Client ID
+**client_secret** |  required  | password | Client Secret
+**non_interactive** |  optional  | boolean | Non Interactive Auth
 **environment** |  required  | string | Azure environment to connect
 
 ### Supported Actions  
@@ -464,7 +464,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [ip prevalence](#action-ip-prevalence) - Return statistics for the specified IP  
 [file prevalence](#action-file-prevalence) - Return statistics for the specified file  
 [get file info](#action-get-file-info) - Retrieve a File information by identifier SHA1, or SHA256  
-[get file devices](#action-get-file-devices) - Retrieve a collection of devices related to a given file hash \(SHA1\)  
+[get file devices](#action-get-file-devices) - Retrieve a collection of devices related to a given file hash (SHA1)  
 [get user devices](#action-get-user-devices) - Retrieve a collection of devices related to a given user ID  
 [get installed software](#action-get-installed-software) - Retrieve a collection of installed software related to a given device ID  
 [restrict app execution](#action-restrict-app-execution) - Restrict execution of all applications on the device except a predefined set  
@@ -473,7 +473,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [delete indicator](#action-delete-indicator) - Delete an Indicator entity by ID  
 [run query](#action-run-query) - An advanced search query  
 [get domain devices](#action-get-domain-devices) - Retrieve a collection of devices that have communicated to or from a given domain address  
-[update device tag](#action-update-device-tag) - Add or remove a tag from a given device \(Maximum\: 200 characters\)  
+[update device tag](#action-update-device-tag) - Add or remove a tag from a given device (Maximum: 200 characters)  
 [get discovered vulnerabilities](#action-get-discovered-vulnerabilities) - Retrieve a collection of discovered vulnerabilities related to a given device ID  
 [remove app restriction](#action-remove-app-restriction) - Enable execution of any application on the device  
 [get exposure score](#action-get-exposure-score) - Retrieve the organizational exposure score  
@@ -481,7 +481,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get file](#action-get-file) - Download a file from a device using live response  
 [put file](#action-put-file) - Put a file from the library to a device using live response  
 [run script](#action-run-script) - Run a script from the library on a device using live response  
-[get missing kbs](#action-get-missing-kbs) - Retrieve missing KBs \(security updates\) by given device ID  
+[get missing kbs](#action-get-missing-kbs) - Retrieve missing KBs (security updates) by given device ID  
 
 ## action: 'test connectivity'
 Validate the asset configuration for connectivity using the supplied configuration
@@ -501,50 +501,50 @@ Quarantine the device
 Type: **contain**  
 Read only: **False**
 
-This action can take a while to complete execution\. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete\. If not, the action would return the latest status of the event along with the event ID\.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID\.<br>For parameter <i>type</i>, <b>&quotFull&quot</b> will completely quarantine the device while <b>&quotSelective&quot</b> will allow Skype and Outlook to be accessed\.<br>The maximum timeout period for a status check is 10 minutes\.
+This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>For parameter <i>type</i>, <b>&quotFull&quot</b> will completely quarantine the device while <b>&quotSelective&quot</b> will allow Skype and Outlook to be accessed.<br>The maximum timeout period for a status check is 10 minutes.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device to quarantine | string |  `defender atp device id` 
-**type** |  required  | Type of quarantine \(Default\: Full\) | string | 
+**device_id** |  required  | ID of the device to quarantine | string |  `defender atp device id` 
+**type** |  required  | Type of quarantine (Default: Full) | string | 
 **comment** |  required  | Comment for quarantine | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 30\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 30) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.parameter\.type | string | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.error | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string |  `email` 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.quarantine\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   selective quarantine 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.parameter.timeout | numeric |  |   130 
+action_result.parameter.type | string |  |   Full 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.computerDnsName | string |  |   win10atp2 
+action_result.data.\*.creationDateTimeUtc | string |  |   2019-05-03T08:50:05.8076226Z 
+action_result.data.\*.error | string |  |   None 
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2019-05-03T08:50:05.8076226Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   349838747f77ec74e43ab7ca70773a41f7bfb6f2 
+action_result.data.\*.relatedFileInfo | string |  |  
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  `email`  |   testuser@example.com 
+action_result.data.\*.requestorComment | string |  |   Selective  test 
+action_result.data.\*.scope | string |  |   Full 
+action_result.data.\*.status | string |  |   Succeeded 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   Isolate 
+action_result.summary.event_id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.summary.quarantine_status | string |  |   Pending 
+action_result.message | string |  |   Event id: 6925706d-3a7e-4596-b2d7-321fca9cd965, Quarantine status: Pending 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'unquarantine device'
 Unquarantine the device
@@ -552,48 +552,48 @@ Unquarantine the device
 Type: **correct**  
 Read only: **False**
 
-This action can take a while to complete execution\. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete\. If not, the action would return the latest status of the event along with the event ID\.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID\.<br>The maximum timeout period for a status check is 10 minutes\.
+This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 10 minutes.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device to unquarantine | string |  `defender atp device id` 
+**device_id** |  required  | ID of the device to unquarantine | string |  `defender atp device id` 
 **comment** |  required  | Comment for unquarantine | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 30\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 30) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.error | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string |  `email` 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.unquarantine\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   unquarantine the device 
+action_result.parameter.device_id | string |  `defender atp device id`  |   349838747f77ec74e43ab7ca70773a41f7bfb6f2 
+action_result.parameter.timeout | numeric |  |   30 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.computerDnsName | string |  |   win10atp2 
+action_result.data.\*.creationDateTimeUtc | string |  |   2019-05-03T08:52:22.7708738Z 
+action_result.data.\*.error | string |  |   None 
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   cb15e6e0-1d53-4762-9c37-f14d412ece9e 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2019-05-03T08:52:22.7708738Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   349838747f77ec74e43ab7ca70773a41f7bfb6f2 
+action_result.data.\*.relatedFileInfo | string |  |  
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  `email`  |   testuser@example.com 
+action_result.data.\*.requestorComment | string |  |   isolation  test 
+action_result.data.\*.scope | string |  |  
+action_result.data.\*.status | string |  |   Pending 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   Unisolate 
+action_result.summary.event_id | string |  `defender atp event id`  |   cb15e6e0-1d53-4762-9c37-f14d412ece9e 
+action_result.summary.unquarantine_status | string |  |   Pending 
+action_result.message | string |  |   Event id: cb15e6e0-1d53-4762-9c37-f14d412ece9e, Unquarantine status: Pending 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get status'
 Get status of the event on a machine
@@ -604,49 +604,49 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**event\_id** |  required  | ID of the event | string |  `defender atp event id` 
+**event_id** |  required  | ID of the event | string |  `defender atp event id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.event\_id | string |  `defender atp event id` 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.commands\.\*\.command\.params\.\*\.key | string | 
-action\_result\.data\.\*\.commands\.\*\.command\.params\.\*\.value | string | 
-action\_result\.data\.\*\.commands\.\*\.command\.type | string | 
-action\_result\.data\.\*\.commands\.\*\.commandStatus | string | 
-action\_result\.data\.\*\.commands\.\*\.endTime | string | 
-action\_result\.data\.\*\.commands\.\*\.index | numeric | 
-action\_result\.data\.\*\.commands\.\*\.startTime | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.error | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.fileInstances | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo | string | 
-action\_result\.data\.\*\.relatedFileInfo\.fileIdentifier | string |  `sha1` 
-action\_result\.data\.\*\.relatedFileInfo\.fileIdentifierType | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string |  `email` 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.sha1 | string |  `sha1` 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.event_id | string |  `defender atp event id`  |   f4ddc97a-6f4e-471c-9be5-45e0d6d64ab8 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.commands.\*.command.params.\*.key | string |  |   Path 
+action_result.data.\*.commands.\*.command.params.\*.value | string |  |   C:\\share\\1.eml 
+action_result.data.\*.commands.\*.command.type | string |  |   GetFile 
+action_result.data.\*.commands.\*.commandStatus | string |  |   Created 
+action_result.data.\*.commands.\*.endTime | string |  |  
+action_result.data.\*.commands.\*.index | numeric |  |  
+action_result.data.\*.commands.\*.startTime | string |  |  
+action_result.data.\*.computerDnsName | string |  |   win10atp2 
+action_result.data.\*.creationDateTimeUtc | string |  |   2019-05-03T09:01:19.3478911Z 
+action_result.data.\*.error | string |  |   None 
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.fileInstances | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   f4ddc97a-6f4e-471c-9be5-45e0d6d64ab8 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2019-05-03T09:01:27.6955788Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   ae2e5bda4bb22ec9c321680079d03e5e4cdff400 
+action_result.data.\*.relatedFileInfo | string |  |  
+action_result.data.\*.relatedFileInfo.fileIdentifier | string |  `sha1`  |   2dba4c14a5e97312f9edf617e1c8b0cc0d387fd8 
+action_result.data.\*.relatedFileInfo.fileIdentifierType | string |  |   Sha1 
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  `email`  |   test.user@example.onmicrosoft.com 
+action_result.data.\*.requestorComment | string |  |   test 
+action_result.data.\*.scope | string |  |  
+action_result.data.\*.sha1 | string |  `sha1`  |   11ffeabbe42159e1365aa82463d8690c845ce7b7 
+action_result.data.\*.status | string |  |   Succeeded 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   RunAntiVirusScan 
+action_result.summary.event_status | string |  |   Succeeded 
+action_result.message | string |  |   Event status: Succeeded 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'scan device'
 Scan a device for virus
@@ -654,50 +654,50 @@ Scan a device for virus
 Type: **investigate**  
 Read only: **True**
 
-This action can take a while to complete execution\. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete\. If not, the action would return the latest status of the event along with the event ID\.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID\.<br>The maximum timeout period for a status check is 1 hour\.
+This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 1 hour.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device to scan | string |  `defender atp device id` 
-**scan\_type** |  required  | Type of scan | string | 
+**device_id** |  required  | ID of the device to scan | string |  `defender atp device id` 
+**scan_type** |  required  | Type of scan | string | 
 **comment** |  required  | Comment for scan | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 30\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 30) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.scan\_type | string | 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.error | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string |  `email` 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.scan\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   Scanning from Test 
+action_result.parameter.device_id | string |  `defender atp device id`  |   a3627cbcad1e9ca2dd94eed63e3f9260e2aa7e8e 
+action_result.parameter.scan_type | string |  |   Quick 
+action_result.parameter.timeout | numeric |  |   30 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.computerDnsName | string |  |   win10atp2 
+action_result.data.\*.creationDateTimeUtc | string |  |   2018-07-12T11:35:30.8573959Z 
+action_result.data.\*.error | string |  |   None 
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   34a0905e-316b-46eb-994d-c7d0e8ac2efb 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2018-07-12T11:35:30.8573959Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   a3627cbcad1e9ca2dd94eed63e3f9260e2aa7e8e 
+action_result.data.\*.relatedFileInfo | string |  |  
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  `email`  |   testuser@example.com 
+action_result.data.\*.requestorComment | string |  |   From Test 
+action_result.data.\*.scope | string |  |   Quick 
+action_result.data.\*.status | string |  |   InProgress 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   RunAntiVirusScan 
+action_result.summary.event_id | string |  `defender atp event id`  |   34a0905e-316b-46eb-994d-c7d0e8ac2efb 
+action_result.summary.scan_status | string |  |   InProgress 
+action_result.message | string |  |   Event id: 34a0905e-316b-46eb-994d-c7d0e8ac2efb, Scan status: InProgress 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'quarantine file'
 Quarantine a file
@@ -705,55 +705,55 @@ Quarantine a file
 Type: **contain**  
 Read only: **False**
 
-This action can take a while to complete execution\. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete\. If not, the action would return the latest status of the event along with the event ID\.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID\.<br>The maximum timeout period for a status check is 10 minutes\.
+This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 10 minutes.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
-**file\_hash** |  required  | Identifier of the file | string |  `sha1` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
+**file_hash** |  required  | Identifier of the file | string |  `sha1` 
 **comment** |  required  | Comment for quarantine | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 30\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 30) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.file\_hash | string |  `sha1` 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.error | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.fileId | string |  `sha1` 
-action\_result\.data\.\*\.fileInstances\.\*\.filePath | string |  `file path` 
-action\_result\.data\.\*\.fileInstances\.\*\.status | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo\.fileIdentifier | string |  `sha1` 
-action\_result\.data\.\*\.relatedFileInfo\.fileIdentifierType | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string |  `email` 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.sha1 | string |  `sha1` 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.quarantine\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   Test comment for file quarantine 
+action_result.parameter.device_id | string |  `defender atp device id`  |   ae2e5bda4bb22ec9c321680079d03e5e4cdff400 
+action_result.parameter.file_hash | string |  `sha1`  |   2dba4c14a5e97312f9edf617e1c8b0cc0d387fd8 
+action_result.parameter.timeout | numeric |  |   125 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.computerDnsName | string |  |   win10atp2 
+action_result.data.\*.creationDateTimeUtc | string |  |   2019-05-03T06:00:00.2740597Z 
+action_result.data.\*.error | string |  |   None 
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.fileId | string |  `sha1`  |   e1049556edc2b28ef25b2932c722e4dc927e9d04 
+action_result.data.\*.fileInstances.\*.filePath | string |  `file path`  |  
+action_result.data.\*.fileInstances.\*.status | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   76e82ecd-54b8-400d-83be-a05d582b3546 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2019-05-03T06:00:00.2740597Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   ae2e5bda4bb22ec9c321680079d03e5e4cdff400 
+action_result.data.\*.relatedFileInfo.fileIdentifier | string |  `sha1`  |   2dba4c14a5e97312f9edf617e1c8b0cc0d387fd8 
+action_result.data.\*.relatedFileInfo.fileIdentifierType | string |  |   Sha1 
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  `email`  |   testuser@example.com 
+action_result.data.\*.requestorComment | string |  |   file quarantine 
+action_result.data.\*.scope | string |  |  
+action_result.data.\*.sha1 | string |  `sha1`  |   e1049556edc2b28ef25b2932c722e4dc927e9d04 
+action_result.data.\*.status | string |  |   Pending 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   StopAndQuarantineFile 
+action_result.summary.event_id | string |  `defender atp event id`  |   76e82ecd-54b8-400d-83be-a05d582b3546 
+action_result.summary.quarantine_status | string |  |   InProgress 
+action_result.message | string |  |   Event id: 76e82ecd-54b8-400d-83be-a05d582b3546, Quarantine status: Pending 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list devices'
 List of recently seen devices
@@ -761,65 +761,65 @@ List of recently seen devices
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/windows/security/threat\-protection/microsoft\-defender\-atp/get\-machines" target="\_blank">List Machines API Documentation</a>\), the user can get devices last seen in the past 30 days; the maximum page size is 10,000; rate limitations for this action are 100 calls per minute and 1500 calls per hour\. If the user does not specify the limit value, it will fetch 100 devices by default\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/get-machines" target="_blank">List Machines API Documentation</a>), the user can get devices last seen in the past 30 days; the maximum page size is 10,000; rate limitations for this action are 100 calls per minute and 1500 calls per hour. If the user does not specify the limit value, it will fetch 100 devices by default.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**input\_type** |  required  | Type of input \(Default\: All\) | string | 
+**input_type** |  required  | Type of input (Default: All) | string | 
 **input** |  optional  | Input filter of type Domain, File hash or All | string |  `sha1`  `sha256`  `md5`  `domain` 
 **query** |  optional  | Additional OData V4 filters to apply | string | 
-**limit** |  optional  | Maximum number of devices to return \(Maximum\: 10,000\) | numeric | 
+**limit** |  optional  | Maximum number of devices to return (Maximum: 10,000) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.input | string |  `sha1`  `sha256`  `md5`  `domain` 
-action\_result\.parameter\.input\_type | string | 
-action\_result\.parameter\.limit | numeric | 
-action\_result\.parameter\.query | string | 
-action\_result\.data\.\*\.aadDeviceId | string | 
-action\_result\.data\.\*\.agentVersion | string | 
-action\_result\.data\.\*\.computerDnsName | string |  `domain` 
-action\_result\.data\.\*\.defenderAvStatus | string | 
-action\_result\.data\.\*\.deviceValue | string | 
-action\_result\.data\.\*\.exposureLevel | string | 
-action\_result\.data\.\*\.firstSeen | string | 
-action\_result\.data\.\*\.groupName | string | 
-action\_result\.data\.\*\.healthStatus | string | 
-action\_result\.data\.\*\.id | string |  `defender atp device id` 
-action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
-action\_result\.data\.\*\.isAadJoined | boolean | 
-action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastSeen | string | 
-action\_result\.data\.\*\.machineTags | string | 
-action\_result\.data\.\*\.managedBy | string | 
-action\_result\.data\.\*\.managedByStatus | string | 
-action\_result\.data\.\*\.onboardingStatus | string | 
-action\_result\.data\.\*\.osArchitecture | string | 
-action\_result\.data\.\*\.osBuild | numeric | 
-action\_result\.data\.\*\.osPlatform | string | 
-action\_result\.data\.\*\.osProcessor | string | 
-action\_result\.data\.\*\.osVersion | string | 
-action\_result\.data\.\*\.rbacGroupId | numeric | 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.riskScore | string | 
-action\_result\.data\.\*\.systemProductName | string | 
-action\_result\.data\.\*\.version | string | 
-action\_result\.data\.\*\.vmMetadata | string | 
-action\_result\.data\.\*\.vmMetadata\.cloudProvider | string | 
-action\_result\.data\.\*\.vmMetadata\.resourceId | string | 
-action\_result\.data\.\*\.vmMetadata\.subscriptionId | string | 
-action\_result\.data\.\*\.vmMetadata\.vmId | string | 
-action\_result\.summary\.total\_devices | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.input | string |  `sha1`  `sha256`  `md5`  `domain`  |   filehash 
+action_result.parameter.input_type | string |  |   All 
+action_result.parameter.limit | numeric |  |   100 
+action_result.parameter.query | string |  |   $filter=riskScore+eq+'High' 
+action_result.data.\*.aadDeviceId | string |  |  
+action_result.data.\*.agentVersion | string |  |   10.5850.17763.404 
+action_result.data.\*.computerDnsName | string |  `domain`  |   desktop-ph2a1ro 
+action_result.data.\*.defenderAvStatus | string |  |   NotSupported 
+action_result.data.\*.deviceValue | string |  |   Normal 
+action_result.data.\*.exposureLevel | string |  |   Medium 
+action_result.data.\*.firstSeen | string |  |   2019-04-16T00:27:12.2677222Z 
+action_result.data.\*.groupName | string |  |  
+action_result.data.\*.healthStatus | string |  |   Active 
+action_result.data.\*.id | string |  `defender atp device id`  |   ae2e5bda4bb22ec9c321680079d03e5e4cdff400 
+action_result.data.\*.ipAddresses.\*.ipAddress | string |  |   10.0.2.15 
+action_result.data.\*.ipAddresses.\*.macAddress | string |  |   002248242A86 
+action_result.data.\*.ipAddresses.\*.operationalStatus | string |  |   Up 
+action_result.data.\*.ipAddresses.\*.type | string |  |   Ethernet 
+action_result.data.\*.isAadJoined | boolean |  |   True  False 
+action_result.data.\*.lastExternalIpAddress | string |  `ip`  |   204.107.141.240 
+action_result.data.\*.lastIpAddress | string |  `ip`  |   10.1.66.140 
+action_result.data.\*.lastSeen | string |  |   2019-05-03T05:23:45.9643247Z 
+action_result.data.\*.machineTags | string |  |   Test Tag -21 
+action_result.data.\*.managedBy | string |  |  
+action_result.data.\*.managedByStatus | string |  |  
+action_result.data.\*.onboardingStatus | string |  |   Onboarded 
+action_result.data.\*.osArchitecture | string |  |   64-bit 
+action_result.data.\*.osBuild | numeric |  |   17763 
+action_result.data.\*.osPlatform | string |  |   Windows10 
+action_result.data.\*.osProcessor | string |  |   x64 
+action_result.data.\*.osVersion | string |  |  
+action_result.data.\*.rbacGroupId | numeric |  |   0 
+action_result.data.\*.rbacGroupName | string |  |   GROUP1 
+action_result.data.\*.riskScore | string |  |   None 
+action_result.data.\*.systemProductName | string |  |  
+action_result.data.\*.version | string |  |   1809 
+action_result.data.\*.vmMetadata | string |  |  
+action_result.data.\*.vmMetadata.cloudProvider | string |  |   Azure 
+action_result.data.\*.vmMetadata.resourceId | string |  |  
+action_result.data.\*.vmMetadata.subscriptionId | string |  |   1b922e46-8595-4749-997a-1205e714cd91 
+action_result.data.\*.vmMetadata.vmId | string |  |   79980585-d655-43f7-80d9-5b9d34b2e30d 
+action_result.summary.total_devices | numeric |  |   2 
+action_result.message | string |  |   Total devices: 2 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list alerts'
 List all alerts of a given type
@@ -827,86 +827,86 @@ List all alerts of a given type
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/windows/security/threat\-protection/microsoft\-defender\-atp/get\-alerts" target="\_blank">List Alerts API Documentation</a>\), the user can get alerts last updated in the past 30 days; the maximum page size is 10,000; rate limitations for this action are 100 calls per minute and 1500 calls per hour\. If the user does not specify the limit value, it will fetch 100 alerts by default\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/get-alerts" target="_blank">List Alerts API Documentation</a>), the user can get alerts last updated in the past 30 days; the maximum page size is 10,000; rate limitations for this action are 100 calls per minute and 1500 calls per hour. If the user does not specify the limit value, it will fetch 100 alerts by default.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**input\_type** |  optional  | Type of input \(Default\: All\) | string | 
+**input_type** |  optional  | Type of input (Default: All) | string | 
 **input** |  optional  | Input filter of type Domain, File Hash, and IP | string |  `domain`  `sha1`  `sha256`  `md5`  `ip` 
-**limit** |  optional  | Maximum number of alerts to return \(Maximum\: 10,000\) | numeric | 
+**limit** |  optional  | Maximum number of alerts to return (Maximum: 10,000) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.input | string |  `domain`  `sha1`  `sha256`  `md5`  `ip` 
-action\_result\.parameter\.input\_type | string | 
-action\_result\.parameter\.limit | numeric | 
-action\_result\.data\.\*\.aadTenantId | string | 
-action\_result\.data\.\*\.alertCreationTime | string | 
-action\_result\.data\.\*\.assignedTo | string |  `email` 
-action\_result\.data\.\*\.category | string | 
-action\_result\.data\.\*\.classification | string | 
-action\_result\.data\.\*\.comments\.\*\.comment | string | 
-action\_result\.data\.\*\.comments\.\*\.createdBy | string |  `email` 
-action\_result\.data\.\*\.comments\.\*\.createdTime | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.detectionSource | string | 
-action\_result\.data\.\*\.detectorId | string | 
-action\_result\.data\.\*\.determination | string | 
-action\_result\.data\.\*\.evidence\.\*\.aadUserId | string | 
-action\_result\.data\.\*\.evidence\.\*\.accountName | string | 
-action\_result\.data\.\*\.evidence\.\*\.detectionStatus | string | 
-action\_result\.data\.\*\.evidence\.\*\.domainName | string | 
-action\_result\.data\.\*\.evidence\.\*\.entityType | string | 
-action\_result\.data\.\*\.evidence\.\*\.evidenceCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.fileName | string | 
-action\_result\.data\.\*\.evidence\.\*\.filePath | string | 
-action\_result\.data\.\*\.evidence\.\*\.ipAddress | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessFileName | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessFilePath | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessId | string | 
-action\_result\.data\.\*\.evidence\.\*\.processCommandLine | string | 
-action\_result\.data\.\*\.evidence\.\*\.processCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.processId | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryHive | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryKey | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryValue | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryValueName | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryValueType | string | 
-action\_result\.data\.\*\.evidence\.\*\.sha1 | string | 
-action\_result\.data\.\*\.evidence\.\*\.sha256 | string | 
-action\_result\.data\.\*\.evidence\.\*\.url | string | 
-action\_result\.data\.\*\.evidence\.\*\.userPrincipalName | string | 
-action\_result\.data\.\*\.evidence\.\*\.userSid | string | 
-action\_result\.data\.\*\.firstEventTime | string | 
-action\_result\.data\.\*\.id | string |  `defender atp alert id` 
-action\_result\.data\.\*\.incidentId | numeric | 
-action\_result\.data\.\*\.investigationId | numeric | 
-action\_result\.data\.\*\.investigationState | string | 
-action\_result\.data\.\*\.lastEventTime | string | 
-action\_result\.data\.\*\.lastUpdateTime | string | 
-action\_result\.data\.\*\.loggedOnUsers\.\*\.accountName | string | 
-action\_result\.data\.\*\.loggedOnUsers\.\*\.domainName | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.recommendedAction | string | 
-action\_result\.data\.\*\.relatedUser | string | 
-action\_result\.data\.\*\.relatedUser\.domainName | string | 
-action\_result\.data\.\*\.relatedUser\.userName | string | 
-action\_result\.data\.\*\.resolvedTime | string | 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.threatFamilyName | string | 
-action\_result\.data\.\*\.threatName | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.summary\.total\_alerts | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.input | string |  `domain`  `sha1`  `sha256`  `md5`  `ip`  |   1b3b40fbc889fd4c645cc12c85d0805ac36ba254  fda7:e6ee:2e09:0:19f9:12ea:c80d:cf5b  google.com 
+action_result.parameter.input_type | string |  |   All 
+action_result.parameter.limit | numeric |  |   100 
+action_result.data.\*.aadTenantId | string |  |   7810-b62a-4fc0-bbbb-20165d183d7f 
+action_result.data.\*.alertCreationTime | string |  |   2019-05-03T01:20:51.8699882Z 
+action_result.data.\*.assignedTo | string |  `email`  |   testuser@example.com 
+action_result.data.\*.category | string |  |   General 
+action_result.data.\*.classification | string |  |  
+action_result.data.\*.comments.\*.comment | string |  |   test 
+action_result.data.\*.comments.\*.createdBy | string |  `email`  |   test@example.onmicrosoft.com 
+action_result.data.\*.comments.\*.createdTime | string |  |   2019-05-01T13:21:37.869889Z 
+action_result.data.\*.computerDnsName | string |  |   win10atp1 
+action_result.data.\*.description | string |  |   Malware and unwanted software are undesirable applications that perform annoying, disruptive, or harmful actions on affected machines. Some of these undesirable applications can replicate and spread from one machine to another. Others can able to receive commands from remote attackers and perform activities associated with cyber attacks. This detection might indicate that Windows Defender has stopped the malware from delivering its payload. However, it is prudent to check the machine for signs of infection. 
+action_result.data.\*.detectionSource | string |  |   WindowsDefenderAv 
+action_result.data.\*.detectorId | string |  |   5c6b7d86-c91f-4f8c-8aec-9d2086f46527 
+action_result.data.\*.determination | string |  |  
+action_result.data.\*.evidence.\*.aadUserId | string |  |  
+action_result.data.\*.evidence.\*.accountName | string |  |  
+action_result.data.\*.evidence.\*.detectionStatus | string |  |  
+action_result.data.\*.evidence.\*.domainName | string |  |  
+action_result.data.\*.evidence.\*.entityType | string |  |   Url 
+action_result.data.\*.evidence.\*.evidenceCreationTime | string |  |   2022-06-10T06:26:09.5133333Z 
+action_result.data.\*.evidence.\*.fileName | string |  |  
+action_result.data.\*.evidence.\*.filePath | string |  |  
+action_result.data.\*.evidence.\*.ipAddress | string |  |  
+action_result.data.\*.evidence.\*.parentProcessCreationTime | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFileName | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFilePath | string |  |  
+action_result.data.\*.evidence.\*.parentProcessId | string |  |  
+action_result.data.\*.evidence.\*.processCommandLine | string |  |  
+action_result.data.\*.evidence.\*.processCreationTime | string |  |  
+action_result.data.\*.evidence.\*.processId | string |  |  
+action_result.data.\*.evidence.\*.registryHive | string |  |  
+action_result.data.\*.evidence.\*.registryKey | string |  |  
+action_result.data.\*.evidence.\*.registryValue | string |  |  
+action_result.data.\*.evidence.\*.registryValueName | string |  |  
+action_result.data.\*.evidence.\*.registryValueType | string |  |  
+action_result.data.\*.evidence.\*.sha1 | string |  |  
+action_result.data.\*.evidence.\*.sha256 | string |  |  
+action_result.data.\*.evidence.\*.url | string |  |   google.com 
+action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
+action_result.data.\*.evidence.\*.userSid | string |  |  
+action_result.data.\*.firstEventTime | string |  |   2019-05-02T23:03:43.2077683Z 
+action_result.data.\*.id | string |  `defender atp alert id`  |   636924432519012302_1685044642 
+action_result.data.\*.incidentId | numeric |  |   11 
+action_result.data.\*.investigationId | numeric |  |   10 
+action_result.data.\*.investigationState | string |  |   Benign 
+action_result.data.\*.lastEventTime | string |  |   2019-05-02T23:03:43.2077683Z 
+action_result.data.\*.lastUpdateTime | string |  |   2019-05-03T01:29:51.9233333Z 
+action_result.data.\*.loggedOnUsers.\*.accountName | string |  |   Test 
+action_result.data.\*.loggedOnUsers.\*.domainName | string |  |   WINATPC1 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   ae2e5bda4bb22ec9c321680079d03e5e4cdff400 
+action_result.data.\*.rbacGroupName | string |  |   UnassignedGroup 
+action_result.data.\*.recommendedAction | string |  |   Collect artifacts and determine scope Review the machine timeline for suspicious activities that may have occurred before and after the time of the alert, and record additional related artifacts (files, IPs/URLs) Look for the presence of relevant artifacts on other systems. Identify commonalities and differences between potentially compromised systems. Submit relevant files for deep analysis and review resulting in detailed behavioral information. Submit undetected files to the MMPC malware portal Initiate containment & mitigation Contact the user to verify intent and initiate local remediation actions as needed. Update AV signatures and run a full scan. The scan might reveal and remove previously-undetected malware components. Ensure that the machine has the latest security updates. In particular, ensure that you have installed the latest software, web browser, and Operating System versions. If credential theft is suspected, reset all relevant users' passwords. Block communication with relevant URLs or IPs at the organization's perimeter. 
+action_result.data.\*.relatedUser | string |  |  
+action_result.data.\*.relatedUser.domainName | string |  |   WINATPC1 
+action_result.data.\*.relatedUser.userName | string |  |   Test 
+action_result.data.\*.resolvedTime | string |  |   2019-05-03T01:29:51.7614303Z 
+action_result.data.\*.severity | string |  |   Informational 
+action_result.data.\*.status | string |  |   Resolved 
+action_result.data.\*.threatFamilyName | string |  |   Fuery 
+action_result.data.\*.threatName | string |  |  
+action_result.data.\*.title | string |  |   Windows Defender AV detected 'Fuery' malware 
+action_result.summary.total_alerts | numeric |  |   12 
+action_result.message | string |  |   Total alerts: 12 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list sessions'
 List all logged in users on a machine
@@ -914,35 +914,35 @@ List all logged in users on a machine
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/windows/security/threat\-protection/microsoft\-defender\-atp/get\-machine\-log\-on\-users" target="\_blank">List Sessions API Documentation</a>\), the user can query on machines last seen in the past 30 days; rate limitations for this action are 100 calls per minute and 1500 calls per hour\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/get-machine-log-on-users" target="_blank">List Sessions API Documentation</a>), the user can query on machines last seen in the past 30 days; rate limitations for this action are 100 calls per minute and 1500 calls per hour.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.data\.\*\.accountDomain | string |  `domain` 
-action\_result\.data\.\*\.accountDomainName | string |  `domain` 
-action\_result\.data\.\*\.accountName | string | 
-action\_result\.data\.\*\.accountSid | string | 
-action\_result\.data\.\*\.firstSeen | string | 
-action\_result\.data\.\*\.id | string | 
-action\_result\.data\.\*\.isDomainAdmin | boolean | 
-action\_result\.data\.\*\.isOnlyNetworkUser | string | 
-action\_result\.data\.\*\.lastSeen | string | 
-action\_result\.data\.\*\.leastPrevalentMachineId | string |  `sha1` 
-action\_result\.data\.\*\.logOnMachinesCount | numeric | 
-action\_result\.data\.\*\.logonTypes | string | 
-action\_result\.data\.\*\.mostPrevalentMachineId | string |  `sha1` 
-action\_result\.summary\.total\_sessions | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.data.\*.accountDomain | string |  `domain`  |   win10atp1 
+action_result.data.\*.accountDomainName | string |  `domain`  |   desktop-gq5jf56 
+action_result.data.\*.accountName | string |  |   example 
+action_result.data.\*.accountSid | string |  |  
+action_result.data.\*.firstSeen | string |  |   2018-07-06T00:00:00Z 
+action_result.data.\*.id | string |  |   desktop-gq5jf56\\example 
+action_result.data.\*.isDomainAdmin | boolean |  |   True  False 
+action_result.data.\*.isOnlyNetworkUser | string |  |  
+action_result.data.\*.lastSeen | string |  |   2018-07-06T00:00:00Z 
+action_result.data.\*.leastPrevalentMachineId | string |  `sha1`  |  
+action_result.data.\*.logOnMachinesCount | numeric |  |   1 
+action_result.data.\*.logonTypes | string |  |   Network, RemoteInteractive 
+action_result.data.\*.mostPrevalentMachineId | string |  `sha1`  |  
+action_result.summary.total_sessions | numeric |  |   1 
+action_result.message | string |  |   Total sessions: 1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get alert'
 Retrieve specific Alert by its ID
@@ -950,82 +950,82 @@ Retrieve specific Alert by its ID
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-alert\-info\-by\-id" target="\_blank">Get Alert Information by ID API Documentation</a>\), user can get alerts last updated according to your configured retention period\.; rate limitations for this action are 100 calls per minute and 1500 calls per hour\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-alert-info-by-id" target="_blank">Get Alert Information by ID API Documentation</a>), user can get alerts last updated according to your configured retention period.; rate limitations for this action are 100 calls per minute and 1500 calls per hour.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | ID of the alert | string |  `defender atp alert id` 
+**alert_id** |  required  | ID of the alert | string |  `defender atp alert id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.alert\_id | string |  `defender atp alert id` 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.aadTenantId | string | 
-action\_result\.data\.\*\.alertCreationTime | string | 
-action\_result\.data\.\*\.assignedTo | string | 
-action\_result\.data\.\*\.category | string | 
-action\_result\.data\.\*\.classification | string | 
-action\_result\.data\.\*\.comments\.\*\.comment | string | 
-action\_result\.data\.\*\.comments\.\*\.createdBy | string | 
-action\_result\.data\.\*\.comments\.\*\.createdTime | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.detectionSource | string | 
-action\_result\.data\.\*\.detectorId | string | 
-action\_result\.data\.\*\.determination | string | 
-action\_result\.data\.\*\.evidence\.\*\.aadUserId | string | 
-action\_result\.data\.\*\.evidence\.\*\.accountName | string | 
-action\_result\.data\.\*\.evidence\.\*\.detectionStatus | string | 
-action\_result\.data\.\*\.evidence\.\*\.domainName | string |  `domain` 
-action\_result\.data\.\*\.evidence\.\*\.entityType | string | 
-action\_result\.data\.\*\.evidence\.\*\.evidenceCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.fileName | string |  `file name` 
-action\_result\.data\.\*\.evidence\.\*\.filePath | string |  `file path` 
-action\_result\.data\.\*\.evidence\.\*\.ipAddress | string |  `ip` 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessFileName | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessFilePath | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessId | string |  `pid` 
-action\_result\.data\.\*\.evidence\.\*\.processCommandLine | string | 
-action\_result\.data\.\*\.evidence\.\*\.processCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.processId | string |  `pid` 
-action\_result\.data\.\*\.evidence\.\*\.registryHive | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryKey | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryValue | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryValueName | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryValueType | string | 
-action\_result\.data\.\*\.evidence\.\*\.sha1 | string |  `sha1` 
-action\_result\.data\.\*\.evidence\.\*\.sha256 | string |  `sha256` 
-action\_result\.data\.\*\.evidence\.\*\.url | string | 
-action\_result\.data\.\*\.evidence\.\*\.userPrincipalName | string | 
-action\_result\.data\.\*\.evidence\.\*\.userSid | string | 
-action\_result\.data\.\*\.firstEventTime | string | 
-action\_result\.data\.\*\.id | string |  `defender atp alert id` 
-action\_result\.data\.\*\.incidentId | numeric | 
-action\_result\.data\.\*\.investigationId | numeric | 
-action\_result\.data\.\*\.investigationState | string | 
-action\_result\.data\.\*\.lastEventTime | string | 
-action\_result\.data\.\*\.lastUpdateTime | string | 
-action\_result\.data\.\*\.loggedOnUsers\.\*\.accountName | string | 
-action\_result\.data\.\*\.loggedOnUsers\.\*\.domainName | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.relatedUser | string | 
-action\_result\.data\.\*\.relatedUser\.domainName | string | 
-action\_result\.data\.\*\.relatedUser\.userName | string | 
-action\_result\.data\.\*\.resolvedTime | string | 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.threatFamilyName | string | 
-action\_result\.data\.\*\.threatName | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.summary\.action\_taken | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.alert_id | string |  `defender atp alert id`  |  
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#Alerts/$entity 
+action_result.data.\*.aadTenantId | string |  |  
+action_result.data.\*.alertCreationTime | string |  |  
+action_result.data.\*.assignedTo | string |  |  
+action_result.data.\*.category | string |  |  
+action_result.data.\*.classification | string |  |  
+action_result.data.\*.comments.\*.comment | string |  |   Test 
+action_result.data.\*.comments.\*.createdBy | string |  |   Automation 
+action_result.data.\*.comments.\*.createdTime | string |  |   2022-04-08T18:03:45.6064942Z 
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.detectionSource | string |  |  
+action_result.data.\*.detectorId | string |  |  
+action_result.data.\*.determination | string |  |  
+action_result.data.\*.evidence.\*.aadUserId | string |  |  
+action_result.data.\*.evidence.\*.accountName | string |  |  
+action_result.data.\*.evidence.\*.detectionStatus | string |  |  
+action_result.data.\*.evidence.\*.domainName | string |  `domain`  |  
+action_result.data.\*.evidence.\*.entityType | string |  |  
+action_result.data.\*.evidence.\*.evidenceCreationTime | string |  |  
+action_result.data.\*.evidence.\*.fileName | string |  `file name`  |  
+action_result.data.\*.evidence.\*.filePath | string |  `file path`  |  
+action_result.data.\*.evidence.\*.ipAddress | string |  `ip`  |  
+action_result.data.\*.evidence.\*.parentProcessCreationTime | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFileName | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFilePath | string |  |  
+action_result.data.\*.evidence.\*.parentProcessId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.processCommandLine | string |  |  
+action_result.data.\*.evidence.\*.processCreationTime | string |  |  
+action_result.data.\*.evidence.\*.processId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.registryHive | string |  |  
+action_result.data.\*.evidence.\*.registryKey | string |  |  
+action_result.data.\*.evidence.\*.registryValue | string |  |  
+action_result.data.\*.evidence.\*.registryValueName | string |  |  
+action_result.data.\*.evidence.\*.registryValueType | string |  |  
+action_result.data.\*.evidence.\*.sha1 | string |  `sha1`  |  
+action_result.data.\*.evidence.\*.sha256 | string |  `sha256`  |  
+action_result.data.\*.evidence.\*.url | string |  |  
+action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
+action_result.data.\*.evidence.\*.userSid | string |  |  
+action_result.data.\*.firstEventTime | string |  |  
+action_result.data.\*.id | string |  `defender atp alert id`  |  
+action_result.data.\*.incidentId | numeric |  |  
+action_result.data.\*.investigationId | numeric |  |  
+action_result.data.\*.investigationState | string |  |  
+action_result.data.\*.lastEventTime | string |  |  
+action_result.data.\*.lastUpdateTime | string |  |  
+action_result.data.\*.loggedOnUsers.\*.accountName | string |  |   TestUser 
+action_result.data.\*.loggedOnUsers.\*.domainName | string |  |   WINATPC2 
+action_result.data.\*.machineId | string |  `defender atp device id`  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.relatedUser | string |  |  
+action_result.data.\*.relatedUser.domainName | string |  |   WINATPC1 
+action_result.data.\*.relatedUser.userName | string |  |   TestUser 
+action_result.data.\*.resolvedTime | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.status | string |  |  
+action_result.data.\*.threatFamilyName | string |  |  
+action_result.data.\*.threatName | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.summary.action_taken | string |  |   Retrieved Alert 
+action_result.message | string |  |   Action taken: Retrieved Alert 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'update alert'
 Update properties of existing Alert
@@ -1033,91 +1033,91 @@ Update properties of existing Alert
 Type: **investigate**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/update\-alert" target="\_blank">Get Alert Information by ID API Documentation</a>\), user can update alerts that available in the API\. See List Alerts for more information\. Also, previously supported alert determination values \('Apt' and 'SecurityPersonnel'\) have been deprecated and no longer available via the API; rate limitations for this action are 100 calls per minute and 1500 calls per hour\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/update-alert" target="_blank">Get Alert Information by ID API Documentation</a>), user can update alerts that available in the API. See List Alerts for more information. Also, previously supported alert determination values ('Apt' and 'SecurityPersonnel') have been deprecated and no longer available via the API; rate limitations for this action are 100 calls per minute and 1500 calls per hour.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | ID of the alert | string |  `defender atp alert id` 
+**alert_id** |  required  | ID of the alert | string |  `defender atp alert id` 
 **status** |  optional  | Specifies the current status of the alert | string | 
-**assigned\_to** |  optional  | Owner of the alert | string |  `email` 
+**assigned_to** |  optional  | Owner of the alert | string |  `email` 
 **classification** |  optional  | Specifies the specification of the alert | string | 
 **determination** |  optional  | Specifies the determination of the alert | string | 
 **comment** |  optional  | Comment to be added to the alert | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.alert\_id | string |  `defender atp alert id` 
-action\_result\.parameter\.assigned\_to | string |  `email` 
-action\_result\.parameter\.classification | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.determination | string | 
-action\_result\.parameter\.status | string | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.aadTenantId | string | 
-action\_result\.data\.\*\.alertCreationTime | string | 
-action\_result\.data\.\*\.assignedTo | string |  `email` 
-action\_result\.data\.\*\.category | string | 
-action\_result\.data\.\*\.classification | string | 
-action\_result\.data\.\*\.comments\.\*\.comment | string | 
-action\_result\.data\.\*\.comments\.\*\.createdBy | string | 
-action\_result\.data\.\*\.comments\.\*\.createdTime | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.detectionSource | string | 
-action\_result\.data\.\*\.detectorId | string | 
-action\_result\.data\.\*\.determination | string | 
-action\_result\.data\.\*\.evidence\.\*\.aadUserId | string | 
-action\_result\.data\.\*\.evidence\.\*\.accountName | string | 
-action\_result\.data\.\*\.evidence\.\*\.detectionStatus | string | 
-action\_result\.data\.\*\.evidence\.\*\.domainName | string |  `domain` 
-action\_result\.data\.\*\.evidence\.\*\.entityType | string | 
-action\_result\.data\.\*\.evidence\.\*\.evidenceCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.fileName | string |  `file name` 
-action\_result\.data\.\*\.evidence\.\*\.filePath | string |  `file path` 
-action\_result\.data\.\*\.evidence\.\*\.ipAddress | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessFileName | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessFilePath | string | 
-action\_result\.data\.\*\.evidence\.\*\.parentProcessId | string |  `pid` 
-action\_result\.data\.\*\.evidence\.\*\.processCommandLine | string | 
-action\_result\.data\.\*\.evidence\.\*\.processCreationTime | string | 
-action\_result\.data\.\*\.evidence\.\*\.processId | string |  `pid` 
-action\_result\.data\.\*\.evidence\.\*\.registryHive | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryKey | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryValue | string | 
-action\_result\.data\.\*\.evidence\.\*\.registryValueType | string | 
-action\_result\.data\.\*\.evidence\.\*\.sha1 | string |  `sha1` 
-action\_result\.data\.\*\.evidence\.\*\.sha256 | string |  `sha256` 
-action\_result\.data\.\*\.evidence\.\*\.url | string |  `url` 
-action\_result\.data\.\*\.evidence\.\*\.userPrincipalName | string | 
-action\_result\.data\.\*\.evidence\.\*\.userSid | string | 
-action\_result\.data\.\*\.firstEventTime | string | 
-action\_result\.data\.\*\.id | string |  `defender atp alert id` 
-action\_result\.data\.\*\.incidentId | numeric | 
-action\_result\.data\.\*\.investigationId | numeric | 
-action\_result\.data\.\*\.investigationState | string | 
-action\_result\.data\.\*\.lastEventTime | string | 
-action\_result\.data\.\*\.lastUpdateTime | string | 
-action\_result\.data\.\*\.loggedOnUsers\.\*\.accountName | string | 
-action\_result\.data\.\*\.loggedOnUsers\.\*\.domainName | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.relatedUser | string | 
-action\_result\.data\.\*\.relatedUser\.domainName | string |  `domain` 
-action\_result\.data\.\*\.relatedUser\.userName | string |  `user name` 
-action\_result\.data\.\*\.resolvedTime | string | 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.threatFamilyName | string | 
-action\_result\.data\.\*\.threatName | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.summary\.action\_taken | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.alert_id | string |  `defender atp alert id`  |  
+action_result.parameter.assigned_to | string |  `email`  |  
+action_result.parameter.classification | string |  |  
+action_result.parameter.comment | string |  |  
+action_result.parameter.determination | string |  |  
+action_result.parameter.status | string |  |  
+action_result.data.\*.@odata.context | string |  `url`  |  
+action_result.data.\*.aadTenantId | string |  |  
+action_result.data.\*.alertCreationTime | string |  |  
+action_result.data.\*.assignedTo | string |  `email`  |  
+action_result.data.\*.category | string |  |  
+action_result.data.\*.classification | string |  |  
+action_result.data.\*.comments.\*.comment | string |  |  
+action_result.data.\*.comments.\*.createdBy | string |  |  
+action_result.data.\*.comments.\*.createdTime | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.detectionSource | string |  |  
+action_result.data.\*.detectorId | string |  |  
+action_result.data.\*.determination | string |  |  
+action_result.data.\*.evidence.\*.aadUserId | string |  |  
+action_result.data.\*.evidence.\*.accountName | string |  |  
+action_result.data.\*.evidence.\*.detectionStatus | string |  |  
+action_result.data.\*.evidence.\*.domainName | string |  `domain`  |  
+action_result.data.\*.evidence.\*.entityType | string |  |  
+action_result.data.\*.evidence.\*.evidenceCreationTime | string |  |  
+action_result.data.\*.evidence.\*.fileName | string |  `file name`  |  
+action_result.data.\*.evidence.\*.filePath | string |  `file path`  |  
+action_result.data.\*.evidence.\*.ipAddress | string |  |  
+action_result.data.\*.evidence.\*.parentProcessCreationTime | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFileName | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFilePath | string |  |  
+action_result.data.\*.evidence.\*.parentProcessId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.processCommandLine | string |  |  
+action_result.data.\*.evidence.\*.processCreationTime | string |  |  
+action_result.data.\*.evidence.\*.processId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.registryHive | string |  |  
+action_result.data.\*.evidence.\*.registryKey | string |  |  
+action_result.data.\*.evidence.\*.registryValue | string |  |  
+action_result.data.\*.evidence.\*.registryValueType | string |  |  
+action_result.data.\*.evidence.\*.sha1 | string |  `sha1`  |  
+action_result.data.\*.evidence.\*.sha256 | string |  `sha256`  |  
+action_result.data.\*.evidence.\*.url | string |  `url`  |  
+action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
+action_result.data.\*.evidence.\*.userSid | string |  |  
+action_result.data.\*.firstEventTime | string |  |  
+action_result.data.\*.id | string |  `defender atp alert id`  |  
+action_result.data.\*.incidentId | numeric |  |  
+action_result.data.\*.investigationId | numeric |  |  
+action_result.data.\*.investigationState | string |  |  
+action_result.data.\*.lastEventTime | string |  |  
+action_result.data.\*.lastUpdateTime | string |  |  
+action_result.data.\*.loggedOnUsers.\*.accountName | string |  |   Test 
+action_result.data.\*.loggedOnUsers.\*.domainName | string |  |   WINATPC2 
+action_result.data.\*.machineId | string |  `defender atp device id`  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.relatedUser | string |  |  
+action_result.data.\*.relatedUser.domainName | string |  `domain`  |  
+action_result.data.\*.relatedUser.userName | string |  `user name`  |  
+action_result.data.\*.resolvedTime | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.status | string |  |  
+action_result.data.\*.threatFamilyName | string |  |  
+action_result.data.\*.threatName | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.summary.action_taken | string |  |   Updated Alert 
+action_result.message | string |  |   Action Taken: Updated Alert 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'domain prevalence'
 Return statistics for the specified domain
@@ -1125,30 +1125,30 @@ Return statistics for the specified domain
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-domain\-statistics?view=o365\-worldwide" target="\_blank">Get domain statistics API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. The maximum value for look\_back\_hours is 720 hours \(30 days\)\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-domain-statistics?view=o365-worldwide" target="_blank">Get domain statistics API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The maximum value for look_back_hours is 720 hours (30 days).
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **domain** |  required  | Domain to get the statistics | string |  `domain` 
-**look\_back\_hours** |  optional  | Define the hours you search back to get the statistics \(Default\: 720 hours \(30 days\)\) | numeric | 
+**look_back_hours** |  optional  | Define the hours you search back to get the statistics (Default: 720 hours (30 days)) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.domain | string |  `domain` 
-action\_result\.parameter\.look\_back\_hours | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.host | string |  `domain` 
-action\_result\.data\.\*\.orgFirstSeen | string | 
-action\_result\.data\.\*\.orgLastSeen | string | 
-action\_result\.data\.\*\.orgPrevalence | string | 
-action\_result\.data\.\*\.organizationPrevalence | numeric | 
-action\_result\.summary\.organization\_prevalence | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.domain | string |  `domain`  |   abc.com 
+action_result.parameter.look_back_hours | numeric |  |   720 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#microsoft.windowsDefenderATP.api.InOrgDomainStats 
+action_result.data.\*.host | string |  `domain`  |   abc.com 
+action_result.data.\*.orgFirstSeen | string |  |  
+action_result.data.\*.orgLastSeen | string |  |  
+action_result.data.\*.orgPrevalence | string |  |   0 
+action_result.data.\*.organizationPrevalence | numeric |  |   0 
+action_result.summary.organization_prevalence | numeric |  |   0 
+action_result.message | string |  |   Organization prevalence: 0 
+summary.total_objects | numeric |  |   7 
+summary.total_objects_successful | numeric |  |   4   
 
 ## action: 'ip prevalence'
 Return statistics for the specified IP
@@ -1156,30 +1156,30 @@ Return statistics for the specified IP
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-ip\-statistics?view=o365\-worldwide" target="\_blank">Get IP statistics API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. The maximum value for look\_back\_hours is 720 hours \(30 days\)\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-ip-statistics?view=o365-worldwide" target="_blank">Get IP statistics API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The maximum value for look_back_hours is 720 hours (30 days).
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **ip** |  required  | IP to get the statistics | string |  `ip`  `ipv6` 
-**look\_back\_hours** |  optional  | Define the hours you search back to get the statistics \(Default\: 720 hours \(30 days\)\) | numeric | 
+**look_back_hours** |  optional  | Define the hours you search back to get the statistics (Default: 720 hours (30 days)) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.ip | string |  `ip`  `ipv6` 
-action\_result\.parameter\.look\_back\_hours | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.ipAddress | string |  `ip`  `ipv6` 
-action\_result\.data\.\*\.orgFirstSeen | string | 
-action\_result\.data\.\*\.orgLastSeen | string | 
-action\_result\.data\.\*\.orgPrevalence | string | 
-action\_result\.data\.\*\.organizationPrevalence | numeric | 
-action\_result\.summary\.organization\_prevalence | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.ip | string |  `ip`  `ipv6`  |   172.217.9.206  2001:0db8:0000:0000:0000:ff00:0042:8329 
+action_result.parameter.look_back_hours | numeric |  |   720 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#microsoft.windowsDefenderATP.api.InOrgIPStats 
+action_result.data.\*.ipAddress | string |  `ip`  `ipv6`  |   172.217.9.206  2001:0db8:0000:0000:0000:ff00:0042:8329 
+action_result.data.\*.orgFirstSeen | string |  |   2021-08-02T10:18:39.9233319Z 
+action_result.data.\*.orgLastSeen | string |  |   2021-08-02T10:18:39.9233319Z 
+action_result.data.\*.orgPrevalence | string |  |   1 
+action_result.data.\*.organizationPrevalence | numeric |  |   1 
+action_result.summary.organization_prevalence | numeric |  |   1 
+action_result.message | string |  |   Organization prevalence: 1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'file prevalence'
 Return statistics for the specified file
@@ -1187,35 +1187,35 @@ Return statistics for the specified file
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-file\-statistics?view=o365\-worldwide" target="\_blank">Get File statistics API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. The maximum value for look\_back\_hours is 720 hours \(30 days\)\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-file-statistics?view=o365-worldwide" target="_blank">Get File statistics API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The maximum value for look_back_hours is 720 hours (30 days).
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**file\_hash** |  required  | File hash to get the statistics \(SHA1 or SHA256\) | string |  `sha1`  `sha256` 
-**look\_back\_hours** |  optional  | Define the hours you search back to get the statistics \(Default\: 720 hours \(30 days\)\) | numeric | 
+**file_hash** |  required  | File hash to get the statistics (SHA1 or SHA256) | string |  `sha1`  `sha256` 
+**look_back_hours** |  optional  | Define the hours you search back to get the statistics (Default: 720 hours (30 days)) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.file\_hash | string |  `sha1`  `sha256` 
-action\_result\.parameter\.look\_back\_hours | string | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.globalFirstObserved | string | 
-action\_result\.data\.\*\.globalLastObserved | string | 
-action\_result\.data\.\*\.globalPrevalence | string | 
-action\_result\.data\.\*\.globallyPrevalence | numeric | 
-action\_result\.data\.\*\.orgFirstSeen | string | 
-action\_result\.data\.\*\.orgLastSeen | string | 
-action\_result\.data\.\*\.orgPrevalence | string | 
-action\_result\.data\.\*\.organizationPrevalence | numeric | 
-action\_result\.data\.\*\.sha1 | string |  `sha1` 
-action\_result\.data\.\*\.topFileNames | string |  `file name` 
-action\_result\.summary\.organization\_prevalence | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.file_hash | string |  `sha1`  `sha256`  |   954e0fd64a1242d0fa860b220198118268e35018 
+action_result.parameter.look_back_hours | string |  |   720 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#microsoft.windowsDefenderATP.api.InOrgFileStats 
+action_result.data.\*.globalFirstObserved | string |  |   2021-07-11T08:50:15.2316886Z 
+action_result.data.\*.globalLastObserved | string |  |   2021-08-20T10:15:33.4741238Z 
+action_result.data.\*.globalPrevalence | string |  |   64356 
+action_result.data.\*.globallyPrevalence | numeric |  |   64356 
+action_result.data.\*.orgFirstSeen | string |  |  
+action_result.data.\*.orgLastSeen | string |  |  
+action_result.data.\*.orgPrevalence | string |  |   0 
+action_result.data.\*.organizationPrevalence | numeric |  |   0 
+action_result.data.\*.sha1 | string |  `sha1`  |   954e0fd64a1242d0fa860b220198118268e35018 
+action_result.data.\*.topFileNames | string |  `file name`  |   mssense.exe 
+action_result.summary.organization_prevalence | numeric |  |   0 
+action_result.message | string |  |   Organization prevalence: 0 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get file info'
 Retrieve a File information by identifier SHA1, or SHA256
@@ -1223,97 +1223,97 @@ Retrieve a File information by identifier SHA1, or SHA256
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-file\-information?view=o365\-worldwide" target="\_blank">Get File Information API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. The valid file identifiers are SHA1, SHA256\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-file-information?view=o365-worldwide" target="_blank">Get File Information API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The valid file identifiers are SHA1, SHA256.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**file\_hash** |  required  | Identifier of the file | string |  `sha1`  `sha256` 
+**file_hash** |  required  | Identifier of the file | string |  `sha1`  `sha256` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.file\_hash | string |  `sha1`  `sha256` 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.determinationType | string | 
-action\_result\.data\.\*\.determinationValue | string | 
-action\_result\.data\.\*\.fileProductName | string | 
-action\_result\.data\.\*\.filePublisher | string | 
-action\_result\.data\.\*\.fileType | string | 
-action\_result\.data\.\*\.globalFirstObserved | string | 
-action\_result\.data\.\*\.globalLastObserved | string | 
-action\_result\.data\.\*\.globalPrevalence | numeric | 
-action\_result\.data\.\*\.isPeFile | boolean | 
-action\_result\.data\.\*\.isValidCertificate | boolean | 
-action\_result\.data\.\*\.issuer | string | 
-action\_result\.data\.\*\.md5 | string |  `md5` 
-action\_result\.data\.\*\.sha1 | string |  `sha1` 
-action\_result\.data\.\*\.sha256 | string |  `sha256` 
-action\_result\.data\.\*\.signer | string | 
-action\_result\.data\.\*\.signerHash | string | 
-action\_result\.data\.\*\.size | numeric | 
-action\_result\.summary\.global\_prevalence | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.file_hash | string |  `sha1`  `sha256`  |   954e0fd64a1242d0fa860b220198118268e35018  1a563e59bfcdc9e7b4d8ac81c6b6579e2d215952f6dd98e0ab1ab026ac616896 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#Files/$entity 
+action_result.data.\*.determinationType | string |  |   Unknown 
+action_result.data.\*.determinationValue | string |  |  
+action_result.data.\*.fileProductName | string |  |   Windows Operating System 
+action_result.data.\*.filePublisher | string |  |  
+action_result.data.\*.fileType | string |  |  
+action_result.data.\*.globalFirstObserved | string |  |   2021-07-11T08:50:15.2316886Z 
+action_result.data.\*.globalLastObserved | string |  |   2021-08-19T10:33:39.6552836Z 
+action_result.data.\*.globalPrevalence | numeric |  |   64134 
+action_result.data.\*.isPeFile | boolean |  |   True 
+action_result.data.\*.isValidCertificate | boolean |  |   True 
+action_result.data.\*.issuer | string |  |   Test Windows Production PCA 2011 
+action_result.data.\*.md5 | string |  `md5`  |   44adb27786eb24e5bbfd06b69e84d252 
+action_result.data.\*.sha1 | string |  `sha1`  |   954e0fd64a1242d0fa860b220198118268e35018 
+action_result.data.\*.sha256 | string |  `sha256`  |   1a563e59bfcdc9e7b4d8ac81c6b6579e2d215952f6dd98e0ab1ab026ac616896 
+action_result.data.\*.signer | string |  |   Windows Publisher 
+action_result.data.\*.signerHash | string |  |   4f95a05d113f1f31b481e92f8f0d2b9889545004 
+action_result.data.\*.size | numeric |  |   5395384 
+action_result.summary.global_prevalence | numeric |  |   64355 
+action_result.message | string |  |   Successfully retrieved file information 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get file devices'
-Retrieve a collection of devices related to a given file hash \(SHA1\)
+Retrieve a collection of devices related to a given file hash (SHA1)
 
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-file\-related\-machines?view=o365\-worldwide" target="\_blank">Get File Related Machines API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. The valid file identifier is SHA1\.<br>The action retrieves data of the last 30 days\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-file-related-machines?view=o365-worldwide" target="_blank">Get File Related Machines API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The valid file identifier is SHA1.<br>The action retrieves data of the last 30 days.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**file\_hash** |  required  | Identifier of the file | string |  `sha1` 
+**file_hash** |  required  | Identifier of the file | string |  `sha1` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.file\_hash | string |  `sha1` 
-action\_result\.data\.\*\.aadDeviceId | string | 
-action\_result\.data\.\*\.agentVersion | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.defenderAvStatus | string |  `domain` 
-action\_result\.data\.\*\.deviceValue | string | 
-action\_result\.data\.\*\.exposureLevel | string | 
-action\_result\.data\.\*\.firstSeen | string | 
-action\_result\.data\.\*\.healthStatus | string | 
-action\_result\.data\.\*\.id | string |  `defender atp device id` 
-action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string |  `ip` 
-action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
-action\_result\.data\.\*\.isAadJoined | boolean | 
-action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastSeen | string | 
-action\_result\.data\.\*\.managedBy | string | 
-action\_result\.data\.\*\.managedByStatus | string | 
-action\_result\.data\.\*\.onboardingStatus | string | 
-action\_result\.data\.\*\.osArchitecture | string | 
-action\_result\.data\.\*\.osBuild | numeric | 
-action\_result\.data\.\*\.osPlatform | string | 
-action\_result\.data\.\*\.osProcessor | string | 
-action\_result\.data\.\*\.osVersion | string | 
-action\_result\.data\.\*\.rbacGroupId | numeric | 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.riskScore | string | 
-action\_result\.data\.\*\.version | string | 
-action\_result\.data\.\*\.vmMetadata | string | 
-action\_result\.data\.\*\.vmMetadata\.cloudProvider | string | 
-action\_result\.data\.\*\.vmMetadata\.resourceId | string | 
-action\_result\.data\.\*\.vmMetadata\.subscriptionId | string | 
-action\_result\.data\.\*\.vmMetadata\.vmId | string | 
-action\_result\.summary\.total\_devices | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.file_hash | string |  `sha1`  |   954e0fd64a1242d0fa860b220198118268e35018 
+action_result.data.\*.aadDeviceId | string |  |  
+action_result.data.\*.agentVersion | string |  |   10.7740.19041.1110 
+action_result.data.\*.computerDnsName | string |  |   testmachine4 
+action_result.data.\*.defenderAvStatus | string |  `domain`  |   Updated 
+action_result.data.\*.deviceValue | string |  |   Normal 
+action_result.data.\*.exposureLevel | string |  |   Medium 
+action_result.data.\*.firstSeen | string |  |   2021-08-02T06:12:16.3736341Z 
+action_result.data.\*.healthStatus | string |  |   Inactive 
+action_result.data.\*.id | string |  `defender atp device id`  |   803c416946e8738b7711903a28362adeae6e1aea 
+action_result.data.\*.ipAddresses.\*.ipAddress | string |  `ip`  |   10.1.1.4 
+action_result.data.\*.ipAddresses.\*.macAddress | string |  |   000D3A7B423C 
+action_result.data.\*.ipAddresses.\*.operationalStatus | string |  |   Up 
+action_result.data.\*.ipAddresses.\*.type | string |  |   Ethernet 
+action_result.data.\*.isAadJoined | boolean |  |   False  True 
+action_result.data.\*.lastExternalIpAddress | string |  `ip`  |   137.116.83.101 
+action_result.data.\*.lastIpAddress | string |  `ip`  |   10.1.1.4 
+action_result.data.\*.lastSeen | string |  |   2021-08-04T13:40:25.2473895Z 
+action_result.data.\*.managedBy | string |  |  
+action_result.data.\*.managedByStatus | string |  |  
+action_result.data.\*.onboardingStatus | string |  |   Onboarded 
+action_result.data.\*.osArchitecture | string |  |   64-bit 
+action_result.data.\*.osBuild | numeric |  |   19042 
+action_result.data.\*.osPlatform | string |  |   Windows10 
+action_result.data.\*.osProcessor | string |  |   x64 
+action_result.data.\*.osVersion | string |  |  
+action_result.data.\*.rbacGroupId | numeric |  |   0 
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.riskScore | string |  |   Medium 
+action_result.data.\*.version | string |  |   20H2 
+action_result.data.\*.vmMetadata | string |  |  
+action_result.data.\*.vmMetadata.cloudProvider | string |  |   Azure 
+action_result.data.\*.vmMetadata.resourceId | string |  |   /subscriptions/1b922e46-8595-4749-997a-1205e714cd91/resourceGroups/evaluation_3e5d447ba5d6470b9636a8709cd5b26a_4/providers/Microsoft.Compute/virtualMachines/TestMachine4 
+action_result.data.\*.vmMetadata.subscriptionId | string |  |   1b922e46-8595-4749-997a-1205e714cd91 
+action_result.data.\*.vmMetadata.vmId | string |  |   238443dc-56ce-487f-aeb6-261a2a00a38c 
+action_result.summary.total_devices | numeric |  |   1 
+action_result.message | string |  |   Total devices: 1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get user devices'
 Retrieve a collection of devices related to a given user ID
@@ -1321,56 +1321,56 @@ Retrieve a collection of devices related to a given user ID
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-user\-related\-machines?view=o365\-worldwide" target="\_blank">Get User Related Machines API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. The ID is not the full UPN, but only the user name\. \(for example, to retrieve machines for user1\@contoso\.com use user1 for user\_id parameter\)\.<br>The action retrieves data of the last 30 days\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-user-related-machines?view=o365-worldwide" target="_blank">Get User Related Machines API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The ID is not the full UPN, but only the user name. (for example, to retrieve machines for user1@contoso.com use user1 for user_id parameter).<br>The action retrieves data of the last 30 days.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**user\_id** |  required  | ID of the user | string |  `user name` 
+**user_id** |  required  | ID of the user | string |  `user name` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.user\_id | string |  `user name` 
-action\_result\.data\.\*\.aadDeviceId | string | 
-action\_result\.data\.\*\.agentVersion | string | 
-action\_result\.data\.\*\.computerDnsName | string |  `domain` 
-action\_result\.data\.\*\.defenderAvStatus | string | 
-action\_result\.data\.\*\.deviceValue | string | 
-action\_result\.data\.\*\.exposureLevel | string | 
-action\_result\.data\.\*\.firstSeen | string | 
-action\_result\.data\.\*\.healthStatus | string | 
-action\_result\.data\.\*\.id | string |  `defender atp device id` 
-action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string |  `ip` 
-action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
-action\_result\.data\.\*\.isAadJoined | boolean | 
-action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastSeen | string | 
-action\_result\.data\.\*\.managedBy | string | 
-action\_result\.data\.\*\.managedByStatus | string | 
-action\_result\.data\.\*\.onboardingStatus | string | 
-action\_result\.data\.\*\.osArchitecture | string | 
-action\_result\.data\.\*\.osBuild | numeric | 
-action\_result\.data\.\*\.osPlatform | string | 
-action\_result\.data\.\*\.osProcessor | string | 
-action\_result\.data\.\*\.osVersion | string | 
-action\_result\.data\.\*\.rbacGroupId | numeric | 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.riskScore | string | 
-action\_result\.data\.\*\.version | string | 
-action\_result\.data\.\*\.vmMetadata | string | 
-action\_result\.data\.\*\.vmMetadata\.cloudProvider | string | 
-action\_result\.data\.\*\.vmMetadata\.resourceId | string | 
-action\_result\.data\.\*\.vmMetadata\.subscriptionId | string | 
-action\_result\.data\.\*\.vmMetadata\.vmId | string | 
-action\_result\.summary\.total\_devices | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.user_id | string |  `user name`  |   Administrator1 
+action_result.data.\*.aadDeviceId | string |  |  
+action_result.data.\*.agentVersion | string |  |   10.7740.19041.1110 
+action_result.data.\*.computerDnsName | string |  `domain`  |   testmachine4 
+action_result.data.\*.defenderAvStatus | string |  |   Updated 
+action_result.data.\*.deviceValue | string |  |   Normal 
+action_result.data.\*.exposureLevel | string |  |   Medium 
+action_result.data.\*.firstSeen | string |  |   2021-08-02T06:12:16.3736341Z 
+action_result.data.\*.healthStatus | string |  |   Inactive 
+action_result.data.\*.id | string |  `defender atp device id`  |   803c416946e8738b7711903a28362adeae6e1aea 
+action_result.data.\*.ipAddresses.\*.ipAddress | string |  `ip`  |   10.1.1.4 
+action_result.data.\*.ipAddresses.\*.macAddress | string |  |   000D3A7B423C 
+action_result.data.\*.ipAddresses.\*.operationalStatus | string |  |   Up 
+action_result.data.\*.ipAddresses.\*.type | string |  |   Ethernet 
+action_result.data.\*.isAadJoined | boolean |  |   False 
+action_result.data.\*.lastExternalIpAddress | string |  `ip`  |   137.116.83.101 
+action_result.data.\*.lastIpAddress | string |  `ip`  |   10.1.1.4 
+action_result.data.\*.lastSeen | string |  |   2021-08-04T13:40:25.2473895Z 
+action_result.data.\*.managedBy | string |  |  
+action_result.data.\*.managedByStatus | string |  |  
+action_result.data.\*.onboardingStatus | string |  |   Onboarded 
+action_result.data.\*.osArchitecture | string |  |   64-bit 
+action_result.data.\*.osBuild | numeric |  |   19042 
+action_result.data.\*.osPlatform | string |  |   Windows10 
+action_result.data.\*.osProcessor | string |  |   x64 
+action_result.data.\*.osVersion | string |  |  
+action_result.data.\*.rbacGroupId | numeric |  |   0 
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.riskScore | string |  |   Medium 
+action_result.data.\*.version | string |  |   20H2 
+action_result.data.\*.vmMetadata | string |  |  
+action_result.data.\*.vmMetadata.cloudProvider | string |  |   Azure 
+action_result.data.\*.vmMetadata.resourceId | string |  |   /subscriptions/1b922e46-8595-4749-997a-1205e714cd91/resourceGroups/evaluation_3e5d447ba5d6470b9636a8709cd5b26a_4/providers/Microsoft.Compute/virtualMachines/TestMachine4 
+action_result.data.\*.vmMetadata.subscriptionId | string |  |   1b922e46-8595-4749-997a-1205e714cd91 
+action_result.data.\*.vmMetadata.vmId | string |  |   238443dc-56ce-487f-aeb6-261a2a00a38c 
+action_result.summary.total_devices | numeric |  |   1 
+action_result.message | string |  |   Total devices: 1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get installed software'
 Retrieve a collection of installed software related to a given device ID
@@ -1381,28 +1381,28 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.data\.\*\.activeAlert | boolean | 
-action\_result\.data\.\*\.category | string | 
-action\_result\.data\.\*\.exposedMachines | numeric | 
-action\_result\.data\.\*\.id | string | 
-action\_result\.data\.\*\.impactScore | numeric | 
-action\_result\.data\.\*\.installedMachines | numeric | 
-action\_result\.data\.\*\.isNormalized | boolean | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.publicExploit | boolean | 
-action\_result\.data\.\*\.vendor | string | 
-action\_result\.data\.\*\.weaknesses | numeric | 
-action\_result\.summary\.total\_software | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.data.\*.activeAlert | boolean |  |   False 
+action_result.data.\*.category | string |  |  
+action_result.data.\*.exposedMachines | numeric |  |   0 
+action_result.data.\*.id | string |  |   test-_-.net_framework 
+action_result.data.\*.impactScore | numeric |  |   0 
+action_result.data.\*.installedMachines | numeric |  |   5 
+action_result.data.\*.isNormalized | boolean |  |   True  False 
+action_result.data.\*.name | string |  |   .net_framework 
+action_result.data.\*.publicExploit | boolean |  |   False 
+action_result.data.\*.vendor | string |  |   Test Vendor 
+action_result.data.\*.weaknesses | numeric |  |   0 
+action_result.summary.total_software | numeric |  |   9 
+action_result.message | string |  |   Total software: 9 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'restrict app execution'
 Restrict execution of all applications on the device except a predefined set
@@ -1410,49 +1410,49 @@ Restrict execution of all applications on the device except a predefined set
 Type: **contain**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/restrict\-code\-execution?view=o365\-worldwide" target="\_blank">Restrict app execution API Documentation</a>\), rate limitations for this API are 100 calls per minute and 1500 calls per hour\.<br>This action can take a while to complete execution\. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete\. If not, the action would return the latest status of the event along with the event ID\.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID\.<br>The maximum timeout period for a status check is 1 minute\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/restrict-code-execution?view=o365-worldwide" target="_blank">Restrict app execution API Documentation</a>), rate limitations for this API are 100 calls per minute and 1500 calls per hour.<br>This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 1 minute.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
 **comment** |  required  | Comment | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 30\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 30) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.error | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string | 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.restrict\_app\_execution\_status | string | 
-action\_result\.summary\.restriction\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   Restrict code execution due to alert 1234 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.parameter.timeout | numeric |  |   30 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.computerDnsName | string |  |   win10atp2 
+action_result.data.\*.creationDateTimeUtc | string |  |   2019-05-03T08:50:05.8076226Z 
+action_result.data.\*.error | string |  |  
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2019-05-03T08:50:05.8076226Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   349838747f77ec74e43ab7ca70773a41f7bfb6f2 
+action_result.data.\*.relatedFileInfo | string |  |  
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  |   65265db5-a7ca-4199-a425-f37ad1dd6d31 
+action_result.data.\*.requestorComment | string |  |   Restrict code execution due to alert 1234 
+action_result.data.\*.scope | string |  |  
+action_result.data.\*.status | string |  |   Succeeded 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   RestrictCodeExecution 
+action_result.summary.event_id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.summary.restrict_app_execution_status | string |  |   Succeeded 
+action_result.summary.restriction_status | string |  |   Pending 
+action_result.message | string |  |   Event id: cd2ab57e-5b52-43b0-99d8-c370fc620a54, Restriction status: Succeeded 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'list indicators'
 Retrieve a collection of all active Indicators
@@ -1460,56 +1460,56 @@ Retrieve a collection of all active Indicators
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-ti\-indicators\-collection?view=o365\-worldwide" target="\_blank">List Indicators API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. If the user does not specify the limit value, it will fetch 100 indicators by default\. The maximum value for the limit parameter is 10000\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-ti-indicators-collection?view=o365-worldwide" target="_blank">List Indicators API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. If the user does not specify the limit value, it will fetch 100 indicators by default. The maximum value for the limit parameter is 10000.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **filter** |  optional  | Additional OData V4 filters to apply | string | 
-**limit** |  optional  | Maximum number of indicators to return \(Maximum\: 10,000\) | numeric | 
+**limit** |  optional  | Maximum number of indicators to return (Maximum: 10,000) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.filter | string | 
-action\_result\.parameter\.limit | numeric | 
-action\_result\.data\.\*\.action | string | 
-action\_result\.data\.\*\.additionalInfo | string | 
-action\_result\.data\.\*\.application | string | 
-action\_result\.data\.\*\.bypassDurationHours | string | 
-action\_result\.data\.\*\.category | numeric | 
-action\_result\.data\.\*\.certificateInfo | string | 
-action\_result\.data\.\*\.certificateInfo\.issuer | string | 
-action\_result\.data\.\*\.certificateInfo\.serial | string | 
-action\_result\.data\.\*\.certificateInfo\.sha256 | string | 
-action\_result\.data\.\*\.certificateInfo\.subject | string | 
-action\_result\.data\.\*\.createdBy | string | 
-action\_result\.data\.\*\.createdByDisplayName | string | 
-action\_result\.data\.\*\.createdBySource | string | 
-action\_result\.data\.\*\.creationTimeDateTimeUtc | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.educateUrl | string | 
-action\_result\.data\.\*\.expirationTime | string | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.generateAlert | boolean | 
-action\_result\.data\.\*\.historicalDetection | boolean | 
-action\_result\.data\.\*\.id | string |  `defender atp indicator id` 
-action\_result\.data\.\*\.indicatorType | string | 
-action\_result\.data\.\*\.indicatorValue | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `domain`  `ip`  `ipv6`  `url` 
-action\_result\.data\.\*\.lastUpdateTime | string | 
-action\_result\.data\.\*\.lastUpdatedBy | string | 
-action\_result\.data\.\*\.lookBackPeriod | string | 
-action\_result\.data\.\*\.notificationBody | string | 
-action\_result\.data\.\*\.notificationId | string | 
-action\_result\.data\.\*\.recommendedActions | string | 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.version | string | 
-action\_result\.summary\.total\_indicators | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.filter | string |  |   severity+eq+'Informational' 
+action_result.parameter.limit | numeric |  |   3 
+action_result.data.\*.action | string |  |   Alert  Warn  Block  Audit  BlockAndRemediate  AlertAndBlock  Allowed 
+action_result.data.\*.additionalInfo | string |  |  
+action_result.data.\*.application | string |  |  
+action_result.data.\*.bypassDurationHours | string |  |  
+action_result.data.\*.category | numeric |  |   1 
+action_result.data.\*.certificateInfo | string |  |  
+action_result.data.\*.certificateInfo.issuer | string |  |   E=test@DS1234.testing.net, CN=localhost, OU=QA, O=System, L=ABC, S=UT, C=US 
+action_result.data.\*.certificateInfo.serial | string |  |   123CE453421A81E2DB9A6A08C3440DBD06 
+action_result.data.\*.certificateInfo.sha256 | string |  |   1234edd57a56d859cd9b18c3b20308917ea2fa5b2013f00d5c98d5a8a9be1234 
+action_result.data.\*.certificateInfo.subject | string |  |   E=test@DS1234.testing.net, CN=localhost, OU=QA, O=System, L=ABC, S=UT, C=US 
+action_result.data.\*.createdBy | string |  |   test@testdomain.onmicrosoft.com 
+action_result.data.\*.createdByDisplayName | string |  |   testuser@domain.onmicrosoft.com 
+action_result.data.\*.createdBySource | string |  |   Portal 
+action_result.data.\*.creationTimeDateTimeUtc | string |  |   2021-08-25T12:30:51.7279453Z 
+action_result.data.\*.description | string |  |   Test-ATP 
+action_result.data.\*.educateUrl | string |  |  
+action_result.data.\*.expirationTime | string |  |   2021-08-26T00:00:00Z 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.generateAlert | boolean |  |   False  True 
+action_result.data.\*.historicalDetection | boolean |  |   False  True 
+action_result.data.\*.id | string |  `defender atp indicator id`  |   13 
+action_result.data.\*.indicatorType | string |  |   FileSha1  FileMd5  CertificateThumbprint  FileSha256  IpAddress  DomainName  Url 
+action_result.data.\*.indicatorValue | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `domain`  `ip`  `ipv6`  `url`  |   63b79504702c9c977e7165ad75d2e6989b2c5962 
+action_result.data.\*.lastUpdateTime | string |  |   2021-08-25T12:30:51.7457726Z 
+action_result.data.\*.lastUpdatedBy | string |  |  
+action_result.data.\*.lookBackPeriod | string |  |  
+action_result.data.\*.notificationBody | string |  |  
+action_result.data.\*.notificationId | string |  |  
+action_result.data.\*.recommendedActions | string |  |  
+action_result.data.\*.severity | string |  |   Informational 
+action_result.data.\*.title | string |  |   Test 
+action_result.data.\*.version | string |  |  
+action_result.summary.total_indicators | numeric |  |   1 
+action_result.message | string |  |   Total indicators: 1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'submit indicator'
 Submit or Update new Indicator entity
@@ -1517,69 +1517,69 @@ Submit or Update new Indicator entity
 Type: **generic**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/post\-ti\-indicator?view=o365\-worldwide" target="\_blank">Submit or Update Indicator API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. There is a limit of 15,000 active indicators per tenant\.<br><b>Notes\:</b><ul><li>For the possible values of given action parameters, refer to the documentation link provided above\.<li>CIDR notation for IPs is not supported\.</li></ul>
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/post-ti-indicator?view=o365-worldwide" target="_blank">Submit or Update Indicator API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. There is a limit of 15,000 active indicators per tenant.<br><b>Notes:</b><ul><li>For the possible values of given action parameters, refer to the documentation link provided above.<li>CIDR notation for IPs is not supported.</li></ul>
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **title** |  required  | Indicator alert title | string | 
 **description** |  required  | Description of the indicator | string | 
-**indicator\_type** |  required  | Type of the indicator | string | 
-**indicator\_value** |  required  | Identity of the Indicator entity | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain` 
+**indicator_type** |  required  | Type of the indicator | string | 
+**indicator_value** |  required  | Identity of the Indicator entity | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain` 
 **action** |  required  | The action that will be taken if the indicator will be discovered in the organization | string | 
 **application** |  optional  | The application associated with the indicator | string | 
-**expiration\_time** |  optional  | The expiration time of the indicator \(Use this format\: %Y\-%m\-%dT%H\:%M\:%SZ in UTC timezone\) | string | 
+**expiration_time** |  optional  | The expiration time of the indicator (Use this format: %Y-%m-%dT%H:%M:%SZ in UTC timezone) | string | 
 **severity** |  optional  | The severity of the indicator | string | 
-**recommended\_actions** |  optional  | TI indicator alert recommended actions | string | 
-**rbac\_group\_names** |  optional  | RBAC group names the indicator would be applied to \(JSON formatted list\) | string | 
+**recommended_actions** |  optional  | TI indicator alert recommended actions | string | 
+**rbac_group_names** |  optional  | RBAC group names the indicator would be applied to (JSON formatted list) | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.action | string | 
-action\_result\.parameter\.application | string | 
-action\_result\.parameter\.description | string | 
-action\_result\.parameter\.expiration\_time | string | 
-action\_result\.parameter\.indicator\_type | string | 
-action\_result\.parameter\.indicator\_value | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain` 
-action\_result\.parameter\.rbac\_group\_names | string | 
-action\_result\.parameter\.recommended\_actions | string | 
-action\_result\.parameter\.severity | string | 
-action\_result\.parameter\.title | string | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.action | string | 
-action\_result\.data\.\*\.additionalInfo | string | 
-action\_result\.data\.\*\.application | string | 
-action\_result\.data\.\*\.bypassDurationHours | string | 
-action\_result\.data\.\*\.category | numeric | 
-action\_result\.data\.\*\.certificateInfo | string | 
-action\_result\.data\.\*\.createdBy | string | 
-action\_result\.data\.\*\.createdByDisplayName | string | 
-action\_result\.data\.\*\.createdBySource | string | 
-action\_result\.data\.\*\.creationTimeDateTimeUtc | string | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.educateUrl | string | 
-action\_result\.data\.\*\.expirationTime | string | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.generateAlert | boolean | 
-action\_result\.data\.\*\.historicalDetection | boolean | 
-action\_result\.data\.\*\.id | string |  `defender atp indicator id` 
-action\_result\.data\.\*\.indicatorType | string | 
-action\_result\.data\.\*\.indicatorValue | string |  `defender atp indicator value`  `ip`  `ipv6`  `sha1`  `sha256`  `md5`  `domain`  `url` 
-action\_result\.data\.\*\.lastUpdateTime | string | 
-action\_result\.data\.\*\.lastUpdatedBy | string | 
-action\_result\.data\.\*\.lookBackPeriod | string | 
-action\_result\.data\.\*\.notificationBody | string | 
-action\_result\.data\.\*\.notificationId | string | 
-action\_result\.data\.\*\.recommendedActions | string | 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.version | string | 
-action\_result\.summary\.indicator\_id | string |  `defender atp indicator id` 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.action | string |  |   Alert  Warn  Block  Audit  BlockAndRemediate  AlertAndBlock  Allowed 
+action_result.parameter.application | string |  |   Test App 
+action_result.parameter.description | string |  |   Test 1 
+action_result.parameter.expiration_time | string |  |   2021-09-07T00:00:00Z 
+action_result.parameter.indicator_type | string |  |   FileSha1  FileMd5  CertificateThumbprint  FileSha256  IpAddress  DomainName  Url 
+action_result.parameter.indicator_value | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain`  |   domain.com 
+action_result.parameter.rbac_group_names | string |  |   ["Group1", "Group2"] 
+action_result.parameter.recommended_actions | string |  |   Test Actions 
+action_result.parameter.severity | string |  |   Low 
+action_result.parameter.title | string |  |   Test 1 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#Indicators/$entity 
+action_result.data.\*.action | string |  |   Alert  Warn  Block  Audit  BlockAndRemediate  AlertAndBlock  Allowed 
+action_result.data.\*.additionalInfo | string |  |  
+action_result.data.\*.application | string |  |  
+action_result.data.\*.bypassDurationHours | string |  |  
+action_result.data.\*.category | numeric |  |   1 
+action_result.data.\*.certificateInfo | string |  |  
+action_result.data.\*.createdBy | string |  |   65265db5-a7ca-4199-a425-f37ad1dd6d31 
+action_result.data.\*.createdByDisplayName | string |  |   WindowsDefenderATPSiemConnector 
+action_result.data.\*.createdBySource | string |  |   PublicApi 
+action_result.data.\*.creationTimeDateTimeUtc | string |  |   2021-08-27T12:50:54.882519Z 
+action_result.data.\*.description | string |  |   Test 1 
+action_result.data.\*.educateUrl | string |  |  
+action_result.data.\*.expirationTime | string |  |   2021-09-07T00:00:00Z 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.generateAlert | boolean |  |   False  True 
+action_result.data.\*.historicalDetection | boolean |  |   False  True 
+action_result.data.\*.id | string |  `defender atp indicator id`  |   17 
+action_result.data.\*.indicatorType | string |  |   FileSha1  FileMd5  CertificateThumbprint  FileSha256  IpAddress  DomainName  Url 
+action_result.data.\*.indicatorValue | string |  `defender atp indicator value`  `ip`  `ipv6`  `sha1`  `sha256`  `md5`  `domain`  `url`  |   test.com 
+action_result.data.\*.lastUpdateTime | string |  |   2021-08-27T12:55:42.0621261Z 
+action_result.data.\*.lastUpdatedBy | string |  |   65265db5-a7ca-4199-a425-f37ad1dd6d31 
+action_result.data.\*.lookBackPeriod | string |  |  
+action_result.data.\*.notificationBody | string |  |  
+action_result.data.\*.notificationId | string |  |  
+action_result.data.\*.recommendedActions | string |  |   Test Actions 
+action_result.data.\*.severity | string |  |   Low 
+action_result.data.\*.title | string |  |   Test 1 
+action_result.data.\*.version | string |  |  
+action_result.summary.indicator_id | string |  `defender atp indicator id`  |   17 
+action_result.message | string |  |   Indicator id: 17 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'delete indicator'
 Delete an Indicator entity by ID
@@ -1587,23 +1587,23 @@ Delete an Indicator entity by ID
 Type: **generic**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/delete\-ti\-indicator\-by\-id?view=o365\-worldwide" target="\_blank">Delete Indicator API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/delete-ti-indicator-by-id?view=o365-worldwide" target="_blank">Delete Indicator API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**indicator\_id** |  required  | Indicator ID to delete | string |  `defender atp indicator id` 
+**indicator_id** |  required  | Indicator ID to delete | string |  `defender atp indicator id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.indicator\_id | string |  `defender atp indicator id` 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.indicator_id | string |  `defender atp indicator id`  |   16 
+action_result.data | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |   Successfully deleted indicator entity 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'run query'
 An advanced search query
@@ -1611,7 +1611,7 @@ An advanced search query
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/run\-advanced\-query\-api?view=o365\-worldwide" target="\_blank">Advanced Hunting API Documentation</a>\), <li>rate limitations for this action are 45 calls per minute and 1500 calls per hour\.</li><li>You can only run a query on data from the last 30 days\.</li><li>The execution time is 10 minutes for every hour and 3 hours of running time a day\. The maximal execution time of a single request is 10 minutes\.</li><li>The maximum query result size of a single request cannot exceed 124 MB\. If exceeded, HTTP 400 Bad Request with the message "Query execution has exceeded the allowed result size\. Optimize your query by limiting the amount of results and try again" will appear\.</li><li>The 429 response indicates that you have reached your quota limit, either in terms of requests or CPU usage\. To figure out what limit has been reached, read the response body\.</li>
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-advanced-query-api?view=o365-worldwide" target="_blank">Advanced Hunting API Documentation</a>), <li>rate limitations for this action are 45 calls per minute and 1500 calls per hour.</li><li>You can only run a query on data from the last 30 days.</li><li>The execution time is 10 minutes for every hour and 3 hours of running time a day. The maximal execution time of a single request is 10 minutes.</li><li>The maximum query result size of a single request cannot exceed 124 MB. If exceeded, HTTP 400 Bad Request with the message "Query execution has exceeded the allowed result size. Optimize your query by limiting the amount of results and try again" will appear.</li><li>The 429 response indicates that you have reached your quota limit, either in terms of requests or CPU usage. To figure out what limit has been reached, read the response body.</li>
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
@@ -1619,68 +1619,68 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **query** |  required  | Query to fetch results | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.query | string | 
-action\_result\.data\.\*\.ActionType | string | 
-action\_result\.data\.\*\.AntivirusEnabled | string | 
-action\_result\.data\.\*\.AntivirusReporting | string | 
-action\_result\.data\.\*\.AntivirusSignatureVersion | string | 
-action\_result\.data\.\*\.AppGuardContainerId | string | 
-action\_result\.data\.\*\.BehaviorMonitoring | string | 
-action\_result\.data\.\*\.CloudProtection | string | 
-action\_result\.data\.\*\.DeviceId | string |  `defender atp device id` 
-action\_result\.data\.\*\.DeviceName | string | 
-action\_result\.data\.\*\.DomainName | string |  `domain` 
-action\_result\.data\.\*\.DurationAtLeast | string | 
-action\_result\.data\.\*\.FileName | string |  `file name` 
-action\_result\.data\.\*\.ImpairedCommunications | string | 
-action\_result\.data\.\*\.InitiatingProcessAccountDomain | string | 
-action\_result\.data\.\*\.InitiatingProcessAccountName | string | 
-action\_result\.data\.\*\.InitiatingProcessAccountObjectId | string | 
-action\_result\.data\.\*\.InitiatingProcessAccountSid | string | 
-action\_result\.data\.\*\.InitiatingProcessAccountUpn | string | 
-action\_result\.data\.\*\.InitiatingProcessCommandLine | string | 
-action\_result\.data\.\*\.InitiatingProcessCreationTime | string | 
-action\_result\.data\.\*\.InitiatingProcessFileName | string |  `file name` 
-action\_result\.data\.\*\.InitiatingProcessFileSize | numeric | 
-action\_result\.data\.\*\.InitiatingProcessFolderPath | string | 
-action\_result\.data\.\*\.InitiatingProcessId | numeric | 
-action\_result\.data\.\*\.InitiatingProcessIntegrityLevel | string | 
-action\_result\.data\.\*\.InitiatingProcessMD5 | string | 
-action\_result\.data\.\*\.InitiatingProcessParentCreationTime | string | 
-action\_result\.data\.\*\.InitiatingProcessParentFileName | string | 
-action\_result\.data\.\*\.InitiatingProcessParentId | numeric | 
-action\_result\.data\.\*\.InitiatingProcessSHA1 | string | 
-action\_result\.data\.\*\.InitiatingProcessSHA256 | string | 
-action\_result\.data\.\*\.InitiatingProcessTokenElevation | string | 
-action\_result\.data\.\*\.InitiatingProcessVersionInfoCompanyName | string | 
-action\_result\.data\.\*\.InitiatingProcessVersionInfoFileDescription | string | 
-action\_result\.data\.\*\.InitiatingProcessVersionInfoInternalFileName | string | 
-action\_result\.data\.\*\.InitiatingProcessVersionInfoOriginalFileName | string | 
-action\_result\.data\.\*\.InitiatingProcessVersionInfoProductName | string | 
-action\_result\.data\.\*\.InitiatingProcessVersionInfoProductVersion | string | 
-action\_result\.data\.\*\.LastTimestamp | string | 
-action\_result\.data\.\*\.PUAProtection | string | 
-action\_result\.data\.\*\.PreviousRegistryKey | string | 
-action\_result\.data\.\*\.PreviousRegistryValueData | string | 
-action\_result\.data\.\*\.PreviousRegistryValueName | string | 
-action\_result\.data\.\*\.RealtimeProtection | string | 
-action\_result\.data\.\*\.RegistryKey | string | 
-action\_result\.data\.\*\.RegistryValueData | string | 
-action\_result\.data\.\*\.RegistryValueName | string | 
-action\_result\.data\.\*\.RegistryValueType | string | 
-action\_result\.data\.\*\.ReportId | numeric | 
-action\_result\.data\.\*\.SensorDataCollection | string | 
-action\_result\.data\.\*\.SensorEnabled | string | 
-action\_result\.data\.\*\.TamperProtection | string | 
-action\_result\.data\.\*\.Timestamp | string | 
-action\_result\.data\.\*\.UserName | string |  `user name` 
-action\_result\.summary\.total\_results | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.query | string |  |   DeviceProcessEvents   |where InitiatingProcessFileName =~ 'powershell.exe' |where ProcessCommandLine contains 'appdata' |project Timestamp, FileName, InitiatingProcessFileName, DeviceId |limit 2 
+action_result.data.\*.ActionType | string |  |   RegistryKeyDeleted 
+action_result.data.\*.AntivirusEnabled | string |  |   BAD 
+action_result.data.\*.AntivirusReporting | string |  |   N/A 
+action_result.data.\*.AntivirusSignatureVersion | string |  |   N/A 
+action_result.data.\*.AppGuardContainerId | string |  |  
+action_result.data.\*.BehaviorMonitoring | string |  |   GOOD 
+action_result.data.\*.CloudProtection | string |  |   BAD 
+action_result.data.\*.DeviceId | string |  `defender atp device id`  |   803c416946e8738b7711903a28362adeae6e1aea 
+action_result.data.\*.DeviceName | string |  |   testserver9 
+action_result.data.\*.DomainName | string |  `domain`  |   TestServer9 
+action_result.data.\*.DurationAtLeast | string |  |   00.12:00:36 
+action_result.data.\*.FileName | string |  `file name`  |   csc.exe 
+action_result.data.\*.ImpairedCommunications | string |  |   BAD 
+action_result.data.\*.InitiatingProcessAccountDomain | string |  |   nt authority 
+action_result.data.\*.InitiatingProcessAccountName | string |  |   system 
+action_result.data.\*.InitiatingProcessAccountObjectId | string |  |  
+action_result.data.\*.InitiatingProcessAccountSid | string |  |   S-1-5-18 
+action_result.data.\*.InitiatingProcessAccountUpn | string |  |  
+action_result.data.\*.InitiatingProcessCommandLine | string |  |   svchost.exe -k netsvcs -p -s wlidsvc 
+action_result.data.\*.InitiatingProcessCreationTime | string |  |   2022-09-13T12:18:40.7867576Z 
+action_result.data.\*.InitiatingProcessFileName | string |  `file name`  |   powershell.exe 
+action_result.data.\*.InitiatingProcessFileSize | numeric |  |   59952 
+action_result.data.\*.InitiatingProcessFolderPath | string |  |   c:\\windows\\system32\\test.exe 
+action_result.data.\*.InitiatingProcessId | numeric |  |   7656 
+action_result.data.\*.InitiatingProcessIntegrityLevel | string |  |   System 
+action_result.data.\*.InitiatingProcessMD5 | string |  |   cd10cb894be1234fca0bf0e2b0c27c16 
+action_result.data.\*.InitiatingProcessParentCreationTime | string |  |   2022-07-15T08:34:44.3266266Z 
+action_result.data.\*.InitiatingProcessParentFileName | string |  |   services.exe 
+action_result.data.\*.InitiatingProcessParentId | numeric |  |   756 
+action_result.data.\*.InitiatingProcessSHA1 | string |  |   1f912d4bec338ef10b7c9f12346286f8acc4eb97 
+action_result.data.\*.InitiatingProcessSHA256 | string |  |   f3feb95e7bcfb0766a694d93fca29eda7e2ca977c2395b4be75242814eb6d881 
+action_result.data.\*.InitiatingProcessTokenElevation | string |  |   TokenElevationTypeDefault 
+action_result.data.\*.InitiatingProcessVersionInfoCompanyName | string |  |   Microsoft Corporation 
+action_result.data.\*.InitiatingProcessVersionInfoFileDescription | string |  |   Host Process for Windows Services 
+action_result.data.\*.InitiatingProcessVersionInfoInternalFileName | string |  |   svchost.exe 
+action_result.data.\*.InitiatingProcessVersionInfoOriginalFileName | string |  |   svchost.exe 
+action_result.data.\*.InitiatingProcessVersionInfoProductName | string |  |   Microsoft® Windows® Operating System 
+action_result.data.\*.InitiatingProcessVersionInfoProductVersion | string |  |   10.0.19041.1566 
+action_result.data.\*.LastTimestamp | string |  |   2021-09-15T22:53:50.2952649Z 
+action_result.data.\*.PUAProtection | string |  |   N/A 
+action_result.data.\*.PreviousRegistryKey | string |  |  
+action_result.data.\*.PreviousRegistryValueData | string |  |  
+action_result.data.\*.PreviousRegistryValueName | string |  |  
+action_result.data.\*.RealtimeProtection | string |  |   N/A 
+action_result.data.\*.RegistryKey | string |  |  
+action_result.data.\*.RegistryValueData | string |  |  
+action_result.data.\*.RegistryValueName | string |  |  
+action_result.data.\*.RegistryValueType | string |  |  
+action_result.data.\*.ReportId | numeric |  |   641555 
+action_result.data.\*.SensorDataCollection | string |  |   BAD 
+action_result.data.\*.SensorEnabled | string |  |   BAD 
+action_result.data.\*.TamperProtection | string |  |   N/A 
+action_result.data.\*.Timestamp | string |  |   2021-09-15T10:53:13.5858707Z 
+action_result.data.\*.UserName | string |  `user name`  |   administrator1 
+action_result.summary.total_results | numeric |  |   7 
+action_result.message | string |  |   Total results: 7 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get domain devices'
 Retrieve a collection of devices that have communicated to or from a given domain address
@@ -1688,7 +1688,7 @@ Retrieve a collection of devices that have communicated to or from a given domai
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-domain\-related\-machines?view=o365\-worldwide" target="\_blank">Get domain related machines API Documentation</a>\), rate limitations for this action are 100 calls per minute and 1500 calls per hour\. You can query on devices last updated according to your configured retention period\.<br>The action retrieves data of the last 30 days\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-domain-related-machines?view=o365-worldwide" target="_blank">Get domain related machines API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. You can query on devices last updated according to your configured retention period.<br>The action retrieves data of the last 30 days.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
@@ -1696,51 +1696,51 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **domain** |  required  | Domain to get the devices | string |  `domain` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.domain | string |  `domain` 
-action\_result\.data\.\*\.aadDeviceId | string | 
-action\_result\.data\.\*\.agentVersion | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.defenderAvStatus | string | 
-action\_result\.data\.\*\.deviceValue | string | 
-action\_result\.data\.\*\.exposureLevel | string | 
-action\_result\.data\.\*\.firstSeen | string | 
-action\_result\.data\.\*\.healthStatus | string | 
-action\_result\.data\.\*\.id | string |  `defender atp device id` 
-action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string |  `ip` 
-action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
-action\_result\.data\.\*\.isAadJoined | boolean | 
-action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastSeen | string | 
-action\_result\.data\.\*\.managedBy | string | 
-action\_result\.data\.\*\.managedByStatus | string | 
-action\_result\.data\.\*\.onboardingStatus | string | 
-action\_result\.data\.\*\.osArchitecture | string | 
-action\_result\.data\.\*\.osBuild | numeric | 
-action\_result\.data\.\*\.osPlatform | string | 
-action\_result\.data\.\*\.osProcessor | string | 
-action\_result\.data\.\*\.osVersion | string | 
-action\_result\.data\.\*\.rbacGroupId | numeric | 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.riskScore | string | 
-action\_result\.data\.\*\.version | string | 
-action\_result\.data\.\*\.vmMetadata | string | 
-action\_result\.data\.\*\.vmMetadata\.cloudProvider | string | 
-action\_result\.data\.\*\.vmMetadata\.resourceId | string | 
-action\_result\.data\.\*\.vmMetadata\.subscriptionId | string | 
-action\_result\.data\.\*\.vmMetadata\.vmId | string | 
-action\_result\.summary\.total\_devices | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.domain | string |  `domain`  |   test.com 
+action_result.data.\*.aadDeviceId | string |  |  
+action_result.data.\*.agentVersion | string |  |   10.7740.19041.1110 
+action_result.data.\*.computerDnsName | string |  |   testmachine4 
+action_result.data.\*.defenderAvStatus | string |  |   Updated 
+action_result.data.\*.deviceValue | string |  |   Normal 
+action_result.data.\*.exposureLevel | string |  |   Medium 
+action_result.data.\*.firstSeen | string |  |   2021-08-02T06:12:16.3736341Z 
+action_result.data.\*.healthStatus | string |  |   Inactive 
+action_result.data.\*.id | string |  `defender atp device id`  |   803c416946e8738b7711903a28362adeae6e1aea 
+action_result.data.\*.ipAddresses.\*.ipAddress | string |  `ip`  |   10.1.1.4 
+action_result.data.\*.ipAddresses.\*.macAddress | string |  |   000X3X7X423X 
+action_result.data.\*.ipAddresses.\*.operationalStatus | string |  |   Up 
+action_result.data.\*.ipAddresses.\*.type | string |  |   Ethernet 
+action_result.data.\*.isAadJoined | boolean |  |   False  True 
+action_result.data.\*.lastExternalIpAddress | string |  `ip`  |   137.116.83.101 
+action_result.data.\*.lastIpAddress | string |  `ip`  |   10.1.1.4 
+action_result.data.\*.lastSeen | string |  |   2021-08-04T13:40:25.2473895Z 
+action_result.data.\*.managedBy | string |  |   Unknown 
+action_result.data.\*.managedByStatus | string |  |   Unknown 
+action_result.data.\*.onboardingStatus | string |  |   Onboarded 
+action_result.data.\*.osArchitecture | string |  |   64-bit 
+action_result.data.\*.osBuild | numeric |  |   19042 
+action_result.data.\*.osPlatform | string |  |   Windows10 
+action_result.data.\*.osProcessor | string |  |   x64 
+action_result.data.\*.osVersion | string |  |  
+action_result.data.\*.rbacGroupId | numeric |  |   0 
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.riskScore | string |  |   Medium 
+action_result.data.\*.version | string |  |   20H2 
+action_result.data.\*.vmMetadata | string |  |  
+action_result.data.\*.vmMetadata.cloudProvider | string |  |   TestCloudProvider 
+action_result.data.\*.vmMetadata.resourceId | string |  |   /subscriptions/1b922e46-8595-4749-997a-1205e714cd91/resourceGroups/evaluation_3e5d447ba5d6470b9636a8709cd5b26a_4/providers/Test.Compute/virtualMachines/TestMachine4 
+action_result.data.\*.vmMetadata.subscriptionId | string |  |   1b922e46-8595-4749-997a-1205e714cd91 
+action_result.data.\*.vmMetadata.vmId | string |  |   238443dc-56ce-487f-aeb6-261a2a00a38c 
+action_result.summary.total_devices | numeric |  |   1 
+action_result.message | string |  |   Total devices: 1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'update device tag'
-Add or remove a tag from a given device \(Maximum\: 200 characters\)
+Add or remove a tag from a given device (Maximum: 200 characters)
 
 Type: **generic**  
 Read only: **False**
@@ -1748,70 +1748,70 @@ Read only: **False**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
 **operation** |  required  | Determines whether the provided tag is added or removed | string | 
 **tag** |  required  | Value of the tag to add or remove from the machine | string | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.operation | string | 
-action\_result\.parameter\.tag | string | 
-action\_result\.data\.\*\.\@odata\.context | string | 
-action\_result\.data\.\*\.\@odata\.context | string | 
-action\_result\.data\.\*\.aadDeviceId | string | 
-action\_result\.data\.\*\.agentVersion | string | 
-action\_result\.data\.\*\.computerDnsName | string |  `domain` 
-action\_result\.data\.\*\.defenderAvStatus | string | 
-action\_result\.data\.\*\.defenderAvStatus | string | 
-action\_result\.data\.\*\.deviceValue | string | 
-action\_result\.data\.\*\.deviceValue | string | 
-action\_result\.data\.\*\.exposureLevel | string | 
-action\_result\.data\.\*\.firstSeen | string | 
-action\_result\.data\.\*\.groupName | string | 
-action\_result\.data\.\*\.healthStatus | string | 
-action\_result\.data\.\*\.id | string |  `defender atp device id` 
-action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.ipAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.macAddress | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.operationalStatus | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
-action\_result\.data\.\*\.ipAddresses\.\*\.type | string | 
-action\_result\.data\.\*\.isAadJoined | boolean | 
-action\_result\.data\.\*\.lastExternalIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastIpAddress | string |  `ip` 
-action\_result\.data\.\*\.lastSeen | string | 
-action\_result\.data\.\*\.machineTags | string | 
-action\_result\.data\.\*\.managedBy | string | 
-action\_result\.data\.\*\.managedBy | string | 
-action\_result\.data\.\*\.managedByStatus | string | 
-action\_result\.data\.\*\.managedByStatus | string | 
-action\_result\.data\.\*\.onboardingStatus | string | 
-action\_result\.data\.\*\.onboardingStatus | string | 
-action\_result\.data\.\*\.osArchitecture | string | 
-action\_result\.data\.\*\.osArchitecture | string | 
-action\_result\.data\.\*\.osBuild | numeric | 
-action\_result\.data\.\*\.osPlatform | string | 
-action\_result\.data\.\*\.osProcessor | string | 
-action\_result\.data\.\*\.osVersion | string | 
-action\_result\.data\.\*\.rbacGroupId | numeric | 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.riskScore | string | 
-action\_result\.data\.\*\.systemProductName | string | 
-action\_result\.data\.\*\.version | string | 
-action\_result\.data\.\*\.vmMetadata | string | 
-action\_result\.data\.\*\.vmMetadata | string | 
-action\_result\.summary\.operation | string | 
-action\_result\.summary\.operation | string | 
-action\_result\.summary\.tag | string | 
-action\_result\.summary\.tag | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.parameter.operation | string |  |   Add 
+action_result.parameter.tag | string |  |   test-tag 
+action_result.data.\*.@odata.context | string |  |   https://api.securitycenter.windows.com/api/$metadata#Machines/$entity 
+action_result.data.\*.@odata.context | string |  |   https://api.securitycenter.windows.com/api/$metadata#Machines/$entity 
+action_result.data.\*.aadDeviceId | string |  |  
+action_result.data.\*.agentVersion | string |  |   10.5850.17763.404 
+action_result.data.\*.computerDnsName | string |  `domain`  |   desktop-ph2a1ro 
+action_result.data.\*.defenderAvStatus | string |  |   NotSupported 
+action_result.data.\*.defenderAvStatus | string |  |   NotSupported 
+action_result.data.\*.deviceValue | string |  |   Normal 
+action_result.data.\*.deviceValue | string |  |   Normal 
+action_result.data.\*.exposureLevel | string |  |   Medium 
+action_result.data.\*.firstSeen | string |  |   2019-04-16T00:27:12.2677222Z 
+action_result.data.\*.groupName | string |  |  
+action_result.data.\*.healthStatus | string |  |   Active 
+action_result.data.\*.id | string |  `defender atp device id`  |   ae2e5bda4bb22ec9c321680079d03e5e4cdff400 
+action_result.data.\*.ipAddresses.\*.ipAddress | string |  |   10.0.2.15 
+action_result.data.\*.ipAddresses.\*.ipAddress | string |  |   10.0.2.15 
+action_result.data.\*.ipAddresses.\*.macAddress | string |  |   002248242A86 
+action_result.data.\*.ipAddresses.\*.macAddress | string |  |   001238242A86 
+action_result.data.\*.ipAddresses.\*.operationalStatus | string |  |   Up 
+action_result.data.\*.ipAddresses.\*.operationalStatus | string |  |   Up 
+action_result.data.\*.ipAddresses.\*.type | string |  |   Ethernet 
+action_result.data.\*.ipAddresses.\*.type | string |  |   Ethernet 
+action_result.data.\*.isAadJoined | boolean |  |   True  False 
+action_result.data.\*.lastExternalIpAddress | string |  `ip`  |   204.107.141.240 
+action_result.data.\*.lastIpAddress | string |  `ip`  |   10.1.66.140 
+action_result.data.\*.lastSeen | string |  |   2019-05-03T05:23:45.9643247Z 
+action_result.data.\*.machineTags | string |  |   Test Tag -21 
+action_result.data.\*.managedBy | string |  |   Unknown 
+action_result.data.\*.managedBy | string |  |  
+action_result.data.\*.managedByStatus | string |  |   Unknown 
+action_result.data.\*.managedByStatus | string |  |   Unknown 
+action_result.data.\*.onboardingStatus | string |  |   Onboarded 
+action_result.data.\*.onboardingStatus | string |  |   Onboarded 
+action_result.data.\*.osArchitecture | string |  |   64-bit 
+action_result.data.\*.osArchitecture | string |  |   64-bit 
+action_result.data.\*.osBuild | numeric |  |   17763 
+action_result.data.\*.osPlatform | string |  |   Windows10 
+action_result.data.\*.osProcessor | string |  |   x64 
+action_result.data.\*.osVersion | string |  |  
+action_result.data.\*.rbacGroupId | numeric |  |   0 
+action_result.data.\*.rbacGroupName | string |  |   GROUP1 
+action_result.data.\*.riskScore | string |  |   None 
+action_result.data.\*.systemProductName | string |  |  
+action_result.data.\*.version | string |  |   1809 
+action_result.data.\*.vmMetadata | string |  |  
+action_result.data.\*.vmMetadata | string |  |  
+action_result.summary.operation | string |  |   Add 
+action_result.summary.operation | string |  |   Add 
+action_result.summary.tag | string |  |   test-new-ac 
+action_result.summary.tag | string |  |   test-tag 
+action_result.message | string |  |   Total devices: 1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get discovered vulnerabilities'
 Retrieve a collection of discovered vulnerabilities related to a given device ID
@@ -1819,37 +1819,37 @@ Retrieve a collection of discovered vulnerabilities related to a given device ID
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-discovered\-vulnerabilities?view=o365\-worldwide" target="\_blank">Get discovered vulnerabilities API Documentation</a>\), rate limitations for this API are 50 calls per minute and 1500 calls per hour\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-discovered-vulnerabilities?view=o365-worldwide" target="_blank">Get discovered vulnerabilities API Documentation</a>), rate limitations for this API are 50 calls per minute and 1500 calls per hour.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.data\.\*\.\@odata\.type | string | 
-action\_result\.data\.\*\.\@odata\.type | string | 
-action\_result\.data\.\*\.cvssV3 | numeric | 
-action\_result\.data\.\*\.description | string | 
-action\_result\.data\.\*\.exploitInKit | numeric | 
-action\_result\.data\.\*\.exploitTypes | string | 
-action\_result\.data\.\*\.exploitUris | string |  `url` 
-action\_result\.data\.\*\.exploitVerified | numeric | 
-action\_result\.data\.\*\.exposedMachines | numeric | 
-action\_result\.data\.\*\.id | string | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.publicExploit | numeric | 
-action\_result\.data\.\*\.publishedOn | string | 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.updatedOn | string | 
-action\_result\.summary\.total\_vulnerabilities | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.data.\*.@odata.type | string |  |  
+action_result.data.\*.@odata.type | string |  |   #microsoft.windowsDefenderATP.api.PublicVulnerabilityDto 
+action_result.data.\*.cvssV3 | numeric |  |   8.8 
+action_result.data.\*.description | string |  |   Windows User Profile Service Elevation of Privilege Vulnerability 
+action_result.data.\*.exploitInKit | numeric |  |   False 
+action_result.data.\*.exploitTypes | string |  |   Local 
+action_result.data.\*.exploitUris | string |  `url`  |   https://msrc.microsoft.com/update-guide/vulnerability/CVE-2021-36934 
+action_result.data.\*.exploitVerified | numeric |  |   False 
+action_result.data.\*.exposedMachines | numeric |  |   1 
+action_result.data.\*.id | string |  |   CVE-2021-30600 
+action_result.data.\*.name | string |  |   CVE-2021-30600 
+action_result.data.\*.publicExploit | numeric |  |   False 
+action_result.data.\*.publishedOn | string |  |   2021-08-16T00:00:00Z 
+action_result.data.\*.severity | string |  |   High 
+action_result.data.\*.updatedOn | string |  |   2021-08-23T00:00:00Z 
+action_result.summary.total_vulnerabilities | numeric |  |   7 
+action_result.message | string |  |   Total vulnerabilities: 7 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'remove app restriction'
 Enable execution of any application on the device
@@ -1857,49 +1857,49 @@ Enable execution of any application on the device
 Type: **contain**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/unrestrict\-code\-execution?view=o365\-worldwide" target="\_blank">Remove app restriction API Documentation</a>\), rate limitations for this API are 100 calls per minute and 1500 calls per hour\.<br>This action can take a while to complete execution\. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete\. If not, the action would return the latest status of the event along with the event ID\.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID\.<br>The maximum timeout period for a status check is 1 minute\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/unrestrict-code-execution?view=o365-worldwide" target="_blank">Remove app restriction API Documentation</a>), rate limitations for this API are 100 calls per minute and 1500 calls per hour.<br>This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 1 minute.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
 **comment** |  required  | Comment | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 30\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 30) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.error | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string | 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.remove\_app\_restriction\_status | string | 
-action\_result\.summary\.restriction\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   Unrestrict code execution since machine was cleaned and validated 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.parameter.timeout | numeric |  |   30 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.computerDnsName | string |  |   win10atp2 
+action_result.data.\*.creationDateTimeUtc | string |  |   2019-05-03T08:50:05.8076226Z 
+action_result.data.\*.error | string |  |  
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2019-05-03T08:50:05.8076226Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   349838747f77ec74e43ab7ca70773a41f7bfb6f2 
+action_result.data.\*.relatedFileInfo | string |  |  
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  |   65265db5-a7ca-4199-a425-f37ad1dd6d31 
+action_result.data.\*.requestorComment | string |  |   Unrestrict code execution since machine was cleaned and validated 
+action_result.data.\*.scope | string |  |  
+action_result.data.\*.status | string |  |   Succeeded 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   UnrestrictCodeExecution 
+action_result.summary.event_id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.summary.remove_app_restriction_status | string |  |   Pending 
+action_result.summary.restriction_status | string |  |   Pending 
+action_result.message | string |  |   Event id: cd2ab57e-5b52-43b0-99d8-c370fc620a54, Restriction status: Succeeded 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get exposure score'
 Retrieve the organizational exposure score
@@ -1911,18 +1911,18 @@ Read only: **True**
 No parameters are required for this action
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.rbacGroupId | string | 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.score | numeric | 
-action\_result\.data\.\*\.time | string | 
-action\_result\.summary\.exposure\_score | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#ExposureScore/$entity 
+action_result.data.\*.rbacGroupId | string |  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.score | numeric |  |   46.23333333333333 
+action_result.data.\*.time | string |  |   2021-08-31T10:41:12.6341624Z 
+action_result.summary.exposure_score | numeric |  |   46.23333333333333 
+action_result.message | string |  |   Exposure score: 46.23333333333333 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get secure score'
 Retrieve your Microsoft Secure Score for devices
@@ -1930,24 +1930,24 @@ Retrieve your Microsoft Secure Score for devices
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-device\-secure\-score?view=o365\-worldwide" target="\_blank">Get device secure score API Documentation</a>\), a higher Microsoft Secure Score for devices means your endpoints are more resilient from cybersecurity threat attacks\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-device-secure-score?view=o365-worldwide" target="_blank">Get device secure score API Documentation</a>), a higher Microsoft Secure Score for devices means your endpoints are more resilient from cybersecurity threat attacks.
 
 #### Action Parameters
 No parameters are required for this action
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.rbacGroupId | string | 
-action\_result\.data\.\*\.rbacGroupName | string | 
-action\_result\.data\.\*\.score | numeric | 
-action\_result\.data\.\*\.time | string | 
-action\_result\.summary\.secure\_score | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#ConfigurationScore/$entity 
+action_result.data.\*.rbacGroupId | string |  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.score | numeric |  |   350 
+action_result.data.\*.time | string |  |   2021-08-31T10:55:48.6805335Z 
+action_result.summary.secure_score | numeric |  |   350 
+action_result.message | string |  |   Secure score: 350.0 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get file'
 Download a file from a device using live response
@@ -1955,61 +1955,61 @@ Download a file from a device using live response
 Type: **generic**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/run\-live\-response?view=o365\-worldwide" target="\_blank">Run live response commands on a device API Documentation</a>\), the user can collect file from a device in the vault, rate limitations for this API are 10 calls per minute\.<br>The action tries to get the file using file\_path along with the device\_id\. This action can take a while to complete the execution\. The action retries at an interval of 5 seconds within a specified timeout to check if event execution is completed\. If not, the action would return the latest status of the event along with the event ID\. The get status action can be used to fetch the latest status of the event with the event ID\. If the status is 'Succeeded', the event ID can be used in the same action to get the file\. If all the parameters are given, the action gives higher priority to the event ID parameter\.<br><br><b>Notes\:</b><ul><li>Live response actions cannot be queued up and can only be executed one at a time\.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group\.</li></ul>
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-live-response?view=o365-worldwide" target="_blank">Run live response commands on a device API Documentation</a>), the user can collect file from a device in the vault, rate limitations for this API are 10 calls per minute.<br>The action tries to get the file using file_path along with the device_id. This action can take a while to complete the execution. The action retries at an interval of 5 seconds within a specified timeout to check if event execution is completed. If not, the action would return the latest status of the event along with the event ID. The get status action can be used to fetch the latest status of the event with the event ID. If the status is 'Succeeded', the event ID can be used in the same action to get the file. If all the parameters are given, the action gives higher priority to the event ID parameter.<br><br><b>Notes:</b><ul><li>Live response actions cannot be queued up and can only be executed one at a time.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group.</li></ul>
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**event\_id** |  optional  | ID of the event | string |  `defender atp event id` 
-**device\_id** |  optional  | ID of the device | string |  `defender atp device id` 
-**file\_path** |  optional  | Path of the file to download from device | string |  `file path` 
+**event_id** |  optional  | ID of the event | string |  `defender atp event id` 
+**device_id** |  optional  | ID of the device | string |  `defender atp device id` 
+**file_path** |  optional  | Path of the file to download from device | string |  `file path` 
 **comment** |  optional  | Comment | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 300\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 300) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.event\_id | string |  `defender atp event id` 
-action\_result\.parameter\.file\_path | string |  `file path` 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.commands\.\*\.command\.params\.\*\.key | string | 
-action\_result\.data\.\*\.commands\.\*\.command\.params\.\*\.value | string |  `file path` 
-action\_result\.data\.\*\.commands\.\*\.command\.type | string | 
-action\_result\.data\.\*\.commands\.\*\.commandStatus | string | 
-action\_result\.data\.\*\.commands\.\*\.endTime | string | 
-action\_result\.data\.\*\.commands\.\*\.index | numeric | 
-action\_result\.data\.\*\.commands\.\*\.startTime | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string | 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.event\_id\_status | string | 
-action\_result\.summary\.file\_status | string | 
-action\_result\.summary\.live\_response\_result | string | 
-action\_result\.summary\.vault\_id | string |  `vault id` 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   Testing get file live response 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.parameter.event_id | string |  `defender atp event id`  |   f4ddc97a-6f4e-471c-9be5-45e0d6d64ab8 
+action_result.parameter.file_path | string |  `file path`  |   C:\\Users\\administrator1\\Desktop\\Test\\one.txt 
+action_result.parameter.timeout | numeric |  |   300 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.commands.\*.command.params.\*.key | string |  |   Path 
+action_result.data.\*.commands.\*.command.params.\*.value | string |  `file path`  |   C:\\Users\\administrator1\\Desktop\\test\\one.txt 
+action_result.data.\*.commands.\*.command.type | string |  |   GetFile 
+action_result.data.\*.commands.\*.commandStatus | string |  |   Completed 
+action_result.data.\*.commands.\*.endTime | string |  |   2021-09-01T09:20:33.353Z 
+action_result.data.\*.commands.\*.index | numeric |  |   0 
+action_result.data.\*.commands.\*.startTime | string |  |  
+action_result.data.\*.computerDnsName | string |  |   testmachine7 
+action_result.data.\*.creationDateTimeUtc | string |  |   2021-09-01T09:17:58.4219929Z 
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   81238f5f-f525-4b33-85e1-4460c5465ea4 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2021-09-01T09:21:19.11422Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   51e978e9c3cd646dde81162f0517f13b8697cfcb 
+action_result.data.\*.relatedFileInfo | string |  |  
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  |   65265db5-a7ca-4199-a425-f37ad1dd6d31 
+action_result.data.\*.requestorComment | string |  |   test 
+action_result.data.\*.scope | string |  |  
+action_result.data.\*.status | string |  |   Succeeded 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   LiveResponse 
+action_result.summary.event_id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.summary.event_id_status | string |  |   Succeeded 
+action_result.summary.file_status | string |  |   Succeeded 
+action_result.summary.live_response_result | string |  |  
+action_result.summary.vault_id | string |  `vault id`  |   7553f175dbbfa2f0830bebe8c367fe68fd40a9a4 
+action_result.message | string |  |   Successfully added file to vault. vault_id: 7553f175dbbfa2f0830bebe8c367fe68fd40a9a4 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'put file'
 Put a file from the library to a device using live response
@@ -2017,56 +2017,56 @@ Put a file from the library to a device using live response
 Type: **generic**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/run\-live\-response?view=o365\-worldwide" target="\_blank">Run live response commands on a device API Documentation</a>\), the user can put a file from the library to the device, rate limitations for this API are 10 calls per minute\.<br>This action can take a while to complete execution\. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete\. If not, the action would return the latest status of the event along with the event ID\.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID\.<br><b>Notes\:</b><ul><li>Live response actions cannot be queued up and can only be executed one at a time\.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group\.</li></ul>
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-live-response?view=o365-worldwide" target="_blank">Run live response commands on a device API Documentation</a>), the user can put a file from the library to the device, rate limitations for this API are 10 calls per minute.<br>This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br><b>Notes:</b><ul><li>Live response actions cannot be queued up and can only be executed one at a time.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group.</li></ul>
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
-**file\_name** |  required  | Name of the file | string |  `file name` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
+**file_name** |  required  | Name of the file | string |  `file name` 
 **comment** |  required  | Comment | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 300\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 300) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.file\_name | string |  `file name` 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.data\.\*\.\@odata\.context | string |  `url` 
-action\_result\.data\.\*\.cancellationComment | string | 
-action\_result\.data\.\*\.cancellationDateTimeUtc | string | 
-action\_result\.data\.\*\.cancellationRequestor | string | 
-action\_result\.data\.\*\.commands\.\*\.command\.params\.\*\.key | string | 
-action\_result\.data\.\*\.commands\.\*\.command\.params\.\*\.value | string |  `file name` 
-action\_result\.data\.\*\.commands\.\*\.command\.type | string | 
-action\_result\.data\.\*\.commands\.\*\.commandStatus | string | 
-action\_result\.data\.\*\.commands\.\*\.endTime | string | 
-action\_result\.data\.\*\.commands\.\*\.index | numeric | 
-action\_result\.data\.\*\.commands\.\*\.startTime | string | 
-action\_result\.data\.\*\.computerDnsName | string | 
-action\_result\.data\.\*\.creationDateTimeUtc | string | 
-action\_result\.data\.\*\.errorHResult | numeric | 
-action\_result\.data\.\*\.externalId | string | 
-action\_result\.data\.\*\.id | string |  `defender atp event id` 
-action\_result\.data\.\*\.lastUpdateDateTimeUtc | string | 
-action\_result\.data\.\*\.machineId | string |  `defender atp device id` 
-action\_result\.data\.\*\.relatedFileInfo | string | 
-action\_result\.data\.\*\.requestSource | string | 
-action\_result\.data\.\*\.requestor | string | 
-action\_result\.data\.\*\.requestorComment | string | 
-action\_result\.data\.\*\.scope | string | 
-action\_result\.data\.\*\.status | string | 
-action\_result\.data\.\*\.title | string | 
-action\_result\.data\.\*\.troubleshootInfo | string | 
-action\_result\.data\.\*\.type | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.put\_file\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   Testing put file live response 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.parameter.file_name | string |  `file name`  |   one.txt 
+action_result.parameter.timeout | numeric |  |   300 
+action_result.data.\*.@odata.context | string |  `url`  |   https://api.securitycenter.windows.com/api/$metadata#MachineActions/$entity 
+action_result.data.\*.cancellationComment | string |  |  
+action_result.data.\*.cancellationDateTimeUtc | string |  |  
+action_result.data.\*.cancellationRequestor | string |  |  
+action_result.data.\*.commands.\*.command.params.\*.key | string |  |   FileName 
+action_result.data.\*.commands.\*.command.params.\*.value | string |  `file name`  |   one.txt 
+action_result.data.\*.commands.\*.command.type | string |  |   PutFile 
+action_result.data.\*.commands.\*.commandStatus | string |  |   Completed 
+action_result.data.\*.commands.\*.endTime | string |  |   2021-09-01T06:43:33.717Z 
+action_result.data.\*.commands.\*.index | numeric |  |   0 
+action_result.data.\*.commands.\*.startTime | string |  |   2021-09-01T06:43:32.42Z 
+action_result.data.\*.computerDnsName | string |  |   testmachine7 
+action_result.data.\*.creationDateTimeUtc | string |  |   2021-09-01T06:40:58.9203082Z 
+action_result.data.\*.errorHResult | numeric |  |   0 
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.id | string |  `defender atp event id`  |   30f736e4-1538-46ca-b21f-8f315b096077 
+action_result.data.\*.lastUpdateDateTimeUtc | string |  |   2021-09-01T06:44:17.161248Z 
+action_result.data.\*.machineId | string |  `defender atp device id`  |   51e978e9c3cd646dde81162f0517f13b8697cfcb 
+action_result.data.\*.relatedFileInfo | string |  |  
+action_result.data.\*.requestSource | string |  |   PublicApi 
+action_result.data.\*.requestor | string |  |   65265db5-a7ca-4199-a425-f37ad1dd6d31 
+action_result.data.\*.requestorComment | string |  |   putfile 
+action_result.data.\*.scope | string |  |  
+action_result.data.\*.status | string |  |   Succeeded 
+action_result.data.\*.title | string |  |  
+action_result.data.\*.troubleshootInfo | string |  |  
+action_result.data.\*.type | string |  |   LiveResponse 
+action_result.summary.event_id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.summary.put_file_status | string |  |   Succeeded 
+action_result.message | string |  |   Event id: 30f736e4-1538-46ca-b21f-8f315b096077, Put file status: Succeeded 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'run script'
 Run a script from the library on a device using live response
@@ -2074,66 +2074,66 @@ Run a script from the library on a device using live response
 Type: **generic**  
 Read only: **False**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/run\-live\-response?view=o365\-worldwide" target="\_blank">Run live response commands on a device API Documentation</a>\), the user can run a script from the library on a device\. The script\_args parameter is passed to your script, rate limitations for this API are 10 calls per minute\.<br>The action tries to execute the script using script\_name along with the device\_id\. This action can take a while to complete the execution\. The action retries at an interval of 5 seconds within a specified timeout to check if event execution is completed\. If not, the action would return the latest status of the event along with the event ID\. The get status action can be used to fetch the latest status of the event with the event ID\. If the status is 'Succeded', the event ID can be used in the same action to get the script output\. If all the parameters are given, the action gives higher priority to the event ID parameter\.<br><br><b>Notes\:</b><ul><li>The maximum timeout period for the script execution is 10 minutes\.</li><li>Live response actions cannot be queued up and can only be executed one at a time\.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group\.</li></ul>
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-live-response?view=o365-worldwide" target="_blank">Run live response commands on a device API Documentation</a>), the user can run a script from the library on a device. The script_args parameter is passed to your script, rate limitations for this API are 10 calls per minute.<br>The action tries to execute the script using script_name along with the device_id. This action can take a while to complete the execution. The action retries at an interval of 5 seconds within a specified timeout to check if event execution is completed. If not, the action would return the latest status of the event along with the event ID. The get status action can be used to fetch the latest status of the event with the event ID. If the status is 'Succeded', the event ID can be used in the same action to get the script output. If all the parameters are given, the action gives higher priority to the event ID parameter.<br><br><b>Notes:</b><ul><li>The maximum timeout period for the script execution is 10 minutes.</li><li>Live response actions cannot be queued up and can only be executed one at a time.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group.</li></ul>
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**event\_id** |  optional  | ID of the event | string |  `defender atp event id` 
-**device\_id** |  optional  | ID of the device | string |  `defender atp device id` 
-**script\_name** |  optional  | Name of the script file to execute on the device | string |  `file name` 
-**script\_args** |  optional  | Arguments of the script file | string | 
+**event_id** |  optional  | ID of the event | string |  `defender atp event id` 
+**device_id** |  optional  | ID of the device | string |  `defender atp device id` 
+**script_name** |  optional  | Name of the script file to execute on the device | string |  `file name` 
+**script_args** |  optional  | Arguments of the script file | string | 
 **comment** |  optional  | Comment | string | 
-**timeout** |  optional  | Timeout in seconds \(Default\: 300\) | numeric | 
+**timeout** |  optional  | Timeout in seconds (Default: 300) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.comment | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.parameter\.event\_id | string |  `defender atp event id` 
-action\_result\.parameter\.script\_args | string | 
-action\_result\.parameter\.script\_name | string |  `file name` 
-action\_result\.parameter\.timeout | numeric | 
-action\_result\.data\.\*\.exit\_code | numeric | 
-action\_result\.data\.\*\.script\_errors | string | 
-action\_result\.data\.\*\.script\_name | string | 
-action\_result\.data\.\*\.script\_output | string | 
-action\_result\.summary\.event\_id | string |  `defender atp event id` 
-action\_result\.summary\.event\_id\_status | string | 
-action\_result\.summary\.live\_response\_result | string | 
-action\_result\.summary\.script\_status | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.comment | string |  |   Testing live response for run script 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.parameter.event_id | string |  `defender atp event id`  |   f4ddc97a-6f4e-471c-9be5-45e0d6d64ab8 
+action_result.parameter.script_args | string |  |   OfficeClickToRun 
+action_result.parameter.script_name | string |  `file name`  |   minidump.ps1 
+action_result.parameter.timeout | numeric |  |   300 
+action_result.data.\*.exit_code | numeric |  |   0 
+action_result.data.\*.script_errors | string |  |  
+action_result.data.\*.script_name | string |  |   script4.ps1 
+action_result.data.\*.script_output | string |  |   Transcript started, output file is C:\\ProgramData\\Microsoft\\Windows Defender Advanced Threat Protection\\Temp\\PSScriptOutputs\\PSScript_Transcript_{66D7B239-34C7-43EF-BB6D-2F6D4C03086E}.txt x is smaller than y 
+action_result.summary.event_id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
+action_result.summary.event_id_status | string |  |  
+action_result.summary.live_response_result | string |  |  
+action_result.summary.script_status | string |  |   Succeeded 
+action_result.message | string |  |   Successfully executed script 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get missing kbs'
-Retrieve missing KBs \(security updates\) by given device ID
+Retrieve missing KBs (security updates) by given device ID
 
 Type: **investigate**  
 Read only: **True**
 
-Based on the link \(<a href="https\://docs\.microsoft\.com/en\-us/microsoft\-365/security/defender\-endpoint/get\-missing\-kbs\-machine?view=o365\-worldwide" target="\_blank">Get missing KBs API Documentation</a>\), the user can retrieve a collection of missing security updated related to a given device ID\.
+Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-missing-kbs-machine?view=o365-worldwide" target="_blank">Get missing KBs API Documentation</a>), the user can retrieve a collection of missing security updated related to a given device ID.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device\_id** |  required  | ID of the device | string |  `defender atp device id` 
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.parameter\.device\_id | string |  `defender atp device id` 
-action\_result\.data\.\*\.cveAddressed | numeric | 
-action\_result\.data\.\*\.id | string | 
-action\_result\.data\.\*\.machineMissedOn | numeric | 
-action\_result\.data\.\*\.name | string | 
-action\_result\.data\.\*\.osBuild | numeric | 
-action\_result\.data\.\*\.productsNames | string | 
-action\_result\.data\.\*\.url | string |  `url` 
-action\_result\.summary\.total\_kbs | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.device_id | string |  `defender atp device id`  |   7af22c8a3f92ec0c9c49b80aee3379bf9bfa0768 
+action_result.data.\*.cveAddressed | numeric |  |   26 
+action_result.data.\*.id | string |  |   5005033 
+action_result.data.\*.machineMissedOn | numeric |  |   1 
+action_result.data.\*.name | string |  |   August 2021 Security Updates 
+action_result.data.\*.osBuild | numeric |  |   19042 
+action_result.data.\*.productsNames | string |  |   windows_10 
+action_result.data.\*.url | string |  `url`  |   https://catalog.update.microsoft.com/v7/site/Search.aspx?q=KB5005033 
+action_result.summary.total_kbs | numeric |  |   1 
+action_result.message | string |  |   Total KBs: 1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1 
