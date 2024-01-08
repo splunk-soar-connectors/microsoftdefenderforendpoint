@@ -6,7 +6,7 @@ Connector Version: 3.8.1
 Product Vendor: Microsoft  
 Product Name: Windows Defender ATP  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 5.3.5  
+Minimum Product Version: 6.1.1  
 
 This app integrates with Windows Defender Advanced Threat Protection(ATP) to execute various containment, corrective, generic, and investigative actions
 
