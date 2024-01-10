@@ -5464,6 +5464,14 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.parameter.generate_alert",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.application",
                     "data_type": "string",
                     "example_values": [
@@ -5648,7 +5656,9 @@
                     "example_values": [
                         false,
                         true
-                    ]
+                    ],
+                    "column_name": "Generate Alert",
+                    "column_order": 7
                 },
                 {
                     "data_path": "action_result.data.*.historicalDetection",
