@@ -1532,6 +1532,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **severity** |  optional  | The severity of the indicator | string | 
 **recommended_actions** |  optional  | TI indicator alert recommended actions | string | 
 **rbac_group_names** |  optional  | RBAC group names the indicator would be applied to (JSON formatted list) | string | 
+**generate_alert** |  optional  | Whether or not this indicator should generate an alert | boolean | 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
