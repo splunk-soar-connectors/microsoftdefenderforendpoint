@@ -1539,6 +1539,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
 action_result.parameter.action | string |  |   Alert  Warn  Block  Audit  BlockAndRemediate  AlertAndBlock  Allowed 
+action_result.parameter.generate_alert | boolean |  |   True  False 
 action_result.parameter.application | string |  |   Test App 
 action_result.parameter.description | string |  |   Test 1 
 action_result.parameter.expiration_time | string |  |   2021-09-07T00:00:00Z 
