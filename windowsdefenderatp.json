@@ -5433,6 +5433,12 @@
                     "description": "RBAC group names the indicator would be applied to (JSON formatted list)",
                     "data_type": "string",
                     "order": 9
+                },
+                "generate_alert": {
+                    "description": "Whether or not this indicator should generate an alert",
+                    "data_type": "boolean",
+                    "order": 10,
+                    "default": false
                 }
             },
             "output": [
