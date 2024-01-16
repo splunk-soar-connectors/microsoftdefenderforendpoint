@@ -2,7 +2,7 @@
 # Windows Defender ATP
 
 Publisher: Splunk  
-Connector Version: 3.8.1  
+Connector Version: 3.8.2  
 Product Vendor: Microsoft  
 Product Name: Windows Defender ATP  
 Product Version Supported (regex): ".\*"  
