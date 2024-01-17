@@ -1,6 +1,6 @@
 # File: windowsdefenderatp_consts.py
 #
-# Copyright (c) 2019-2023 Splunk Inc.
+# Copyright (c) 2019-2024 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -182,6 +182,7 @@ DEFENDERATP_JSON_INDICATOR_DESCRIPTION = 'description'
 DEFENDERATP_JSON_INDICATOR_TYPE = 'indicator_type'
 DEFENDERATP_JSON_INDICATOR_VALUE = 'indicator_value'
 DEFENDERATP_JSON_RECOMMENDED_ACTIONS = 'recommended_actions'
+DEFENDERATP_JSON_GENERATE_ALERT = 'generate_alert'
 DEFENDERATP_JSON_RBAC_GROUP_NAMES = 'rbac_group_names'
 DEFENDERATP_PAST_TIME_ERR = 'Invalid {0}, can not be lesser than or equal to current UTC time.'
 DEFENDERATP_INVALID_TIME_ERR = 'Invalid {0}, supports ISO date format only. e.g. 2019-10-17T00:00:00Z.'

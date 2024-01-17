@@ -9,14 +9,14 @@
     "product_name": "Windows Defender ATP",
     "product_version_regex": ".*",
     "publisher": "Splunk",
-    "license": "Copyright (c) 2019-2023 Splunk Inc.",
-    "app_version": "3.8.1",
+    "license": "Copyright (c) 2019-2024 Splunk Inc.",
+    "app_version": "3.8.2",
     "utctime_updated": "2022-10-06T07:32:27.000000Z",
     "package_name": "phantom_windowsdefenderatp",
     "main_module": "windowsdefenderatp_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "5.3.5",
+    "min_phantom_version": "6.1.1",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
         "Cloud November 11, 2022"
@@ -5433,6 +5433,12 @@
                     "description": "RBAC group names the indicator would be applied to (JSON formatted list)",
                     "data_type": "string",
                     "order": 9
+                },
+                "generate_alert": {
+                    "description": "Whether or not this indicator should generate an alert",
+                    "data_type": "boolean",
+                    "order": 10,
+                    "default": false
                 }
             },
             "output": [
@@ -5455,6 +5461,14 @@
                         "BlockAndRemediate",
                         "AlertAndBlock",
                         "Allowed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.generate_alert",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
                     ]
                 },
                 {
@@ -5642,7 +5656,9 @@
                     "example_values": [
                         false,
                         true
-                    ]
+                    ],
+                    "column_name": "Generate Alert",
+                    "column_order": 7
                 },
                 {
                     "data_path": "action_result.data.*.historicalDetection",

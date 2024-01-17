@@ -2,16 +2,16 @@
 # Windows Defender ATP
 
 Publisher: Splunk  
-Connector Version: 3.8.1  
+Connector Version: 3.8.2  
 Product Vendor: Microsoft  
 Product Name: Windows Defender ATP  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 5.3.5  
+Minimum Product Version: 6.1.1  
 
 This app integrates with Windows Defender Advanced Threat Protection(ATP) to execute various containment, corrective, generic, and investigative actions
 
 [comment]: # " File: README.md"
-[comment]: # "  Copyright (c) 2019-2022 Splunk Inc."
+[comment]: # "  Copyright (c) 2019-2024 Splunk Inc."
 [comment]: # ""
 [comment]: # "  Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)"
 [comment]: # ""
@@ -1532,12 +1532,14 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 **severity** |  optional  | The severity of the indicator | string | 
 **recommended_actions** |  optional  | TI indicator alert recommended actions | string | 
 **rbac_group_names** |  optional  | RBAC group names the indicator would be applied to (JSON formatted list) | string | 
+**generate_alert** |  optional  | Whether or not this indicator should generate an alert | boolean | 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
 action_result.parameter.action | string |  |   Alert  Warn  Block  Audit  BlockAndRemediate  AlertAndBlock  Allowed 
+action_result.parameter.generate_alert | boolean |  |   True  False 
 action_result.parameter.application | string |  |   Test App 
 action_result.parameter.description | string |  |   Test 1 
 action_result.parameter.expiration_time | string |  |   2021-09-07T00:00:00Z 
