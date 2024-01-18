@@ -1,6 +1,6 @@
 # File: windowsdefenderatp_connector.py
 #
-# Copyright (c) 2019-2023 Splunk Inc.
+# Copyright (c) 2019-2024 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -1951,6 +1951,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         application = param.get(DEFENDERATP_JSON_APPLICATION)
         recommended_actions = param.get(DEFENDERATP_JSON_RECOMMENDED_ACTIONS)
 
+        generate_alert = param.get(DEFENDERATP_JSON_GENERATE_ALERT, False)
+
         expiration_time = param.get(DEFENDERATP_JSON_EXPIRATION_TIME)
         # Checking date format
         if expiration_time:
@@ -1986,6 +1988,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "title": title,
             "action": action,
             "description": description,
+            "generateAlert": generate_alert,
         }
 
         if application:
