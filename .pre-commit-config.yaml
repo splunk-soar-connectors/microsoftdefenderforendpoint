@@ -8,4 +8,4 @@ repos:
     rev: v1.4.0
     hooks:
     -   id: detect-secrets
-        args: ['--no-verify', '--exclude-files', '^windowsdefenderatp.json$']
+        args: ['--no-verify', '--exclude-files', '^microsoftdefenderforendpoint.json$']

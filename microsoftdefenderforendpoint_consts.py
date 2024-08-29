@@ -1,4 +1,4 @@
-# File: windowsdefenderatp_consts.py
+# File: microsoftdefenderforendpoint_consts.py
 #
 # Copyright (c) 2019-2024 Splunk Inc.
 #
@@ -150,7 +150,7 @@ DEFENDERATP_MAX_LOOK_BACK_HOURS = 720
 ERR_CODE_MSG = "Error code unavailable"
 ERR_MSG_UNAVAILABLE = "Error message unavailable. Please check the asset configuration and|or action parameters"
 PARSE_ERR_MSG = "Unable to parse the error message. Please check the asset configuration and|or action parameters"
-TYPE_ERR_MSG = "Error occurred while connecting to the Windows Defender ATP Server." \
+TYPE_ERR_MSG = "Error occurred while connecting to the Microsoft Defender for Endpoint Server." \
                " Please check the asset configuration and|or the action parameters"
 
 # Constants relating to '_validate_integer'

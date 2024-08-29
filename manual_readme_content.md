@@ -3,11 +3,11 @@
 [comment]: # ""
 [comment]: # "  Licensed under Apache 2.0 (https://www.apache.org/licenses/LICENSE-2.0.txt)"
 [comment]: # ""
-## Defender ATP Instance Minimum Version Compatibility
+## Defender for Endpoint Instance Minimum Version Compatibility
 
--   With this major version 2.0.0 of the Windows Defender ATP app on Splunk SOAR, we declare support
-    for (on and above) the cloud 'November-December 2019' GA release for the ATP instances. This app
-    has been tested and certified on the mentioned GA release of the Defender ATP and its APIs.
+-   With this major version 2.0.0 of the Microsoft Defender for Endpoint app on Splunk SOAR, we declare support
+    for (on and above) the cloud 'November-December 2019' GA release for the Defender for Endpoint instances. This app
+    has been tested and certified on the mentioned GA release of the Defender for Endpoint and its APIs.
 
 ## Playbook Backward Compatibility
 
@@ -21,13 +21,13 @@
 
     -   List Devices - The 'IP' option has been removed from the value list of the \[input_type\]
         action parameter in the app version 3.0.0 because there is no specific API currently
-        available to support the filtering of devices based on the IP in the Defender ATP.
+        available to support the filtering of devices based on the IP in the Defender for Endpoint.
     -   List Devices - The new \[query\] parameter has been added to support the additional OData V4
         filters.
 
 ## Port Information
 
-The app uses HTTP/ HTTPS protocol for communicating with the Defender ATP server. Below are the
+The app uses HTTP/ HTTPS protocol for communicating with the Defender for Endpoint server. Below are the
 default ports used by Splunk SOAR.
 
 |         Service Name | Transport Protocol | Port |
@@ -37,9 +37,9 @@ default ports used by Splunk SOAR.
 
 ## Pagination Not Supported
 
--   Based on the base URL link ( [Microsoft Defender ATP API
+-   Based on the base URL link ( [Microsoft Defender for Endpoint API
     Documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/exposed-apis-list)
-    ), the pagination is not supported by the Defender ATP APIs. Hence, this app does not implement
+    ), the pagination is not supported by the Defender for Endpoint APIs. Hence, this app does not implement
     the pagination for the below-mentioned actions.
 
       
@@ -165,7 +165,7 @@ default ports used by Splunk SOAR.
 
 
 
-## Configure the Windows Defender ATP SOAR app's asset
+## Configure the Microsoft Defender for Endpoint SOAR app's asset
 
 When creating an asset for the app,
 
@@ -187,13 +187,13 @@ When creating an asset for the app,
 -   Save the asset with the above values.
 
 -   After saving the asset, a new uneditable field will appear in the 'Asset Settings' tab of the
-    configured asset for the ATP app on SOAR. Copy the URL mentioned in the 'POST incoming for
-    Windows Defender ATP to this location' field. Add a suffix '/result' to the URL copied in the
+    configured asset for the Defender for Endpoint app on SOAR. Copy the URL mentioned in the 'POST incoming for
+    Microsoft Defender for Endpoint to this location' field. Add a suffix '/result' to the URL copied in the
     previous step. The resulting URL looks like the one mentioned below.
 
       
 
-                    https://<soar_host>/rest/handler/windowsdefenderatp_<appid>/<asset_name>/result
+                    https://<soar_host>/rest/handler/microsoftdefenderforendpoint_<appid>/<asset_name>/result
                   
 
 -   Add the URL created in the earlier step into the 'Redirect URIs' section of the 'Authentication'
@@ -219,7 +219,7 @@ When creating an asset for the app,
     that pop-up window.
 -   Open this URL in a separate browser tab. This new tab will redirect to the Microsoft login page
     to complete the login process to grant the permissions to the app.
--   Log in using the same Microsoft account that was used to configure the Windows Defender ATP
+-   Log in using the same Microsoft account that was used to configure the Microsoft Defender for Endpoint
     workflow and the application on the Microsoft Azure Portal. After logging in, review the
     requested permissions listed and click on the 'Accept' button.
 -   This will display a successful message of 'Code received. Please close this window, the action
@@ -238,7 +238,7 @@ When creating an asset for the app,
 -   This app uses (version 1.0) OAUTH 2.0 authorization code workflow APIs for generating the
     \[access_token\] and \[refresh_token\] pairs if the authentication method is interactive else
     \[access_token\] if authentication method is non interactive is used for all the API calls to
-    the Defender ATP instance.
+    the Defender for Endpoint instance.
 
 -   Interactive authentication mechanism is a user-context based workflow and the permissions of the
     user also matter along with the API permissions set to define the scope and permissions of the
@@ -261,7 +261,7 @@ When creating an asset for the app,
         Active Directory. Generate the \[client_secret\] for the configured application. The
         detailed steps have been mentioned in the earlier section.
 
-    -   Configure the Windows Defender ATP app's asset with appropriate values for \[tenant_id\],
+    -   Configure the Microsoft Defender for Endpoint app's asset with appropriate values for \[tenant_id\],
         \[client_id\], and \[client_secret\] configuration parameters.
 
     -   Run the test connectivity action for Interactive method.
@@ -290,7 +290,7 @@ When creating an asset for the app,
         -   The successful run of the Test Connectivity ensures that a valid pair of
             \[access_token\] and \[refresh_token\] has been generated and stored in the app's state
             file. These tokens will be used in all the actions' execution flow to authorize their
-            API calls to the Defender ATP instance.
+            API calls to the Defender for Endpoint instance.
 
     -   Run the test connectivity action for Non Interactive method.
 
@@ -305,7 +305,7 @@ When creating an asset for the app,
             \[access_token\] by making the corresponding API call.
         -   The successful run of the Test Connectivity ensures that a valid \[access_token\] has
             been generated and stored in the app's state file. This token will be used in all the
-            actions execution flow to authorize their API calls to the Defender ATP instance.
+            actions execution flow to authorize their API calls to the Defender for Endpoint instance.
 
 ## State file permissions
 
@@ -326,9 +326,9 @@ Please check the permissions for the state file as mentioned below.
 ## Notes
 
 -   \<appid> - The app ID will be available in the Redirect URI which gets populated in the field
-    'POST incoming for Windows Defender ATP to this location' when the Defender ATP Splunk SOAR app
+    'POST incoming for Microsoft Defender for Endpoint to this location' when the Defender for Endpoint Splunk SOAR app
     asset is configured e.g.
-    https://\<splunk_soar_host>/rest/handler/windowsdefenderatp\_\<appid>/\<asset_name>/result
+    https://\<splunk_soar_host>/rest/handler/microsoftdefenderforendpoint\_\<appid>/\<asset_name>/result
 -   \<asset_id> - The asset ID will be available on the created asset's Splunk SOAR web URL e.g.
     https://\<splunk_soar_host>/apps/\<app_number>/asset/\<asset_id>/
 
