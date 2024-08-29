@@ -6,7 +6,7 @@ Connector Version: 3.8.2
 Product Vendor: Microsoft  
 Product Name: Microsoft Defender for Endpoint  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 6.1.1  
+Minimum Product Version: 6.2.1  
 
 This app integrates with Microsoft Defender for Endpoint to execute various containment, corrective, generic, and investigative actions
 
