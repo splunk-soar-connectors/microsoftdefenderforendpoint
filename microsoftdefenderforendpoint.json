@@ -16,7 +16,7 @@
     "main_module": "microsoftdefenderforendpoint_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "6.1.1",
+    "min_phantom_version": "6.2.1",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
         "Cloud November 11, 2022"

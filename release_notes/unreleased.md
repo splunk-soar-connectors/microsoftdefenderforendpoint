@@ -1,1 +1,3 @@
 **Unreleased**
+
+* App name updated from Windows Defender ATP to Microsoft Defender for Endpoint [PAPP-34608]
