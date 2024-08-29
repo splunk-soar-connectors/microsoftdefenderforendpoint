@@ -18,7 +18,7 @@ This app integrates with Microsoft Defender for Endpoint to execute various cont
 ## Defender for Endpoint Instance Minimum Version Compatibility
 
 -   With this major version 2.0.0 of the Microsoft Defender for Endpoint app on Splunk SOAR, we declare support
-    for (on and above) the cloud 'November-December 2019' GA release for the ATP instances. This app
+    for (on and above) the cloud 'November-December 2019' GA release for the Defender for Endpoint instances. This app
     has been tested and certified on the mentioned GA release of the Defender for Endpoint and its APIs.
 
 ## Playbook Backward Compatibility
@@ -199,7 +199,7 @@ When creating an asset for the app,
 -   Save the asset with the above values.
 
 -   After saving the asset, a new uneditable field will appear in the 'Asset Settings' tab of the
-    configured asset for the ATP app on SOAR. Copy the URL mentioned in the 'POST incoming for
+    configured asset for the Defender for Endpoint app on SOAR. Copy the URL mentioned in the 'POST incoming for
     Microsoft Defender for Endpoint to this location' field. Add a suffix '/result' to the URL copied in the
     previous step. The resulting URL looks like the one mentioned below.
 
