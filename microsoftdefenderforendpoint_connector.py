@@ -651,7 +651,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)), resp_json)
 
         try:
-            response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
+            if timeout is None:
+                response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
+            else:
+                response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params, timeout=timeout)
 
         except Exception as e:
             self._dump_error_log("Error occurred while logging the make_rest_call exception message")
@@ -2965,6 +2968,95 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_persistence_evidence(self, param):
+        """ This function is used to handle the persistence evidence action in advanced hunting.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        query_purpose = param.get('query_purpose')
+        device_name = param.get('device_name')
+
+        if not query_purpose or not device_name:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters: query_purpose and/or device_name")
+
+        file_name = param.get('file_name')
+        sha1 = param.get('sha1')
+        sha256 = param.get('sha256')
+        md5 = param.get('md5')
+        device_id = param.get('device_id')
+        query_operation = param.get('query_operation', 'or')
+        limit = param.get('limit', DEFENDERATP_HANDLE_PERSISTENT_EVIDENCE_DEFAULT_LIMIT)
+        time_range = param.get('time_range', '1d')
+        process_cmd = param.get('process_cmd')
+        show_query = param.get('show_query', False)
+        timeout = param.get('timeout', DEFENDERATP_HANDLE_PERSISTENT_EVIDENCE_DEFAULT_TIMEOUT)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query_templates = {
+            "scheduled_job": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'ScheduledTaskCreated'",
+            "registry_entry": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'RegistryValueSet' and ProcessCommandLine contains '{process_cmd}'",
+            "startup_folder_changes": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'FileCreated' and FolderPath endswith 'Startup'",
+            "new_service_created": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'ServiceInstalled'",
+            "service_updated": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'ServiceUpdated'",
+            "file_replaced": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'FileReplaced'",
+            "new_user": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'UserCreated'",
+            "new_group": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'GroupCreated'",
+            "group_user_change": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'GroupMembershipChanged'",
+            "local_firewall_change": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'FirewallRuleModified'",
+            "host_file_change": f"DeviceEvents | where DeviceName == '{device_name}' and ActionType == 'HostsFileModified'"
+        }
+
+        if query_purpose not in query_templates:
+            return action_result.set_status(phantom.APP_ERROR, "Invalid query_purpose provided")
+
+        query = query_templates[query_purpose]
+
+        optional_conditions = []
+
+        if file_name:
+            optional_conditions.append(f"FileName == '{file_name}'")
+        if sha1:
+            optional_conditions.append(f"SHA1 == '{sha1}'")
+        if sha256:
+            optional_conditions.append(f"SHA256 == '{sha256}'")
+        if md5:
+            optional_conditions.append(f"MD5 == '{md5}'")
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        if show_query:
+            # TODO: Change this after testing
+            action_result.update_summary({"query": query})
+
+        data = {
+            "Query": query
+        }
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result,
+                                                 method="post", data=json.dumps(data), timeout=timeout)
+
+        if phantom.is_fail(ret_val):
+            summary['query_status'] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        action_result.add_data(response)
+        summary['total_results'] = len(response.get('Results', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved persistence evidence")
+
     def _handle_on_poll(self, param):
         """This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
 
@@ -3150,6 +3242,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "run_script_live_response": self._handle_run_script_live_response,
             "get_missing_kbs": self._handle_get_missing_kbs,
             "update_device_tag": self._handle_update_device_tag,
+            'retrieve_persistence_evidence': self._handle_persistence_evidence,
         }
 
         action = self.get_action_identifier()
