@@ -2899,6 +2899,239 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "create alert",
+            "description": "Create a new alert in Microsoft Defender for Endpoint",
+            "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/create-alert-by-reference\" target=\"_blank\">Create Alert API Documentation</a>), user can create alerts.",
+            "type": "investigate",
+            "identifier": "create_alert",
+            "read_only": false,
+            "parameters": {
+                "report_id": {
+                    "description": "Report ID of associated event",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 0
+                },
+                "event_time": {
+                    "description": "UTC event time of associated event",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 1
+                },
+                "machine_id": {
+                    "description": "Machine/Device ID of associated event",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 2
+                },
+                "severity": {
+                    "description": "Severity level of alert",
+                    "value_list": [
+                        "Informational",
+                        "Low",
+                        "Medium",
+                        "High"
+                    ],
+                    "data_type": "string",
+                    "required": true,
+                    "order": 3
+                },
+                "title": {
+                    "description": "Alert title",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 4
+                },
+                "description": {
+                    "description": "Alert description",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 5
+                },
+                "recommended_action": {
+                    "description": "Recommended action for alert",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 6
+                },
+                "category": {
+                    "description": "Category of alert",
+                    "value_list": [
+                        "SuspiciousActivity",
+                        "Malware",
+                        "Phishing",
+                        "UnauthorizedAccess",
+                        "DataExfiltration",
+                        "CommandAndControl",
+                        "LateralMovement",
+                        "DefenseEvasion",
+                        "CredentialAccess",
+                        "Persistence",
+                        "PrivilegeEscalation"
+                    ],
+                    "data_type": "string",
+                    "required": true,
+                    "order": 7
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.report_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.event_time",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.machine_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.severity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.recommended_action",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp alert id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.domains",
+                    "data_type": "array"
+                },
+                {
+                    "data_path": "action_result.data.*.category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments",
+                    "data_type": "array"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence",
+                    "data_type": "array"
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.machineId",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.assignedTo",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectorId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.incidentId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.threatName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.aadTenantId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.resolvedTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.determination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Created Alert"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Action taken: Created Alert"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "update alert",
             "description": "Update properties of existing Alert",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/update-alert\" target=\"_blank\">Get Alert Information by ID API Documentation</a>), user can update alerts that available in the API. See List Alerts for more information. Also, previously supported alert determination values ('Apt' and 'SecurityPersonnel') have been deprecated and no longer available via the API; rate limitations for this action are 100 calls per minute and 1500 calls per hour.",

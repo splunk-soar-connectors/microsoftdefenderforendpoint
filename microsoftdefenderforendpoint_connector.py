@@ -1478,6 +1478,104 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_create_alert(self, param):
+        """ This function is used to handle the create alert action.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        report_id = param.get("report_id")
+        event_time = param.get("event_time")
+        machine_id = param.get("machine_id")
+        severity = param.get("severity")
+        title = param.get("title")
+        description = param.get("description")
+        recommended_action = param.get("recommended_action")
+        category = param.get("category")
+
+        # Validation
+        if not all([report_id, event_time, machine_id, severity, title, description, recommended_action, category]):
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
+
+        request_body = {
+            "reportId": report_id,
+            "eventTime": event_time,
+            "machineId": machine_id,
+            "severity": severity,
+            "title": title,
+            "description": description,
+            "recommendedAction": recommended_action,
+            "category": category
+        }
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_CREATE_ALERT_ENDPOINT)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post",
+                                                data=json.dumps(request_body))
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Created Alert"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_create_alert(self, param):
+        """ This function is used to handle the create alert action.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        report_id = param.get("report_id")
+        event_time = param.get("event_time")
+        machine_id = param.get("machine_id")
+        severity = param.get("severity")
+        title = param.get("title")
+        description = param.get("description")
+        recommended_action = param.get("recommended_action")
+        category = param.get("category")
+
+        # Validation
+        if not all([report_id, event_time, machine_id, severity, title, description, recommended_action, category]):
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
+
+        request_body = {
+            "reportId": report_id,
+            "eventTime": event_time,
+            "machineId": machine_id,
+            "severity": severity,
+            "title": title,
+            "description": description,
+            "recommendedAction": recommended_action,
+            "category": category
+        }
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_CREATE_ALERT_ENDPOINT)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post",
+                                                data=json.dumps(request_body))
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Created Alert"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_update_alert(self, param):
         """This function is used to handle the update alert action.
 
@@ -2534,6 +2632,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "list_alerts": self._handle_list_alerts,
             "list_sessions": self._handle_list_sessions,
             "get_alert": self._handle_get_alert,
+            'create_alert': self._handle_create_alert,
             "update_alert": self._handle_update_alert,
             "ip_prevalence": self._handle_ip_prevalence,
             "domain_prevalence": self._handle_domain_prevalence,

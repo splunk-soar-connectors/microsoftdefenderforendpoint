@@ -67,6 +67,8 @@ DEFENDERATP_RUN_QUERY_ENDPOINT = "/advancedqueries/run"
 DEFENDERATP_LIVE_RESPONSE_ENDPOINT = "/machines/{device_id}/runliveresponse"
 DEFENDERATP_LIVE_RESPONSE_RESULT_ENDPOINT = "/machineactions/{action_id}/GetLiveResponseResultDownloadLink(index=0)"
 DEFENDERATP_MISSING_KBS_ENDPOINT = "/machines/{device_id}/getmissingkbs"
+DEFENDERATP_CREATE_ALERT_ENDPOINT = '/alerts/CreateAlertByReference'
+
 DEFENDERATP_IP_PARAM_CONST = "ip"
 DEFENDERATP_DOMAIN_PARAM_CONST = "domain"
 DEFENDERATP_FILE_PARAM_CONST = "file_hash"
