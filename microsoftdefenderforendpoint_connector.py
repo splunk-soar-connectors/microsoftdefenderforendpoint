@@ -1578,7 +1578,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         alert_id = param.get("alert_id")
 
         if not alert_id:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
         endpoint = "{0}{1}/user".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
 
@@ -1587,18 +1587,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        if not response:
-            return action_result.set_status(phantom.APP_SUCCESS, "No alert found")
-
-        # Check if getting error as no user resource found
-        if "error" in response:
-            error_code = response["error"].get("code", "Unknown error code")
-            error_message = response["error"].get("message", "Unknown error message")
-
-            if error_code == "ResourceNotFound":
-                return action_result.set_status(phantom.APP_SUCCESS, "User not found for alert")
-
-            return action_result.set_status(phantom.APP_ERROR, f"Error retrieving user: {error_code} - {error_message}")
+        action_result.add_data(response.get('value', []))
 
         summary = action_result.update_summary({})
         summary['action_taken'] = "Retrieved Assigned User for Alert"
@@ -1634,23 +1623,47 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        if not response:
-            return action_result.set_status(phantom.APP_SUCCESS, "No alert found")
-
-        # Check if getting error as no resource found
-        if "error" in response:
-            error_code = response["error"].get("code", "Unknown error code")
-            error_message = response["error"].get("message", "Unknown error message")
-
-            if error_code == "ResourceNotFound":
-                return action_result.set_status(phantom.APP_SUCCESS, "No files found for alert")
-
-            return action_result.set_status(phantom.APP_ERROR, f"Error retrieving files: {error_code} - {error_message}")
-
-        action_result.add_data(response)
+        action_result.add_data(response.get('value', []))
 
         summary = action_result.update_summary({})
         summary['action_taken'] = "Retrieved Files for Alert"
+        summary['total_results'] = len(response.get('value', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_alert_ips(self, param):
+        """ This function is used to handle the get alert IPs action.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        alert_id = param.get("alert_id")
+        limit = param.get("limit", DEFENDERATP_FILES_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_FILES_DEFAULT_OFFSET)
+
+        if not alert_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
+
+        endpoint = "{0}{1}/ips?$top={2}&$skip={3}".format(
+            self._graph_url,
+            DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id),
+            limit,
+            offset
+        )
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response.get('value', []))
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved IPs for Alert"
         summary['total_results'] = len(response.get('value', []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -2762,6 +2775,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_alert": self._handle_get_alert,
             'get_alert_user': self._handle_get_alert_user,
             'get_alert_files': self._handle_get_alert_files,
+            'get_alert_ips': self._handle_get_alert_ips,
             'create_alert': self._handle_create_alert,
             "update_alert": self._handle_update_alert,
             "ip_prevalence": self._handle_ip_prevalence,
