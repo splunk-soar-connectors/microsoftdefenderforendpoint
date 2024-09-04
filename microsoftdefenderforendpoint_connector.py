@@ -1527,6 +1527,82 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_alert_user(self, param):
+        """ This function is used to handle the get alert user action.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        alert_id = param.get("alert_id")
+
+        if not alert_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, "No alert found")
+
+        assigned_user = response.get('assignedTo')
+
+        if not assigned_user:
+            return action_result.set_status(phantom.APP_SUCCESS, "No user assigned to the alert")
+
+        # Get user now
+        action_result.add_data({"assignedUser": assigned_user})
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Assigned User for Alert"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_alert_user(self, param):
+        """ This function is used to handle the get alert user action.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        alert_id = param.get("alert_id")
+
+        if not alert_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if not response:
+            return action_result.set_status(phantom.APP_SUCCESS, "No alert found")
+
+        assigned_user = response.get('assignedTo')
+
+        if not assigned_user:
+            return action_result.set_status(phantom.APP_SUCCESS, "No user assigned to the alert")
+
+        # Get user now
+        action_result.add_data({"assignedUser": assigned_user})
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Assigned User for Alert"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_create_alert(self, param):
         """ This function is used to handle the create alert action.
 
@@ -2632,6 +2708,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "list_alerts": self._handle_list_alerts,
             "list_sessions": self._handle_list_sessions,
             "get_alert": self._handle_get_alert,
+            'get_alert_user': self._handle_get_alert_user,
             'create_alert': self._handle_create_alert,
             "update_alert": self._handle_update_alert,
             "ip_prevalence": self._handle_ip_prevalence,

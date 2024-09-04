@@ -2899,6 +2899,75 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get alert user",
+            "description": "Retrieve user for specific Alert from its ID",
+            "verbose": "Retrieve user for specific Alert from its ID",
+            "type": "investigate",
+            "identifier": "get_alert_user",
+            "read_only": true,
+            "parameters": {
+                "alert_id": {
+                    "description": "ID of the alert",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "defender atp alert id"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.alert_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp alert id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Assigned User for Alert"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Action taken: Retrieved Assigned User for Alert"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "create alert",
             "description": "Create a new alert in Microsoft Defender for Endpoint",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/create-alert-by-reference\" target=\"_blank\">Create Alert API Documentation</a>), user can create alerts.",
