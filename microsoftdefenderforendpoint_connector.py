@@ -1668,6 +1668,43 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_alert_domains(self, param):
+        """ This function is used to handle the get alert domains action.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        alert_id = param.get("alert_id")
+        limit = param.get("limit", DEFENDERATP_DOMAINS_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_DOMAINS_DEFAULT_OFFSET)
+
+        if not alert_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
+
+        endpoint = "{0}{1}/domains?$top={2}&$skip={3}".format(
+            self._graph_url,
+            DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id),
+            limit,
+            offset
+        )
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response.get('value', []))
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Domains for Alert"
+        summary['total_results'] = len(response.get('value', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_create_alert(self, param):
         """ This function is used to handle the create alert action.
 
@@ -2776,6 +2813,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'get_alert_user': self._handle_get_alert_user,
             'get_alert_files': self._handle_get_alert_files,
             'get_alert_ips': self._handle_get_alert_ips,
+            'get_alert_domains': self._handle_get_alert_domains,
             'create_alert': self._handle_create_alert,
             "update_alert": self._handle_update_alert,
             "ip_prevalence": self._handle_ip_prevalence,
