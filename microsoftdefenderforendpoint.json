@@ -6727,6 +6727,101 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get file alerts",
+            "description": "Retrieve alerts related to a specific file hash",
+            "verbose": "Retrieve alerts related to a specific file hash, such as a SHA1 or SHA256 hash.",
+            "type": "investigate",
+            "identifier": "get_file_alerts",
+            "read_only": true,
+            "parameters": {
+                "file_hash": {
+                    "description": "The file hash (e.g., SHA1) used to retrieve related alerts.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "sha1",
+                        "sha256",
+                        "file_hash"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.file_hash",
+                    "data_type": "string",
+                    "contains": [
+                        "file_hash"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "alertId1",
+                        "alertId2"
+                    ],
+                    "contains": [
+                        "defender atp alert id"
+                    ],
+                    "column_name": "Alert ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unauthorized Access Attempt Detected"
+                    ],
+                    "column_name": "Title",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "example_values": [
+                        "Low",
+                        "Medium",
+                        "High"
+                    ],
+                    "column_name": "Severity",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "New",
+                        "Resolved"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "summary.total_alerts",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5
+                    ],
+                    "column_name": "Total Alerts",
+                    "column_order": 4
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get device alerts",
             "description": "Retrieve all alerts related to a specific device using deviceId",
             "verbose": "This action retrieves all alerts related to a specific device.",
@@ -6831,14 +6926,14 @@
         },
         {
             "action": "get domain alerts",
-            "description": "Retrieve all alerts related to a specific domain address",
-            "verbose": "This action retrieves alerts related to a specific domain address using client-side filtering.",
+            "description": "Retrieve alerts related to a specific domain address.",
+            "verbose": "This action retrieves alerts related to a specific domain.",
             "type": "investigate",
             "identifier": "get_domain_alerts",
             "read_only": true,
             "parameters": {
                 "domain": {
-                    "description": "The domain address to filter alerts by.",
+                    "description": "The domain address to retrieve alerts for.",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -6913,7 +7008,7 @@
                     "example_values": [
                         5
                     ],
-                    "column_name": "Total Alerts",
+                    "column_name": "Total Results",
                     "column_order": 4
                 }
             ],

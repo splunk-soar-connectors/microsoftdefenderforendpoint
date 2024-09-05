@@ -1806,6 +1806,71 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_domain_alerts(self, param):
+        """ This function retrieves alerts related to a specific domain address.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        domain = param.get("domain")
+
+        if not domain:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: domain")
+
+        endpoint = "{0}/api/domains/{1}/alerts".format(self._graph_url, domain)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if not response or not response.get('value', []):
+            return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified domain")
+
+        action_result.add_data(response.get('value', []))
+
+        summary = action_result.update_summary({})
+        summary['total_results'] = len(response.get('value', []))
+        summary['domain'] = domain
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_file_alerts(self, param):
+        """ This function retrieves alerts related to a specific file hash.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        file_hash = param.get("file_hash")
+
+        if not file_hash:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: file_hash")
+
+        endpoint = "{0}/api/files/{1}/alerts".format(self._graph_url, file_hash)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if not response or not response.get('value', []):
+            return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified file hash")
+
+        action_result.add_data(response.get('value', []))
+
+        summary = action_result.update_summary({})
+        summary['total_results'] = len(response.get('value', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_get_device_alerts(self, param):
         """ This function retrieves all alerts related to a specific device using the machineId.
 
@@ -1835,59 +1900,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         summary = action_result.update_summary({})
         summary['total_results'] = len(response.get('value', []))
-
-        return action_result.set_status(phantom.APP_SUCCESS)
-
-    def _handle_get_domain_alerts(self, param):
-        """ This function retrieves alerts related to a specific domain address.
-
-        :param param: Dictionary of input parameters
-        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
-        """
-
-        # Note: This function uses client side filtering as the Defender for Endpoint API does not support filtering by domain
-
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        action_result = self.add_action_result(ActionResult(dict(param)))
-
-        domain = param.get("domain")
-        if not domain:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: domain")
-
-        all_alerts = []
-        batch_size = DEFENDERATP_BATCH_LIMIT
-        skip_value = DEFENDERATP_BATCH_OFFSET
-
-        while True:
-            endpoint = "{0}/api/alerts?$top={1}&$skip={2}".format(self._graph_url, batch_size, skip_value)
-
-            ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
-
-            if phantom.is_fail(ret_val):
-                return action_result.get_status()
-
-            alerts = response.get('value', [])
-
-            # If empty we know we have all the alerts
-            if not alerts:
-                break
-
-            # Keep combining alerts
-            all_alerts.extend(alerts)
-
-            # Move to the next batch
-            skip_value += batch_size
-
-        # Now client filter to get alerts related to that domain
-        domain_alerts = [alert for alert in all_alerts if alert.get('domains') and domain in alert['domains']]
-
-        if not domain_alerts:
-            return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified domain")
-
-        action_result.add_data(domain_alerts)
-
-        summary = action_result.update_summary({})
-        summary['total_results'] = len(domain_alerts)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -3076,6 +3088,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'create_alert': self._handle_create_alert,
             "update_alert": self._handle_update_alert,
             'get_domain_alerts': self._handle_get_domain_alerts,
+            'get_file_alerts': self._handle_get_file_alerts,
             'get_device_alerts': self._handle_get_device_alerts,
             "ip_prevalence": self._handle_ip_prevalence,
             "domain_prevalence": self._handle_domain_prevalence,
