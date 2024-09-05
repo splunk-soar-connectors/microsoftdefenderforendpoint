@@ -2099,6 +2099,66 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_indicator(self, param):
+        """ This function is used to retrieve an indicator by its ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        indicator_id = param.get("indicator_id")
+
+        if not indicator_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_id")
+
+        endpoint = "{0}/api/indicators/{1}".format(self._graph_url, indicator_id)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary['indicator_id'] = indicator_id
+        summary['action_taken'] = "Retrieved Indicator"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_indicator(self, param):
+        """ This function is used to retrieve an indicator by its ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        indicator_id = param.get("indicator_id")
+
+        if not indicator_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_id")
+
+        endpoint = "{0}/api/indicators/{1}".format(self._graph_url, indicator_id)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary['indicator_id'] = indicator_id
+        summary['action_taken'] = "Retrieved Indicator"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_list_indicators(self, param):
         """This function is used to handle the list indicators action.
 
@@ -2214,6 +2274,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         summary = action_result.update_summary({})
         summary['action_taken'] = "Updated Indicator"
         return action_result.set_status(phantom.APP_SUCCESS)
+    
+    
 
     def _handle_delete_indicator(self, param):
         """This function is used to handle the delete indicator action.
@@ -2897,6 +2959,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_installed_software": self._handle_get_installed_software,
             "restrict_app_execution": self._handle_restrict_app_execution,
             "remove_app_restriction": self._handle_remove_app_restriction,
+            'get_indicator': self._handle_get_indicator,
             "list_indicators": self._handle_list_indicators,
             "delete_indicator": self._handle_delete_indicator,
             "submit_indicator": self._handle_submit_indicator,

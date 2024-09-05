@@ -5903,6 +5903,129 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get indicator",
+            "description": "Retrieve an Indicator entity by its ID",
+            "verbose": "This action retrieves an indicator by its unique ID.",
+            "type": "investigate",
+            "identifier": "get_indicator",
+            "read_only": true,
+            "parameters": {
+                "indicator_id": {
+                    "description": "The ID of the indicator to retrieve.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "defender atp indicator id"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_id",
+                    "data_type": "string",
+                    "example_values": [
+                        "220e7d15b011d7fac48f2bd61114db1022197f7f"
+                    ],
+                    "contains": [
+                        "defender atp indicator id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicatorType",
+                    "data_type": "string",
+                    "example_values": [
+                        "FileSha1",
+                        "IpAddress",
+                        "DomainName"
+                    ],
+                    "column_name": "Indicator Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.indicatorValue",
+                    "data_type": "string",
+                    "example_values": [
+                        "test.com"
+                    ],
+                    "contains": [
+                        "defender atp indicator value",
+                        "sha1",
+                        "ip",
+                        "url",
+                        "domain"
+                    ],
+                    "column_name": "Indicator Value",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "example_values": [
+                        "Low",
+                        "Medium",
+                        "High"
+                    ],
+                    "column_name": "Severity",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.action",
+                    "data_type": "string",
+                    "example_values": [
+                        "Alert",
+                        "AlertAndBlock",
+                        "Allowed"
+                    ],
+                    "column_name": "Action",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Suspicious File Detected"
+                    ],
+                    "column_name": "Title",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "example_values": [
+                        "This is a description of the malicious indicator."
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.expirationTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2024-12-01T00:00:00Z"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "submit indicator",
             "description": "Submit or Update new Indicator entity",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/post-ti-indicator?view=o365-worldwide\" target=\"_blank\">Submit or Update Indicator API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. There is a limit of 15,000 active indicators per tenant.<br><b>Notes:</b><ul><li>For the possible values of given action parameters, refer to the documentation link provided above.<li>CIDR notation for IPs is not supported.</li></ul>",
@@ -6357,7 +6480,7 @@
         {
             "action": "update indicator",
             "description": "Update an existing Indicator entity",
-            "verbose": "This action allows updating an indicator entity. For possible values of the parameters, refer to the API documentation.",
+            "verbose": "This action allows updating an indicator entity.",
             "type": "generic",
             "identifier": "update_indicator",
             "read_only": false,
