@@ -35,7 +35,7 @@ except Exception:
 import grp
 import ipaddress
 import pwd
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import encryption_helper
 import phantom.app as phantom
@@ -3125,6 +3125,166 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_on_poll(self, param):
+        """This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        config = self.get_config()
+
+        # Validation
+        poll_filter, offset, orderby = config.get(DEFENDER_FILTER, ""), 0, "lastUpdateTime"
+        last_modified_time = (datetime.now() - timedelta(days=7)).strftime(DEFENDER_APP_DT_STR_FORMAT)  # Default to last 7 days
+
+        start_time_scheduled_poll = config.get(DEFENDER_CONFIG_START_TIME_SCHEDULED_POLL)
+        if start_time_scheduled_poll:
+            ret_val = self._check_date_format(action_result, start_time_scheduled_poll)
+            if phantom.is_fail(ret_val):
+                self.save_progress(action_result.get_message())
+                return action_result.set_status(phantom.APP_ERROR)
+
+            last_modified_time = start_time_scheduled_poll
+
+        # Max alerts to ingest
+        if self.is_poll_now():
+            max_alerts = int(param.get(phantom.APP_JSON_CONTAINER_COUNT))
+        else:
+            max_alerts = config.get(DEFENDER_CONFIG_FIRST_RUN_MAX_ALERTS, DEFENDER_ALERT_DEFAULT_LIMIT_FOR_SCHEDULE_POLLING)
+            ret_val, max_alerts = self._validate_integer(action_result, max_alerts, "max_alerts")
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
+
+            if self._state.get(STATE_FIRST_RUN, True):
+                self._state[STATE_FIRST_RUN] = False
+            elif last_time := self._state.get(STATE_LAST_TIME):
+                last_modified_time = last_time
+
+        start_time_filter = f"lastUpdateTime ge {last_modified_time}"
+        poll_filter += start_time_filter if not poll_filter else f" and {start_time_filter}"
+
+        endpoint = "{0}/api/alerts".format(self._graph_url)
+        alerts_left = max_alerts
+        self.duplicate_container = 0
+
+        while alerts_left > 0:
+            self.debug_print("Making a REST call with offset: {}, alerts_left: {}".format(offset, alerts_left))
+            alert_list = self._paginator(action_result, alerts_left, offset, endpoint, poll_filter, orderby)
+
+            if not alert_list and not isinstance(alert_list, list):  # Failed to fetch alerts
+                self.save_progress("Failed to retrieve alerts")
+                return action_result.get_status()
+
+            self.save_progress(f"Successfully fetched {len(alert_list)} alerts.")
+
+            # Ingest the alerts
+            self.debug_print("Creating alert artifacts")
+            for alert in alert_list:
+                try:
+                    self._ingest_alert(alert)
+                except Exception as e:
+                    self.debug_print("Error occurred while saving alert artifacts. Error: {}".format(str(e)))
+
+            if self.is_poll_now():
+                break
+
+            if alert_list:
+                if DEFENDER_JSON_LAST_MODIFIED not in alert_list[-1]:
+                    return action_result.set_status(phantom.APP_ERROR, "Could not extract {} from latest ingested "
+                                                                    "alert.".format(DEFENDER_JSON_LAST_MODIFIED))
+
+                self._state[STATE_LAST_TIME] = alert_list[-1].get(DEFENDER_JSON_LAST_MODIFIED)
+                self.save_state(self._state)
+
+            offset += alerts_left
+            alerts_left = self.duplicate_container
+            self.duplicate_container = 0
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_on_poll(self, param):
+        """This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        config = self.get_config()
+
+        # Validation
+        poll_filter, offset, orderby = config.get(DEFENDER_FILTER, ""), 0, "lastUpdateTime"
+        last_modified_time = (datetime.now() - timedelta(days=7)).strftime(DEFENDER_APP_DT_STR_FORMAT)  # Default to last 7 days
+
+        start_time_scheduled_poll = config.get(DEFENDER_CONFIG_START_TIME_SCHEDULED_POLL)
+        if start_time_scheduled_poll:
+            ret_val = self._check_date_format(action_result, start_time_scheduled_poll)
+            if phantom.is_fail(ret_val):
+                self.save_progress(action_result.get_message())
+                return action_result.set_status(phantom.APP_ERROR)
+
+            last_modified_time = start_time_scheduled_poll
+
+        # Max alerts to ingest
+        if self.is_poll_now():
+            max_alerts = int(param.get(phantom.APP_JSON_CONTAINER_COUNT))
+        else:
+            max_alerts = config.get(DEFENDER_CONFIG_FIRST_RUN_MAX_ALERTS, DEFENDER_ALERT_DEFAULT_LIMIT_FOR_SCHEDULE_POLLING)
+            ret_val, max_alerts = self._validate_integer(action_result, max_alerts, "max_alerts")
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
+
+            if self._state.get(STATE_FIRST_RUN, True):
+                self._state[STATE_FIRST_RUN] = False
+            elif last_time := self._state.get(STATE_LAST_TIME):
+                last_modified_time = last_time
+
+        start_time_filter = f"lastUpdateTime ge {last_modified_time}"
+        poll_filter += start_time_filter if not poll_filter else f" and {start_time_filter}"
+
+        endpoint = "{0}/api/alerts".format(self._graph_url)
+        alerts_left = max_alerts
+        self.duplicate_container = 0
+
+        while alerts_left > 0:
+            self.debug_print("Making a REST call with offset: {}, alerts_left: {}".format(offset, alerts_left))
+            alert_list = self._paginator(action_result, alerts_left, offset, endpoint, poll_filter, orderby)
+
+            if not alert_list and not isinstance(alert_list, list):  # Failed to fetch alerts
+                self.save_progress("Failed to retrieve alerts")
+                return action_result.get_status()
+
+            self.save_progress(f"Successfully fetched {len(alert_list)} alerts.")
+
+            # Ingest the alerts
+            self.debug_print("Creating alert artifacts")
+            for alert in alert_list:
+                try:
+                    self._ingest_alert(alert)
+                except Exception as e:
+                    self.debug_print("Error occurred while saving alert artifacts. Error: {}".format(str(e)))
+
+            if self.is_poll_now():
+                break
+
+            if alert_list:
+                if DEFENDER_JSON_LAST_MODIFIED not in alert_list[-1]:
+                    return action_result.set_status(phantom.APP_ERROR, "Could not extract {} from latest ingested "
+                                                                    "alert.".format(DEFENDER_JSON_LAST_MODIFIED))
+
+                self._state[STATE_LAST_TIME] = alert_list[-1].get(DEFENDER_JSON_LAST_MODIFIED)
+                self.save_state(self._state)
+
+            offset += alerts_left
+            alerts_left = self.duplicate_container
+            self.duplicate_container = 0
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def handle_action(self, param):
         """This function gets current action identifier and calls member function of its own to handle the action.
 
@@ -3135,6 +3295,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         # Dictionary mapping each action with its corresponding actions
         action_mapping = {
             "test_connectivity": self._handle_test_connectivity,
+            'on_poll': self._handle_on_poll,
             "quarantine_device": self._handle_quarantine_device,
             "unquarantine_device": self._handle_unquarantine_device,
             "get_status": self._handle_get_status,

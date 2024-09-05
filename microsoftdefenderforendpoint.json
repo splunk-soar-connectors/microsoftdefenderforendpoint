@@ -56,6 +56,17 @@
             "default": false,
             "order": 4
         },
+        "max_alerts_per_poll": {
+            "description": "Maximum Alerts for scheduled/interval polling for each cycle",
+            "data_type": "numeric",
+            "default": 1000,
+            "order": 5
+        },
+        "start_time": {
+            "description": "Start time for schedule/interval/manual poll (Use this format: 1970-01-01T00:00:00Z)",
+            "data_type": "string",
+            "order": 6
+        },
         "environment": {
             "description": "Azure environment to connect",
             "data_type": "string",
@@ -66,7 +77,7 @@
                 "GCC",
                 "GCC High"
             ],
-            "order": 5
+            "order": 7
         }
     },
     "actions": [
@@ -77,6 +88,42 @@
             "identifier": "test_connectivity",
             "read_only": true,
             "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "on poll",
+            "description": "Callback action for the on_poll ingest functionality for Defender for Endpoint",
+            "type": "ingest",
+            "identifier": "on_poll",
+            "read_only": true,
+            "parameters": {
+                "start_time": {
+                    "data_type": "numeric",
+                    "description": "The start time to filter alerts by their last updated time. If not provided, defaults to the last 7 days.",
+                    "order": 0
+                },
+                "end_time": {
+                    "data_type": "numeric",
+                    "description": "Parameter ignored in this app",
+                    "order": 1
+                },
+                "container_count": {
+                    "data_type": "numeric",
+                    "description": "The number of alerts to ingest in each poll. Default is 1000.",
+                    "order": 2
+                },
+                "artifact_count": {
+                    "data_type": "numeric",
+                    "description": "Parameter ignored in this app",
+                    "order": 3
+                },
+                "container_id": {
+                    "data_type": "numeric",
+                    "description": "Parameter ignored in this app",
+                    "order": 4
+                }
+            },
             "output": [],
             "versions": "EQ(*)"
         },
@@ -6951,7 +6998,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.user",
-                    "data_type": "string",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.id",
