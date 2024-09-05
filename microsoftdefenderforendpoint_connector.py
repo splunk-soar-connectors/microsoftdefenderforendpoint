@@ -2143,6 +2143,78 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_update_indicator(self, param):
+        """ This function is used to update an indicator.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        indicator_value = param.get("indicator_value")
+        indicator_type = param.get("indicator_type")
+        action_taken = param.get("action")
+        description = param.get("indicator_description")
+        title = param.get("indicator_title")
+
+        if not all([indicator_value, indicator_type, action_taken, description, title]):
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
+
+        if not indicator_value:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_value")
+        if not indicator_type:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_type")
+        if not action_taken:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: action")
+        if not description:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_description")
+        if not title:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_title")
+
+        endpoint = "{0}/api/indicators/{1}".format(self._graph_url, indicator_value)
+
+        payload = {
+            "indicatorValue": indicator_value,
+            "indicatorType": indicator_type,
+            "action": action_taken,
+            "description": description,
+            "title": title
+        }
+
+        severity = param.get("severity")
+        if severity:
+            payload["severity"] = severity
+
+        expiration_time = param.get("expiration_time")
+        if expiration_time:
+            payload["expirationTime"] = expiration_time
+
+        indicator_application = param.get("indicator_application")
+        if indicator_application:
+            payload["application"] = indicator_application
+
+        recommended_actions = param.get("recommended_actions")
+        if recommended_actions:
+            payload["recommendedActions"] = recommended_actions
+
+        rbac_group_names = param.get("rbac_group_names")
+        if rbac_group_names:
+            payload["rbacGroupNames"] = rbac_group_names
+
+        # Patch update
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="patch", data=json.dumps(payload))
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Updated Indicator"
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_delete_indicator(self, param):
         """This function is used to handle the delete indicator action.
 
@@ -2828,6 +2900,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "list_indicators": self._handle_list_indicators,
             "delete_indicator": self._handle_delete_indicator,
             "submit_indicator": self._handle_submit_indicator,
+            'update_indicator': self._handle_update_indicator,
             "run_query": self._handle_run_query,
             "get_domain_related_devices": self._handle_get_domain_related_devices,
             "get_discovered_vulnerabilities": self._get_discovered_vulnerabilities,

@@ -6355,6 +6355,163 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "update indicator",
+            "description": "Update an existing Indicator entity",
+            "verbose": "This action allows updating an indicator entity. For possible values of the parameters, refer to the API documentation.",
+            "type": "generic",
+            "identifier": "update_indicator",
+            "read_only": false,
+            "parameters": {
+                "indicator_value": {
+                    "description": "The value of the indicator to update.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "defender atp indicator value",
+                        "sha1",
+                        "sha256",
+                        "md5",
+                        "ip",
+                        "ipv6",
+                        "url",
+                        "domain"
+                    ],
+                    "order": 0
+                },
+                "indicator_type": {
+                    "description": "The type of indicator.",
+                    "data_type": "string",
+                    "required": true,
+                    "value_list": [
+                        "FileSha1",
+                        "FileSha256",
+                        "IpAddress",
+                        "DomainName",
+                        "Url"
+                    ],
+                    "order": 1
+                },
+                "action": {
+                    "description": "Action taken if the indicator is discovered.",
+                    "data_type": "string",
+                    "required": true,
+                    "value_list": [
+                        "Alert",
+                        "AlertAndBlock",
+                        "Allowed"
+                    ],
+                    "order": 2
+                },
+                "severity": {
+                    "description": "The severity of the malicious behavior identified by the indicator.",
+                    "data_type": "string",
+                    "value_list": [
+                        "Informational",
+                        "Low",
+                        "Medium",
+                        "High"
+                    ],
+                    "order": 3
+                },
+                "indicator_description": {
+                    "description": "A brief description of the threat represented by the indicator.",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 4
+                },
+                "indicator_title": {
+                    "description": "Title for the indicator alert.",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 5
+                },
+                "expiration_time": {
+                    "description": "The expiration time of the indicator (in DateTime format: YYYY-MM-DDTHH:MM:SSZ).",
+                    "data_type": "string",
+                    "order": 6
+                },
+                "indicator_application": {
+                    "description": "The application associated with the indicator.",
+                    "data_type": "string",
+                    "order": 7
+                },
+                "recommended_actions": {
+                    "description": "Recommended actions for the indicator.",
+                    "data_type": "string",
+                    "order": 8
+                },
+                "rbac_group_names": {
+                    "description": "Comma-separated list of RBAC group names.",
+                    "data_type": "string",
+                    "order": 9
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.action",
+                    "data_type": "string",
+                    "example_values": [
+                        "Alert",
+                        "AlertAndBlock",
+                        "Allowed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.severity",
+                    "data_type": "string",
+                    "example_values": [
+                        "Low",
+                        "Medium",
+                        "High"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_value",
+                    "data_type": "string",
+                    "example_values": [
+                        "domain.com"
+                    ],
+                    "contains": [
+                        "defender atp indicator value",
+                        "sha1",
+                        "sha256",
+                        "md5",
+                        "ip",
+                        "ipv6",
+                        "url",
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.expiration_time",
+                    "data_type": "string",
+                    "example_values": [
+                        "2024-12-01T00:00:00Z"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "delete indicator",
             "description": "Delete an Indicator entity by ID",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/delete-ti-indicator-by-id?view=o365-worldwide\" target=\"_blank\">Delete Indicator API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour.",
