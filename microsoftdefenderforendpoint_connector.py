@@ -1806,6 +1806,70 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_user_alerts(self, param):
+        """ This function retrieves alerts related to a specific user.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        user = param.get("user")
+
+        if not user:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: user")
+
+        endpoint = "{0}/api/Users/{1}/alerts".format(self._graph_url, user)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if not response or not response.get('value', []):
+            return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified user")
+
+        action_result.add_data(response.get('value', []))
+
+        summary = action_result.update_summary({})
+        summary['total_results'] = len(response.get('value', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_user_alerts(self, param):
+        """ This function retrieves alerts related to a specific user.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        user = param.get("user")
+
+        if not user:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: user")
+
+        endpoint = "{0}/api/Users/{1}/alerts".format(self._graph_url, user)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        if not response or not response.get('value', []):
+            return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified user")
+
+        action_result.add_data(response.get('value', []))
+
+        summary = action_result.update_summary({})
+        summary['total_results'] = len(response.get('value', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_get_domain_alerts(self, param):
         """ This function retrieves alerts related to a specific domain address.
 
@@ -1835,7 +1899,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         summary = action_result.update_summary({})
         summary['total_results'] = len(response.get('value', []))
-        summary['domain'] = domain
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -3087,6 +3150,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'get_alert_domains': self._handle_get_alert_domains,
             'create_alert': self._handle_create_alert,
             "update_alert": self._handle_update_alert,
+            'get_user_alerts': self._handle_get_user_alerts,
             'get_domain_alerts': self._handle_get_domain_alerts,
             'get_file_alerts': self._handle_get_file_alerts,
             'get_device_alerts': self._handle_get_device_alerts,

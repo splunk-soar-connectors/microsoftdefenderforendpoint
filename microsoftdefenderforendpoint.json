@@ -6925,6 +6925,93 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get user alerts",
+            "description": "Retrieve alerts related to a specific user.",
+            "verbose": "This action retrieves alerts related to a specific user.",
+            "type": "investigate",
+            "identifier": "get_user_alerts",
+            "read_only": true,
+            "parameters": {
+                "user": {
+                    "description": "The user to retrieve alerts for.",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.user",
+                    "data_type": "string",
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "alertId1",
+                        "alertId2"
+                    ],
+                    "contains": [
+                        "defender atp alert id"
+                    ],
+                    "column_name": "Alert ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Unauthorized Access Attempt Detected"
+                    ],
+                    "column_name": "Title",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "example_values": [
+                        "Low",
+                        "Medium",
+                        "High"
+                    ],
+                    "column_name": "Severity",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "New",
+                        "Resolved"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "summary.total_results",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5
+                    ],
+                    "column_name": "Total Results",
+                    "column_order": 4
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get domain alerts",
             "description": "Retrieve alerts related to a specific domain address.",
             "verbose": "This action retrieves alerts related to a specific domain.",
