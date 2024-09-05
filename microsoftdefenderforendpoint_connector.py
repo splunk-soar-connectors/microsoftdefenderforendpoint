@@ -2274,8 +2274,48 @@ class WindowsDefenderAtpConnector(BaseConnector):
         summary = action_result.update_summary({})
         summary['action_taken'] = "Updated Indicator"
         return action_result.set_status(phantom.APP_SUCCESS)
-    
-    
+
+    def _handle_update_indicator_batch(self, param):
+        """ This function is used to update a batch of indicators
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        indicator_batch = param.get("indicator_batch")
+
+        if not indicator_batch:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_batch")
+
+        try:
+            indicator_batch = json.loads(indicator_batch)
+            if not isinstance(indicator_batch, list):
+                return action_result.set_status(phantom.APP_ERROR, "indicator_batch must be a list of dictionaries.")
+        except Exception as e:
+            return action_result.set_status(phantom.APP_ERROR, f"Error processing batch: {str(e)}")
+
+        endpoint = "{0}/api/indicators/import".format(self._graph_url)
+
+        payload = {
+            "Indicators": indicator_batch
+        }
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, data=json.dumps(payload), method="post")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        # Update the summary and return success
+        summary = action_result.update_summary({})
+        summary['total_results'] = len(indicator_batch)
+        summary['action_taken'] = "Updated batch of indicators"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_delete_indicator(self, param):
         """This function is used to handle the delete indicator action.
@@ -2964,6 +3004,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "delete_indicator": self._handle_delete_indicator,
             "submit_indicator": self._handle_submit_indicator,
             'update_indicator': self._handle_update_indicator,
+            'update_indicator_batch': self._handle_update_indicator_batch,
             "run_query": self._handle_run_query,
             "get_domain_related_devices": self._handle_get_domain_related_devices,
             "get_discovered_vulnerabilities": self._get_discovered_vulnerabilities,

@@ -6635,6 +6635,98 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "update indicator batch",
+            "description": "Update or create a batch of Indicator entities",
+            "verbose": "This action updates or creates a batch of indicators. New indicators will be created if they do not exist.",
+            "type": "generic",
+            "identifier": "update_indicator_batch",
+            "read_only": false,
+            "parameters": {
+                "indicator_batch": {
+                    "description": "A JSON object with a list of indicators to update or create. Each indicator should include properties like indicatorValue, indicatorType, action, title, etc.",
+                    "data_type": "json",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "defender atp indicator value"
+                    ],
+                    "order": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_batch",
+                    "data_type": "json"
+                },
+                {
+                    "data_path": "action_result.data.*.indicatorValue",
+                    "data_type": "string",
+                    "example_values": [
+                        "domain.com",
+                        "8.8.8.8",
+                        "220e7d15b011d7fac48f2bd61114db1022197f7f"
+                    ],
+                    "contains": [
+                        "defender atp indicator value"
+                    ],
+                    "column_name": "Indicator Value",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.action",
+                    "data_type": "string",
+                    "example_values": [
+                        "Alert",
+                        "Allowed"
+                    ],
+                    "column_name": "Action",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "example_values": [
+                        "Informational",
+                        "Low",
+                        "Medium",
+                        "High"
+                    ],
+                    "column_name": "Severity",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Suspicious Activity Detected"
+                    ],
+                    "column_name": "Title",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "summary.total_updated_indicators",
+                    "data_type": "numeric",
+                    "example_values": [
+                        5
+                    ],
+                    "column_name": "Total Updated Indicators",
+                    "column_order": 5
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "delete indicator",
             "description": "Delete an Indicator entity by ID",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/delete-ti-indicator-by-id?view=o365-worldwide\" target=\"_blank\">Delete Indicator API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour.",
