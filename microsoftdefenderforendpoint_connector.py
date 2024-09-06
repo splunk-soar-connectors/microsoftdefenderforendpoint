@@ -1853,7 +1853,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not user:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: user")
 
-        endpoint = "{0}/api/Users/{1}/alerts".format(self._graph_url, user)
+        endpoint = "{0}/Users/{1}/alerts".format(self._graph_url, user)
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1885,7 +1885,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not domain:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: domain")
 
-        endpoint = "{0}/api/domains/{1}/alerts".format(self._graph_url, domain)
+        endpoint = "{0}/domains/{1}/alerts".format(self._graph_url, domain)
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1917,7 +1917,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not file_hash:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: file_hash")
 
-        endpoint = "{0}/api/files/{1}/alerts".format(self._graph_url, file_hash)
+        endpoint = "{0}/files/{1}/alerts".format(self._graph_url, file_hash)
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1949,7 +1949,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not machine_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: machineId")
 
-        endpoint = "{0}/api/machines/{1}/alerts".format(self._graph_url, machine_id)
+        endpoint = "{0}/machines/{1}/alerts".format(self._graph_url, machine_id)
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -2304,7 +2304,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not indicator_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_id")
 
-        endpoint = "{0}/api/indicators/{1}".format(self._graph_url, indicator_id)
+        endpoint = "{0}/indicators/{1}".format(self._graph_url, indicator_id)
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -2393,7 +2393,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not title:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_title")
 
-        endpoint = "{0}/api/indicators/{1}".format(self._graph_url, indicator_value)
+        endpoint = "{0}/indicators/{1}".format(self._graph_url, indicator_value)
 
         payload = {
             "indicatorValue": indicator_value,
@@ -2457,7 +2457,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         except Exception as e:
             return action_result.set_status(phantom.APP_ERROR, f"Error processing batch: {str(e)}")
 
-        endpoint = "{0}/api/indicators/import".format(self._graph_url)
+        endpoint = "{0}/indicators/import".format(self._graph_url)
 
         payload = {
             "Indicators": indicator_batch
@@ -3246,7 +3246,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         start_time_filter = f"lastUpdateTime ge {last_modified_time}"
         poll_filter += start_time_filter if not poll_filter else f" and {start_time_filter}"
 
-        endpoint = "{0}/api/alerts".format(self._graph_url)
+        endpoint = "{0}/alerts".format(self._graph_url)
         alerts_left = max_alerts
         self.duplicate_container = 0
 
