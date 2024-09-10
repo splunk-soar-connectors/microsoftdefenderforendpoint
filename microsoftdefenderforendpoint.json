@@ -94,7 +94,7 @@
         {
             "action": "on poll",
             "description": "Callback action for the on_poll ingest functionality for Defender for Endpoint",
-            "type": "ingest",
+            "type": "investigate",
             "identifier": "on_poll",
             "read_only": true,
             "parameters": {
@@ -2948,13 +2948,12 @@
         {
             "action": "get alert user",
             "description": "Retrieve user for specific Alert from its ID",
-            "verbose": "Retrieve user for specific Alert from its ID",
             "type": "investigate",
             "identifier": "get_alert_user",
             "read_only": true,
             "parameters": {
                 "alert_id": {
-                    "description": "ID of the alert",
+                    "description": "ID of alert",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -2981,31 +2980,65 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary.action_taken",
+                    "data_path": "action_result.data.*.id",
                     "data_type": "string",
-                    "example_values": [
-                        "Retrieved Assigned User for Alert"
+                    "contains": [
+                        "defender atp user id"
                     ]
+                },
+                {
+                    "data_path": "action_result.data.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.accountDomain",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.accountSid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstSeen",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastSeen",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.mostPrevalentMachineId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.leastPrevalentMachineId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.logonTypes",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.logOnMachinesCount",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.isDomainAdmin",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.isOnlyNetworkUser",
+                    "data_type": "boolean"
                 },
                 {
                     "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
-                        "Action taken: Retrieved Assigned User for Alert"
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
+                        "Retrieved Assigned User for Alert"
                     ]
                 }
             ],
@@ -3017,7 +3050,6 @@
         {
             "action": "get alert files",
             "description": "Retrieve files for specific Alert from its ID",
-            "verbose": "Retrieve files for specific Alert from its ID",
             "type": "investigate",
             "identifier": "get_alert_files",
             "read_only": true,
@@ -3070,17 +3102,114 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.summary.action_taken",
+                    "data_path": "action_result.data.*.determinationType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.determinationValue",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileProductName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.filePublisher",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.fileType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.isPeFile",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.isValidCertificate",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.issuer",
+                    "data_type": "string",
+                    "column_name": "Issuer",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.globalFirstObserved",
+                    "data_type": "string",
+                    "column_name": "Global First Observed",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.globalPrevalence",
+                    "data_type": "numeric",
+                    "column_name": "Global Prevalence",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.globalLastObserved",
+                    "data_type": "string",
+                    "column_name": "Global Last Observed",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.md5",
                     "data_type": "string",
                     "example_values": [
-                        "Retrieved Files for Alert"
+                        "44adb27786eb24e5bbfd06b69e84d252"
+                    ],
+                    "contains": [
+                        "md5"
                     ]
                 },
                 {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.data.*.sha1",
                     "data_type": "string",
                     "example_values": [
-                        "Action taken: Retrieved Files for Alert"
+                        "954e0fd64a1242d0fa860b220198118268e35018"
+                    ],
+                    "contains": [
+                        "sha1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.sha256",
+                    "data_type": "string",
+                    "example_values": [
+                        "1a563e59bfcdc9e7b4d8ac81c6b6579e2d215952f6dd98e0ab1ab026ac616896"
+                    ],
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.signer",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.signerHash",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.size",
+                    "data_type": "numeric",
+                    "column_name": "Size",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.summary.global_prevalence",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Files for Alert"
                     ]
                 },
                 {
@@ -3099,7 +3228,6 @@
         {
             "action": "get alert ips",
             "description": "Retrieve IP addresses for a specific Alert from its ID",
-            "verbose": "Retrieve IP addresses for a specific Alert from its ID",
             "type": "investigate",
             "identifier": "get_alert_ips",
             "read_only": true,
@@ -3152,17 +3280,21 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.summary.action_taken",
+                    "data_path": "action_result.data.*.ip",
                     "data_type": "string",
-                    "example_values": [
-                        "Retrieved IPs for Alert"
+                    "contains": [
+                        "ip"
                     ]
                 },
                 {
                     "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
-                        "Action taken: Retrieved IPs for Alert"
+                        "Retrieved Files for Alert"
                     ]
                 },
                 {
@@ -3181,7 +3313,6 @@
         {
             "action": "get alert domains",
             "description": "Retrieve domains for a specific Alert from its ID",
-            "verbose": "Retrieve domains for a specific Alert from its ID",
             "type": "investigate",
             "identifier": "get_alert_domains",
             "read_only": true,
@@ -3234,17 +3365,21 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.summary.action_taken",
+                    "data_path": "action_result.data.*.host",
                     "data_type": "string",
-                    "example_values": [
-                        "Retrieved Domains for Alert"
+                    "contains": [
+                        "domain"
                     ]
                 },
                 {
                     "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
-                        "Action taken: Retrieved Domains for Alert"
+                        "Retrieved Domains for Alert"
                     ]
                 },
                 {
@@ -3263,7 +3398,6 @@
         {
             "action": "create alert",
             "description": "Create a new alert in Microsoft Defender for Endpoint",
-            "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/create-alert-by-reference\" target=\"_blank\">Create Alert API Documentation</a>), user can create alerts.",
             "type": "investigate",
             "identifier": "create_alert",
             "read_only": false,
@@ -3355,7 +3489,10 @@
                 },
                 {
                     "data_path": "action_result.parameter.machine_id",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.severity",
@@ -3375,6 +3512,203 @@
                 },
                 {
                     "data_path": "action_result.parameter.category",
+                    "data_type": "string",
+                    "example_values": [
+                        "SuspiciousActivity",
+                        "Malware",
+                        "Phishing",
+                        "UnauthorizedAccess",
+                        "DataExfiltration",
+                        "CommandAndControl",
+                        "LateralMovement",
+                        "DefenseEvasion",
+                        "CredentialAccess",
+                        "Persistence",
+                        "PrivilegeEscalation"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.aadTenantId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.alertCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignedTo",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.classification",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectionSource",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectorId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.determination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.aadUserId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.detectionStatus",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.domainName",
+                    "data_type": "string",
+                    "contains": [
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.entityType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.evidenceCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.fileName",
+                    "data_type": "string",
+                    "contains": [
+                        "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.filePath",
+                    "data_type": "string",
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.ipAddress",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFilePath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCommandLine",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryHive",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValue",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha1",
+                    "data_type": "string",
+                    "contains": [
+                        "sha1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha256",
+                    "data_type": "string",
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userPrincipalName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userSid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstEventTime",
                     "data_type": "string"
                 },
                 {
@@ -3385,31 +3719,31 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.title",
+                    "data_path": "action_result.data.*.incidentId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationState",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.status",
+                    "data_path": "action_result.data.*.lastEventTime",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.domains",
-                    "data_type": "array"
-                },
-                {
-                    "data_path": "action_result.data.*.category",
+                    "data_path": "action_result.data.*.lastUpdateTime",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.comments",
-                    "data_type": "array"
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.evidence",
-                    "data_type": "array"
-                },
-                {
-                    "data_path": "action_result.data.*.severity",
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
                     "data_type": "string"
                 },
                 {
@@ -3420,27 +3754,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.assignedTo",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.detectorId",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.incidentId",
-                    "data_type": "numeric"
-                },
-                {
-                    "data_path": "action_result.data.*.threatName",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.aadTenantId",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.description",
+                    "data_path": "action_result.data.*.rbacGroupName",
                     "data_type": "string"
                 },
                 {
@@ -3448,40 +3762,50 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.data.*.relatedUser.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.userName",
+                    "data_type": "string"
+                },
+                {
                     "data_path": "action_result.data.*.resolvedTime",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.determination",
+                    "data_path": "action_result.data.*.severity",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.lastEventTime",
+                    "data_path": "action_result.data.*.status",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary.action_taken",
+                    "data_path": "action_result.data.*.threatFamilyName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.threatName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
                         "Created Alert"
                     ]
                 },
                 {
-                    "data_path": "action_result.message",
-                    "data_type": "string",
-                    "example_values": [
-                        "Action taken: Created Alert"
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
+                    "data_path": "summary.total_results",
                     "data_type": "numeric",
                     "example_values": [
                         1
@@ -5952,7 +6276,6 @@
         {
             "action": "get indicator",
             "description": "Retrieve an Indicator entity by its ID",
-            "verbose": "This action retrieves an indicator by its unique ID.",
             "type": "investigate",
             "identifier": "get_indicator",
             "read_only": true,
@@ -5978,11 +6301,94 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.indicator_id",
+                    "data_path": "action_result.data.*.action",
                     "data_type": "string",
-                    "example_values": [
-                        "220e7d15b011d7fac48f2bd61114db1022197f7f"
-                    ],
+                    "column_name": "Action",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.additionalInfo",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.application",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.bypassDurationHours",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.category",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo.issuer",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo.serial",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo.sha256",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.certificateInfo.subject",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.createdBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.createdByDisplayName",
+                    "data_type": "string",
+                    "column_name": "Created By",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.createdBySource",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.creationTimeDateTimeUtc",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.educateUrl",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.expirationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.externalId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.generateAlert",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.historicalDetection",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Indicator ID",
+                    "column_order": 0,
                     "contains": [
                         "defender atp indicator id"
                     ]
@@ -5990,80 +6396,74 @@
                 {
                     "data_path": "action_result.data.*.indicatorType",
                     "data_type": "string",
-                    "example_values": [
-                        "FileSha1",
-                        "IpAddress",
-                        "DomainName"
-                    ],
                     "column_name": "Indicator Type",
-                    "column_order": 1
+                    "column_order": 5
                 },
                 {
                     "data_path": "action_result.data.*.indicatorValue",
                     "data_type": "string",
-                    "example_values": [
-                        "test.com"
-                    ],
                     "contains": [
                         "defender atp indicator value",
                         "sha1",
+                        "sha256",
+                        "md5",
+                        "domain",
                         "ip",
-                        "url",
-                        "domain"
+                        "ipv6",
+                        "url"
                     ],
                     "column_name": "Indicator Value",
-                    "column_order": 2
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.lastUpdateTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastUpdatedBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lookBackPeriod",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.notificationBody",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.notificationId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.recommendedActions",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.severity",
                     "data_type": "string",
-                    "example_values": [
-                        "Low",
-                        "Medium",
-                        "High"
-                    ],
                     "column_name": "Severity",
                     "column_order": 3
                 },
                 {
-                    "data_path": "action_result.data.*.action",
-                    "data_type": "string",
-                    "example_values": [
-                        "Alert",
-                        "AlertAndBlock",
-                        "Allowed"
-                    ],
-                    "column_name": "Action",
-                    "column_order": 4
-                },
-                {
                     "data_path": "action_result.data.*.title",
                     "data_type": "string",
-                    "example_values": [
-                        "Suspicious File Detected"
-                    ],
                     "column_name": "Title",
-                    "column_order": 5
+                    "column_order": 1
                 },
                 {
-                    "data_path": "action_result.data.*.description",
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
-                        "This is a description of the malicious indicator."
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.expirationTime",
-                    "data_type": "string",
-                    "example_values": [
-                        "2024-12-01T00:00:00Z"
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
+                        "Retrieved Indicator"
                     ]
                 }
             ],
@@ -6527,7 +6927,6 @@
         {
             "action": "update indicator",
             "description": "Update an existing Indicator entity",
-            "verbose": "This action allows updating an indicator entity.",
             "type": "generic",
             "identifier": "update_indicator",
             "read_only": false,
@@ -6669,10 +7068,33 @@
                     ]
                 },
                 {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp indicator id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.indicator",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.isFailed",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.failureReason",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
+                    "data_type": "string",
                     "example_values": [
-                        1
+                        "Updated Indicator"
                     ]
                 }
             ],
@@ -6684,7 +7106,7 @@
         {
             "action": "update indicator batch",
             "description": "Update or create a batch of Indicator entities",
-            "verbose": "This action updates or creates a batch of indicators. New indicators will be created if they do not exist.",
+            "verbose": "This action updates or creates a batch of indicators from a json object. Based on (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/import-ti-indicators\" target=\"_blank\">Batch Update Indicator API Documentation</a>). New indicators will be created if they do not exist.",
             "type": "generic",
             "identifier": "update_indicator_batch",
             "read_only": false,
@@ -6714,58 +7136,41 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.indicatorValue",
+                    "data_path": "action_result.data.*.id",
                     "data_type": "string",
-                    "example_values": [
-                        "domain.com",
-                        "8.8.8.8",
-                        "220e7d15b011d7fac48f2bd61114db1022197f7f"
-                    ],
                     "contains": [
-                        "defender atp indicator value"
-                    ],
-                    "column_name": "Indicator Value",
-                    "column_order": 1
+                        "defender atp indicator id"
+                    ]
                 },
                 {
-                    "data_path": "action_result.data.*.action",
+                    "data_path": "action_result.data.*.indicator",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.isFailed",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.failureReason",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
-                        "Alert",
-                        "Allowed"
-                    ],
-                    "column_name": "Action",
-                    "column_order": 2
+                        "Updated batch of indicators"
+                    ]
                 },
                 {
-                    "data_path": "action_result.data.*.severity",
-                    "data_type": "string",
-                    "example_values": [
-                        "Informational",
-                        "Low",
-                        "Medium",
-                        "High"
-                    ],
-                    "column_name": "Severity",
-                    "column_order": 3
-                },
-                {
-                    "data_path": "action_result.data.*.title",
-                    "data_type": "string",
-                    "example_values": [
-                        "Suspicious Activity Detected"
-                    ],
-                    "column_name": "Title",
-                    "column_order": 4
-                },
-                {
-                    "data_path": "summary.total_updated_indicators",
+                    "data_path": "summary.total_results",
                     "data_type": "numeric",
                     "example_values": [
                         5
-                    ],
-                    "column_name": "Total Updated Indicators",
-                    "column_order": 5
+                    ]
                 }
             ],
             "render": {
@@ -6811,56 +7216,288 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.id",
-                    "data_type": "string",
-                    "example_values": [
-                        "alertId1",
-                        "alertId2"
-                    ],
-                    "contains": [
-                        "defender atp alert id"
-                    ],
-                    "column_name": "Alert ID",
-                    "column_order": 0
+                    "data_path": "action_result.data.*.aadTenantId",
+                    "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.title",
+                    "data_path": "action_result.data.*.alertCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignedTo",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.classification",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectionSource",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectorId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.determination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.aadUserId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.detectionStatus",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.domainName",
                     "data_type": "string",
-                    "example_values": [
-                        "Unauthorized Access Attempt Detected"
-                    ],
-                    "column_name": "Title",
-                    "column_order": 1
+                    "contains": [
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.entityType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.evidenceCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.fileName",
+                    "data_type": "string",
+                    "contains": [
+                        "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.filePath",
+                    "data_type": "string",
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.ipAddress",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFilePath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCommandLine",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryHive",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValue",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha1",
+                    "data_type": "string",
+                    "contains": [
+                        "sha1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha256",
+                    "data_type": "string",
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userPrincipalName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userSid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp alert id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.incidentId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationState",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastUpdateTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.machineId",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.userName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.resolvedTime",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.severity",
-                    "data_type": "string",
-                    "example_values": [
-                        "Low",
-                        "Medium",
-                        "High"
-                    ],
-                    "column_name": "Severity",
-                    "column_order": 2
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "New",
-                        "Resolved"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 3
+                    "data_type": "string"
                 },
                 {
-                    "data_path": "summary.total_alerts",
+                    "data_path": "action_result.data.*.threatFamilyName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.threatName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Alerts for File"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_results",
                     "data_type": "numeric",
                     "example_values": [
                         5
-                    ],
-                    "column_name": "Total Alerts",
-                    "column_order": 4
+                    ]
                 }
             ],
             "render": {
@@ -6871,7 +7508,6 @@
         {
             "action": "get device alerts",
             "description": "Retrieve all alerts related to a specific device using deviceId",
-            "verbose": "This action retrieves all alerts related to a specific device.",
             "type": "investigate",
             "identifier": "get_device_alerts",
             "read_only": true,
@@ -6917,53 +7553,288 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.data.*.title",
-                    "data_type": "string",
-                    "example_values": [
-                        "Unauthorized Access Attempt Detected"
-                    ],
-                    "column_name": "Title",
-                    "column_order": 1
+                    "data_path": "action_result.data.*.aadTenantId",
+                    "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.severity",
-                    "data_type": "string",
-                    "example_values": [
-                        "Low",
-                        "Medium",
-                        "High"
-                    ],
-                    "column_name": "Severity",
-                    "column_order": 2
+                    "data_path": "action_result.data.*.alertCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignedTo",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.classification",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectionSource",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectorId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.determination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.aadUserId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.detectionStatus",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.domainName",
                     "data_type": "string",
-                    "example_values": [
-                        "SuspiciousActivity",
-                        "Malware"
-                    ],
-                    "column_name": "Category",
-                    "column_order": 3
+                    "contains": [
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.entityType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.evidenceCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.fileName",
+                    "data_type": "string",
+                    "contains": [
+                        "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.filePath",
+                    "data_type": "string",
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.ipAddress",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFilePath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCommandLine",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryHive",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValue",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha1",
+                    "data_type": "string",
+                    "contains": [
+                        "sha1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha256",
+                    "data_type": "string",
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userPrincipalName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userSid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp alert id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.incidentId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationState",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastUpdateTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.machineId",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.userName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.resolvedTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.status",
-                    "data_type": "string",
-                    "example_values": [
-                        "New",
-                        "Resolved"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 4
+                    "data_type": "string"
                 },
                 {
-                    "data_path": "summary.total_alerts",
+                    "data_path": "action_result.data.*.threatFamilyName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.threatName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Alerts for Device"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_results",
                     "data_type": "numeric",
                     "example_values": [
                         10
-                    ],
-                    "column_name": "Total Alerts",
-                    "column_order": 5
+                    ]
                 }
             ],
             "render": {
@@ -6974,7 +7845,6 @@
         {
             "action": "get user alerts",
             "description": "Retrieve alerts related to a specific user.",
-            "verbose": "This action retrieves alerts related to a specific user.",
             "type": "investigate",
             "identifier": "get_user_alerts",
             "read_only": true,
@@ -7001,56 +7871,288 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.id",
-                    "data_type": "string",
-                    "example_values": [
-                        "alertId1",
-                        "alertId2"
-                    ],
-                    "contains": [
-                        "defender atp alert id"
-                    ],
-                    "column_name": "Alert ID",
-                    "column_order": 0
+                    "data_path": "action_result.data.*.aadTenantId",
+                    "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.title",
+                    "data_path": "action_result.data.*.alertCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignedTo",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.classification",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectionSource",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectorId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.determination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.aadUserId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.detectionStatus",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.domainName",
                     "data_type": "string",
-                    "example_values": [
-                        "Unauthorized Access Attempt Detected"
-                    ],
-                    "column_name": "Title",
-                    "column_order": 1
+                    "contains": [
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.entityType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.evidenceCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.fileName",
+                    "data_type": "string",
+                    "contains": [
+                        "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.filePath",
+                    "data_type": "string",
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.ipAddress",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFilePath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCommandLine",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryHive",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValue",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha1",
+                    "data_type": "string",
+                    "contains": [
+                        "sha1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha256",
+                    "data_type": "string",
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userPrincipalName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userSid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp alert id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.incidentId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationState",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastUpdateTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.machineId",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.userName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.resolvedTime",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.severity",
-                    "data_type": "string",
-                    "example_values": [
-                        "Low",
-                        "Medium",
-                        "High"
-                    ],
-                    "column_name": "Severity",
-                    "column_order": 2
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.threatFamilyName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.threatName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
-                        "New",
-                        "Resolved"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 3
+                        "Retrieved Alerts for User"
+                    ]
                 },
                 {
                     "data_path": "summary.total_results",
                     "data_type": "numeric",
                     "example_values": [
                         5
-                    ],
-                    "column_name": "Total Results",
-                    "column_order": 4
+                    ]
                 }
             ],
             "render": {
@@ -7061,7 +8163,6 @@
         {
             "action": "get domain alerts",
             "description": "Retrieve alerts related to a specific domain address.",
-            "verbose": "This action retrieves alerts related to a specific domain.",
             "type": "investigate",
             "identifier": "get_domain_alerts",
             "read_only": true,
@@ -7094,56 +8195,288 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.id",
-                    "data_type": "string",
-                    "example_values": [
-                        "alertId1",
-                        "alertId2"
-                    ],
-                    "contains": [
-                        "defender atp alert id"
-                    ],
-                    "column_name": "Alert ID",
-                    "column_order": 0
+                    "data_path": "action_result.data.*.aadTenantId",
+                    "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.title",
+                    "data_path": "action_result.data.*.alertCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.assignedTo",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.classification",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdBy",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.comments.*.createdTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectionSource",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.detectorId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.determination",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.aadUserId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.detectionStatus",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.domainName",
                     "data_type": "string",
-                    "example_values": [
-                        "Unauthorized Access Attempt Detected"
-                    ],
-                    "column_name": "Title",
-                    "column_order": 1
+                    "contains": [
+                        "domain"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.entityType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.evidenceCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.fileName",
+                    "data_type": "string",
+                    "contains": [
+                        "file name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.filePath",
+                    "data_type": "string",
+                    "contains": [
+                        "file path"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.ipAddress",
+                    "data_type": "string",
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessFilePath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.parentProcessId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCommandLine",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.processId",
+                    "data_type": "string",
+                    "contains": [
+                        "pid"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryHive",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValue",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.registryValueType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha1",
+                    "data_type": "string",
+                    "contains": [
+                        "sha1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.sha256",
+                    "data_type": "string",
+                    "contains": [
+                        "sha256"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.url",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userPrincipalName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.evidence.*.userSid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp alert id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.incidentId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.investigationState",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastEventTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastUpdateTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.accountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.loggedOnUsers.*.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.machineId",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.domainName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.relatedUser.userName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.resolvedTime",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.severity",
-                    "data_type": "string",
-                    "example_values": [
-                        "Low",
-                        "Medium",
-                        "High"
-                    ],
-                    "column_name": "Severity",
-                    "column_order": 2
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.threatFamilyName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.threatName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
-                        "New",
-                        "Resolved"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 3
+                        "Retrieved Alerts for Domain"
+                    ]
                 },
                 {
                     "data_path": "summary.total_results",
                     "data_type": "numeric",
                     "example_values": [
                         5
-                    ],
-                    "column_name": "Total Results",
-                    "column_order": 4
+                    ]
                 }
             ],
             "render": {

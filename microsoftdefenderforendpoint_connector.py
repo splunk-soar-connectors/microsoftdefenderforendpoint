@@ -1580,7 +1580,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not alert_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
-        endpoint = "{0}{1}/user".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
+        endpoint = "{0}{1}/users".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1866,6 +1866,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response.get('value', []))
 
         summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Alerts for User"
         summary['total_results'] = len(response.get('value', []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -1898,6 +1899,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response.get('value', []))
 
         summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Alerts for Domain"
         summary['total_results'] = len(response.get('value', []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -1930,6 +1932,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response.get('value', []))
 
         summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Alerts for File"
         summary['total_results'] = len(response.get('value', []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -1962,6 +1965,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response.get('value', []))
 
         summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Alerts for Device"
         summary['total_results'] = len(response.get('value', []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -2314,7 +2318,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['indicator_id'] = indicator_id
         summary['action_taken'] = "Retrieved Indicator"
 
         return action_result.set_status(phantom.APP_SUCCESS)
@@ -2393,7 +2396,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not title:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_title")
 
-        endpoint = "{0}/indicators/{1}".format(self._graph_url, indicator_value)
+        endpoint = "{0}/indicators/import".format(self._graph_url)
 
         payload = {
             "indicatorValue": indicator_value,
@@ -2423,8 +2426,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if rbac_group_names:
             payload["rbacGroupNames"] = rbac_group_names
 
-        # Patch update
-        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="patch", data=json.dumps(payload))
+        payload = {
+            "Indicators": [payload]
+        }
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, data=json.dumps(payload), method="post")
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -3206,7 +3212,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_on_poll(self, param):
-        """This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
+        """ This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -3216,20 +3222,17 @@ class WindowsDefenderAtpConnector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         config = self.get_config()
 
-        # Validation
-        poll_filter, offset, orderby = config.get(DEFENDER_FILTER, ""), 0, "lastUpdateTime"
-        last_modified_time = (datetime.now() - timedelta(days=7)).strftime(DEFENDER_APP_DT_STR_FORMAT)  # Default to last 7 days
+        poll_filter = config.get(DEFENDER_FILTER, "")
+        last_modified_time = (datetime.now() - timedelta(days=DEFENDER_ALERT_DEFAULT_TIME_RANGE)).strftime(DEFENDER_APP_DT_STR_FORMAT)
 
         start_time_scheduled_poll = config.get(DEFENDER_CONFIG_START_TIME_SCHEDULED_POLL)
         if start_time_scheduled_poll:
             ret_val = self._check_date_format(action_result, start_time_scheduled_poll)
             if phantom.is_fail(ret_val):
-                self.save_progress(action_result.get_message())
-                return action_result.set_status(phantom.APP_ERROR)
+                return action_result.get_status()
 
             last_modified_time = start_time_scheduled_poll
 
-        # Max alerts to ingest
         if self.is_poll_now():
             max_alerts = int(param.get(phantom.APP_JSON_CONTAINER_COUNT))
         else:
@@ -3238,6 +3241,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
 
+            # Pick up from last ingested alerts if applicable
             if self._state.get(STATE_FIRST_RUN, True):
                 self._state[STATE_FIRST_RUN] = False
             elif last_time := self._state.get(STATE_LAST_TIME):
@@ -3246,44 +3250,96 @@ class WindowsDefenderAtpConnector(BaseConnector):
         start_time_filter = f"lastUpdateTime ge {last_modified_time}"
         poll_filter += start_time_filter if not poll_filter else f" and {start_time_filter}"
 
-        endpoint = "{0}/alerts".format(self._graph_url)
-        alerts_left = max_alerts
-        self.duplicate_container = 0
+        endpoint = "{0}/alerts?$top={1}&$filter={2}".format(self._graph_url, max_alerts, poll_filter)
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
-        while alerts_left > 0:
-            self.debug_print("Making a REST call with offset: {}, alerts_left: {}".format(offset, alerts_left))
-            alert_list = self._paginator(action_result, alerts_left, offset, endpoint, poll_filter, orderby)
+        alert_list = response.get('value', [])
 
-            if not alert_list and not isinstance(alert_list, list):  # Failed to fetch alerts
-                self.save_progress("Failed to retrieve alerts")
-                return action_result.get_status()
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
 
-            self.save_progress(f"Successfully fetched {len(alert_list)} alerts.")
+        self.save_progress(f"Successfully fetched {len(alert_list)} alerts.")
+        for alert in alert_list:
+            try:
+                # Ingest alert
+                ret_val = self._ingest_alert(action_result, alert)
+                if phantom.is_fail(ret_val):
+                    return action_result.get_status()
 
-            # Ingest the alerts
-            self.debug_print("Creating alert artifacts")
-            for alert in alert_list:
-                try:
-                    self._ingest_alert(alert)
-                except Exception as e:
-                    self.debug_print("Error occurred while saving alert artifacts. Error: {}".format(str(e)))
+            except Exception as e:
+                return action_result.set_status(phantom.APP_ERROR, "Could not ingested alert. Error: {}".format(e))
 
-            if self.is_poll_now():
-                break
-
-            if alert_list:
-                if DEFENDER_JSON_LAST_MODIFIED not in alert_list[-1]:
-                    return action_result.set_status(phantom.APP_ERROR, "Could not extract {} from latest ingested "
-                                                                    "alert.".format(DEFENDER_JSON_LAST_MODIFIED))
-
-                self._state[STATE_LAST_TIME] = alert_list[-1].get(DEFENDER_JSON_LAST_MODIFIED)
-                self.save_state(self._state)
-
-            offset += alerts_left
-            alerts_left = self.duplicate_container
-            self.duplicate_container = 0
+            # Set state to last modified time of last alert so we can pick up from there next time
+            self._state[STATE_LAST_TIME] = alert_list[-1].get(DEFENDER_JSON_LAST_MODIFIED)
+            self.save_state(self._state)
 
         return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _ingest_alert(self, action_result, alert):
+        """ This helper function ingests a single alert as a container with its artifacts.
+
+        :param alert: Dictionary containing alert details
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        acceptable_severities = ['low', 'medium', 'high']
+
+        alert_severity = alert.get('severity').lower()
+
+        severity = alert_severity if alert_severity in acceptable_severities else 'low'
+
+        artifact = {
+            'label': 'alert',
+            'name': alert.get('title'),
+            'source_data_identifier': alert.get('id'),
+            "severity": severity,
+            'data': alert,
+            'cef': alert
+        }
+
+        container = {
+            "name": alert.get('title'),
+            "description": 'Alert ingested using MS Defender for Endpoint',
+            "source_data_identifier": alert.get('id'),
+            "severity": severity,
+        }
+
+        ret_val, message, cid = self.save_container(container)
+        if phantom.is_fail(ret_val):
+            return action_result.set_status(phantom.APP_ERROR, message)
+
+        self.debug_print("save_container returned: {}, reason: {}, id: {}".format(ret_val, message, cid))
+
+        if message in "Duplicate container found":
+            self.save_progress("Duplicate container found. Continuing with the same container.")
+
+        artifact['container_id'] = cid
+        ret_val, message, _ = self.save_artifacts([artifact])
+
+        return phantom.APP_SUCCESS
+
+    def _check_date_format(self, action_result, date):
+        """ This helper function is used to check date format.
+
+        :param action_result: action result object
+        :param date: date string
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR), date
+        """
+
+        try:
+            time = datetime.strptime(date, DEFENDER_APP_DT_STR_FORMAT)
+            end_time = datetime.now(datetime.UTC)
+            if self._check_invalid_since_utc_time(time):
+                return action_result.set_status(phantom.APP_ERROR, LOG_UTC_SINCE_TIME_ERROR)
+
+            if time >= end_time:
+                message = LOG_GREATER_EQUAL_TIME_ERROR.format(LOG_CONFIG_TIME_POLL_NOW)
+                return action_result.set_status(phantom.APP_ERROR, message)
+        except Exception as e:
+            message = "Invalid date string received. Error occurred while checking date format. Error: {}".format(str(e))
+            return action_result.set_status(phantom.APP_ERROR, message)
+
+        return phantom.APP_SUCCESS
 
     def handle_action(self, param):
         """This function gets current action identifier and calls member function of its own to handle the action.
