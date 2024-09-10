@@ -92,9 +92,8 @@ default ports used by Splunk SOAR.
 
 ## Explanation of On Poll Behavior
 
--   Alert Ordering - By default, alerts are sorted by the lastUpdateTime property, ensuring that the most recently updated alerts are ingested first. This allows the system to prioritize the latest security events.
--   Start Time Parameter - The start_time parameter directly correlates with the lastUpdateTime property of the alerts, ensuring that only alerts updated after this time are included in the ingestion process.
--   Max Alerts Parameter - This setting works only with scheduled or interval polling, controlling how many alerts are ingested per cycle. For instance, if this value is set to 100, the system will ingest up to 100 distinct alerts, applying the provided filters and start time.
+-   Start Time Parameter - The `start_time` parameter directly correlates with the lastUpdateTime property of the alerts, ensuring that only alerts updated after this time are included in the ingestion process.
+-   Max Alerts Parameter - The `max_alerts_per_poll` setting works only with scheduled or interval polling, controlling how many alerts are ingested per cycle. For instance, if this value is set to 100, the system will ingest up to 100 distinct alerts, applying the provided filters and start time.
 -   Example - If you configure the maximum alerts parameter to 100, the on_poll function will retrieve up to 100 alerts, considering any filter and start time provided. The filtering ensures only relevant alerts based on the time and other criteria are ingested during the polling process.
 
 ## Configure and set up permissions of the app created on the Microsoft Azure portal
@@ -461,7 +460,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **client_secret** |  required  | password | Client Secret
 **non_interactive** |  optional  | boolean | Non Interactive Auth
 **max_alerts_per_poll** |  optional  | numeric | Maximum Alerts for scheduled/interval polling for each cycle
-**start_time** |  optional  | string | Start time for schedule/interval/manual poll (Use this format: 1970-01-01T00:00:00Z)
+**start_time** |  optional  | string | Start time for schedule/interval/manual poll (Use this format: 2024-09-04T16:26:58.87Z)
 **environment** |  required  | string | Azure environment to connect
 
 ### Supported Actions  
@@ -480,7 +479,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get alert files](#action-get-alert-files) - Retrieve files for specific Alert from its ID  
 [get alert ips](#action-get-alert-ips) - Retrieve IP addresses for a specific Alert from its ID  
 [get alert domains](#action-get-alert-domains) - Retrieve domains for a specific Alert from its ID  
-[create alert](#action-create-alert) - Create a new alert in Microsoft Defender for Endpoint  
+[create alert](#action-create-alert) - Create a new alert in Defender for Endpoint  
 [update alert](#action-update-alert) - Update properties of existing Alert  
 [domain prevalence](#action-domain-prevalence) - Return statistics for the specified domain  
 [ip prevalence](#action-ip-prevalence) - Return statistics for the specified IP  
@@ -496,9 +495,9 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [update indicator](#action-update-indicator) - Update an existing Indicator entity  
 [update indicator batch](#action-update-indicator-batch) - Update or create a batch of Indicator entities  
 [get file alerts](#action-get-file-alerts) - Retrieve alerts related to a specific file hash  
-[get device alerts](#action-get-device-alerts) - Retrieve all alerts related to a specific device using deviceId  
-[get user alerts](#action-get-user-alerts) - Retrieve alerts related to a specific user.  
-[get domain alerts](#action-get-domain-alerts) - Retrieve alerts related to a specific domain address.  
+[get device alerts](#action-get-device-alerts) - Retrieve all alerts related to a specific device  
+[get user alerts](#action-get-user-alerts) - Retrieve alerts related to a specific user  
+[get domain alerts](#action-get-domain-alerts) - Retrieve alerts related to a specific domain address  
 [delete indicator](#action-delete-indicator) - Delete an Indicator entity by ID  
 [run query](#action-run-query) - An advanced search query  
 [get domain devices](#action-get-domain-devices) - Retrieve a collection of devices that have communicated to or from a given domain address  
@@ -527,15 +526,15 @@ No Output
 ## action: 'on poll'
 Callback action for the on_poll ingest functionality for Defender for Endpoint
 
-Type: **investigate**  
+Type: **ingest**  
 Read only: **True**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**start_time** |  optional  | The start time to filter alerts by their last updated time. If not provided, defaults to the last 7 days. | numeric | 
+**start_time** |  optional  | The start time to filter alerts by their last updated time. If not provided, defaults to the last 7 days | numeric | 
 **end_time** |  optional  | Parameter ignored in this app | numeric | 
-**container_count** |  optional  | The number of alerts to ingest in each poll. Default is 1000. | numeric | 
+**container_count** |  optional  | The number of alerts to ingest in each poll. Default is 1000 | numeric | 
 **artifact_count** |  optional  | Parameter ignored in this app | numeric | 
 **container_id** |  optional  | Parameter ignored in this app | numeric | 
 
@@ -1103,7 +1102,9 @@ action_result.data.\*.logOnMachinesCount | numeric |  |
 action_result.data.\*.isDomainAdmin | boolean |  |  
 action_result.data.\*.isOnlyNetworkUser | boolean |  |  
 action_result.message | string |  |  
-summary.action_taken | string |  |   Retrieved Assigned User for Alert   
+summary.action_taken | string |  |   Retrieved Assigned User for Alert 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get alert files'
 Retrieve files for specific Alert from its ID
@@ -1132,6 +1133,7 @@ action_result.data.\*.filePublisher | string |  |
 action_result.data.\*.fileType | string |  |  
 action_result.data.\*.isPeFile | boolean |  |  
 action_result.data.\*.isValidCertificate | boolean |  |  
+action_result.data.\*.size | numeric |  |  
 action_result.data.\*.issuer | string |  |  
 action_result.data.\*.globalFirstObserved | string |  |  
 action_result.data.\*.globalPrevalence | numeric |  |  
@@ -1141,11 +1143,12 @@ action_result.data.\*.sha1 | string |  `sha1`  |   954e0fd64a1242d0fa860b2201981
 action_result.data.\*.sha256 | string |  `sha256`  |   1a563e59bfcdc9e7b4d8ac81c6b6579e2d215952f6dd98e0ab1ab026ac616896 
 action_result.data.\*.signer | string |  |  
 action_result.data.\*.signerHash | string |  |  
-action_result.data.\*.size | numeric |  |  
 action_result.summary.global_prevalence | numeric |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved Files for Alert 
-summary.total_results | numeric |  |   1   
+summary.total_results | numeric |  |   1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get alert ips'
 Retrieve IP addresses for a specific Alert from its ID
@@ -1169,8 +1172,10 @@ action_result.parameter.limit | numeric |  |
 action_result.parameter.offset | numeric |  |  
 action_result.data.\*.ip | string |  `ip`  |  
 action_result.message | string |  |  
-summary.action_taken | string |  |   Retrieved Files for Alert 
-summary.total_results | numeric |  |   5   
+summary.action_taken | string |  |   Retrieved IPs for Alert 
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get alert domains'
 Retrieve domains for a specific Alert from its ID
@@ -1195,20 +1200,22 @@ action_result.parameter.offset | numeric |  |
 action_result.data.\*.host | string |  `domain`  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved Domains for Alert 
-summary.total_results | numeric |  |   5   
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'create alert'
-Create a new alert in Microsoft Defender for Endpoint
+Create a new alert in Defender for Endpoint
 
-Type: **investigate**  
+Type: **generic**  
 Read only: **False**
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **report_id** |  required  | Report ID of associated event | string | 
-**event_time** |  required  | UTC event time of associated event | string | 
-**machine_id** |  required  | Machine/Device ID of associated event | string | 
+**event_time** |  required  | UTC event time of associated event (Use this format: %Y-%m-%dT%H:%M:%SZ in UTC timezone) | string | 
+**device_id** |  required  | Device ID of associated event | string | 
 **severity** |  required  | Severity level of alert | string | 
 **title** |  required  | Alert title | string | 
 **description** |  required  | Alert description | string | 
@@ -1221,12 +1228,12 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string |  |   success  failed 
 action_result.parameter.report_id | string |  |  
 action_result.parameter.event_time | string |  |  
-action_result.parameter.machine_id | string |  `defender atp device id`  |  
+action_result.parameter.device_id | string |  `defender atp device id`  |  
 action_result.parameter.severity | string |  |  
 action_result.parameter.title | string |  |  
 action_result.parameter.description | string |  |  
 action_result.parameter.recommended_action | string |  |  
-action_result.parameter.category | string |  |   SuspiciousActivity  Malware  Phishing  UnauthorizedAccess  DataExfiltration  CommandAndControl  LateralMovement  DefenseEvasion  CredentialAccess  Persistence  PrivilegeEscalation 
+action_result.parameter.category | string |  |  
 action_result.data.\*.aadTenantId | string |  |  
 action_result.data.\*.alertCreationTime | string |  |  
 action_result.data.\*.assignedTo | string |  |  
@@ -1288,7 +1295,8 @@ action_result.data.\*.threatName | string |  |
 action_result.data.\*.title | string |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Created Alert 
-summary.total_results | numeric |  |   1   
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'update alert'
 Update properties of existing Alert
@@ -1783,12 +1791,13 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**indicator_id** |  required  | The ID of the indicator to retrieve. | string |  `defender atp indicator id` 
+**indicator_id** |  required  | The ID of the indicator to retrieve | string |  `defender atp indicator id` 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
+action_result.parameter.indicator_id | string |  `defender atp indicator id`  |  
 action_result.data.\*.action | string |  |  
 action_result.data.\*.additionalInfo | string |  |  
 action_result.data.\*.application | string |  |  
@@ -1822,7 +1831,9 @@ action_result.data.\*.severity | string |  |
 action_result.data.\*.title | string |  |  
 action_result.data.\*.version | string |  |  
 action_result.message | string |  |  
-summary.action_taken | string |  |   Retrieved Indicator   
+summary.action_taken | string |  |   Retrieved Indicator 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'submit indicator'
 Submit or Update new Indicator entity
@@ -1905,31 +1916,33 @@ Read only: **False**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**indicator_value** |  required  | The value of the indicator to update. | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain` 
-**indicator_type** |  required  | The type of indicator. | string | 
-**action** |  required  | Action taken if the indicator is discovered. | string | 
-**severity** |  optional  | The severity of the malicious behavior identified by the indicator. | string | 
-**indicator_description** |  required  | A brief description of the threat represented by the indicator. | string | 
-**indicator_title** |  required  | Title for the indicator alert. | string | 
-**expiration_time** |  optional  | The expiration time of the indicator (in DateTime format: YYYY-MM-DDTHH:MM:SSZ). | string | 
-**indicator_application** |  optional  | The application associated with the indicator. | string | 
-**recommended_actions** |  optional  | Recommended actions for the indicator. | string | 
-**rbac_group_names** |  optional  | Comma-separated list of RBAC group names. | string | 
+**indicator_value** |  required  | The identity value of the indicator to update | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain` 
+**indicator_type** |  required  | The type of indicator | string | 
+**action** |  required  | Action taken if the indicator is discovered | string | 
+**severity** |  optional  | The severity of the malicious behavior identified by the indicator | string | 
+**indicator_description** |  required  | Description of the indicator | string | 
+**indicator_title** |  required  | Indicator alert title | string | 
+**expiration_time** |  optional  | The expiration time of the indicator (Use this format: %Y-%m-%dT%H:%M:%SZ in UTC timezone) | string | 
+**indicator_application** |  optional  | The application associated with the indicator | string | 
+**recommended_actions** |  optional  | TI indicator alert recommended actions | string | 
+**rbac_group_names** |  optional  | JSON formatted list of RBAC group names | string | 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
-action_result.parameter.action | string |  |   Alert  AlertAndBlock  Allowed 
-action_result.parameter.severity | string |  |   Low  Medium  High 
+action_result.parameter.action | string |  |  
+action_result.parameter.severity | string |  |  
 action_result.parameter.indicator_value | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain`  |   domain.com 
-action_result.parameter.expiration_time | string |  |   2024-12-01T00:00:00Z 
+action_result.parameter.expiration_time | string |  |  
 action_result.data.\*.id | string |  `defender atp indicator id`  |  
 action_result.data.\*.indicator | string |  |  
 action_result.data.\*.isFailed | boolean |  |  
 action_result.data.\*.failureReason | string |  |  
 action_result.message | string |  |  
-summary.action_taken | string |  |   Updated Indicator   
+summary.action_taken | string |  |   Updated Indicator 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'update indicator batch'
 Update or create a batch of Indicator entities
@@ -1942,7 +1955,7 @@ This action updates or creates a batch of indicators from a json object. Based o
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**indicator_batch** |  required  | A JSON object with a list of indicators to update or create. Each indicator should include properties like indicatorValue, indicatorType, action, title, etc. | string |  `defender atp indicator value` 
+**indicator_batch** |  required  | A JSON object with a list of indicators to update or create. Each indicator should include properties like indicatorValue, indicatorType, action, title, etc. | string | 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
@@ -1955,7 +1968,9 @@ action_result.data.\*.isFailed | boolean |  |
 action_result.data.\*.failureReason | string |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Updated batch of indicators 
-summary.total_results | numeric |  |   5   
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get file alerts'
 Retrieve alerts related to a specific file hash
@@ -1968,13 +1983,13 @@ Retrieve alerts related to a specific file hash, such as a SHA1 or SHA256 hash.
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**file_hash** |  required  | The file hash (e.g., SHA1) used to retrieve related alerts. | string |  `sha1`  `sha256`  `file_hash` 
+**file_hash** |  required  | The file hash (e.g., SHA1) used to retrieve related alerts | string |  `sha1`  `sha256`  `file_hash` 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
-action_result.parameter.file_hash | string |  `file_hash`  |  
+action_result.parameter.file_hash | string |  `sha1`  `sha256`  `file_hash`  |  
 action_result.data.\*.aadTenantId | string |  |  
 action_result.data.\*.alertCreationTime | string |  |  
 action_result.data.\*.assignedTo | string |  |  
@@ -2036,10 +2051,12 @@ action_result.data.\*.threatName | string |  |
 action_result.data.\*.title | string |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved Alerts for File 
-summary.total_results | numeric |  |   5   
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get device alerts'
-Retrieve all alerts related to a specific device using deviceId
+Retrieve all alerts related to a specific device
 
 Type: **investigate**  
 Read only: **True**
@@ -2047,14 +2064,14 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**device_id** |  required  | The deviceId of the device to retrieve related alerts. | string |  `deviceId` 
+**device_id** |  required  | The device ID of the device to retrieve related alerts | string |  `defender atp device id` 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
-action_result.parameter.device_id | string |  `deviceId`  |  
-action_result.data.\*.id | string |  `defender atp alert id`  |   alertId1  alertId2 
+action_result.parameter.device_id | string |  `defender atp device id`  |  
+action_result.data.\*.id | string |  `defender atp alert id`  |  
 action_result.data.\*.aadTenantId | string |  |  
 action_result.data.\*.alertCreationTime | string |  |  
 action_result.data.\*.assignedTo | string |  |  
@@ -2116,10 +2133,12 @@ action_result.data.\*.threatName | string |  |
 action_result.data.\*.title | string |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved Alerts for Device 
-summary.total_results | numeric |  |   10   
+summary.total_results | numeric |  |   10 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get user alerts'
-Retrieve alerts related to a specific user.
+Retrieve alerts related to a specific user
 
 Type: **investigate**  
 Read only: **True**
@@ -2127,7 +2146,7 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**user** |  required  | The user to retrieve alerts for. | string | 
+**user** |  required  | The user to retrieve alerts for | string | 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
@@ -2195,10 +2214,12 @@ action_result.data.\*.threatName | string |  |
 action_result.data.\*.title | string |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved Alerts for User 
-summary.total_results | numeric |  |   5   
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get domain alerts'
-Retrieve alerts related to a specific domain address.
+Retrieve alerts related to a specific domain address
 
 Type: **investigate**  
 Read only: **True**
@@ -2206,7 +2227,7 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**domain** |  required  | The domain address to retrieve alerts for. | string |  `domain` 
+**domain** |  required  | The domain address to retrieve alerts for | string |  `domain` 
 
 #### Action Output
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
@@ -2274,7 +2295,9 @@ action_result.data.\*.threatName | string |  |
 action_result.data.\*.title | string |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved Alerts for Domain 
-summary.total_results | numeric |  |   5   
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'delete indicator'
 Delete an Indicator entity by ID
