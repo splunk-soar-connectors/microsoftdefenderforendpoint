@@ -1642,8 +1642,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         alert_id = param.get("alert_id")
-        limit = param.get("limit", DEFENDERATP_FILES_DEFAULT_LIMIT)
-        offset = param.get("offset", DEFENDERATP_FILES_DEFAULT_OFFSET)
+        limit = param.get("limit", DEFENDERATP_IPS_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_IPS_DEFAULT_OFFSET)
 
         if not alert_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
@@ -1717,7 +1717,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         report_id = param.get("report_id")
         event_time = param.get("event_time")
-        machine_id = param.get("machine_id")
+        device_id = param.get("device_id")
         severity = param.get("severity")
         title = param.get("title")
         description = param.get("description")
@@ -1725,13 +1725,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
         category = param.get("category")
 
         # Validation
-        if not all([report_id, event_time, machine_id, severity, title, description, recommended_action, category]):
+        if not all([report_id, event_time, device_id, severity, title, description, recommended_action, category]):
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
 
         request_body = {
             "reportId": report_id,
             "eventTime": event_time,
-            "machineId": machine_id,
+            "machineId": device_id,
             "severity": severity,
             "title": title,
             "description": description,
@@ -1739,7 +1739,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "category": category
         }
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_CREATE_ALERT_ENDPOINT)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_CREATE_ALERT_ENDPOINT)
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post",
                                                 data=json.dumps(request_body))
@@ -1853,7 +1853,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not user:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: user")
 
-        endpoint = "{0}/Users/{1}/alerts".format(self._graph_url, user)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_USER_ALERTS_ENDPOINT.format(user=user))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1886,7 +1886,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not domain:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: domain")
 
-        endpoint = "{0}/domains/{1}/alerts".format(self._graph_url, domain)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DOMAIN_ALERTS_ENDPOINT.format(domain=domain))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1919,7 +1919,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not file_hash:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: file_hash")
 
-        endpoint = "{0}/files/{1}/alerts".format(self._graph_url, file_hash)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_FILE_ALERTS_ENDPOINT.format(file_hash=file_hash))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1947,12 +1947,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        machine_id = param.get("device_id")
+        device_id = param.get("device_id")
 
-        if not machine_id:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: machineId")
+        if not device_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_id")
 
-        endpoint = "{0}/machines/{1}/alerts".format(self._graph_url, machine_id)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DEVICE_ALERTS_ENDPOINT.format(machine_id=device_id))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1960,7 +1960,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.get_status()
 
         if not response or not response.get('value', []):
-            return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified machineId")
+            return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified device")
 
         action_result.add_data(response.get('value', []))
 
@@ -2308,7 +2308,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not indicator_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_id")
 
-        endpoint = "{0}/indicators/{1}".format(self._graph_url, indicator_id)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_INDICATOR_ENDPOINT.format(indicator_id=indicator_id))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -2385,18 +2385,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not all([indicator_value, indicator_type, action_taken, description, title]):
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
 
-        if not indicator_value:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_value")
-        if not indicator_type:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_type")
-        if not action_taken:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: action")
-        if not description:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_description")
-        if not title:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_title")
-
-        endpoint = "{0}/indicators/import".format(self._graph_url)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_UPDATE_INDICATOR_ENDPOINT)
 
         payload = {
             "indicatorValue": indicator_value,
@@ -2459,11 +2448,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         try:
             indicator_batch = json.loads(indicator_batch)
             if not isinstance(indicator_batch, list):
-                return action_result.set_status(phantom.APP_ERROR, "indicator_batch must be a list of dictionaries.")
+                return action_result.set_status(phantom.APP_ERROR, "indicator_batch must be a list of dictionaries")
         except Exception as e:
             return action_result.set_status(phantom.APP_ERROR, f"Error processing batch: {str(e)}")
 
-        endpoint = "{0}/indicators/import".format(self._graph_url)
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_UPDATE_INDICATOR_ENDPOINT)
 
         payload = {
             "Indicators": indicator_batch
@@ -3250,7 +3239,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         start_time_filter = f"lastUpdateTime ge {last_modified_time}"
         poll_filter += start_time_filter if not poll_filter else f" and {start_time_filter}"
 
-        endpoint = "{0}/alerts?$top={1}&$filter={2}".format(self._graph_url, max_alerts, poll_filter)
+        endpoint = "{0}{1}?$top={2}&$filter={3}".format(self._graph_url, DEFENDERATP_ALERTS_ENDPOINT, max_alerts, poll_filter)
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         alert_list = response.get('value', [])
@@ -3330,10 +3319,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
             time = datetime.strptime(date, DEFENDER_APP_DT_STR_FORMAT)
             end_time = datetime.now(datetime.UTC)
             if self._check_invalid_since_utc_time(time):
-                return action_result.set_status(phantom.APP_ERROR, LOG_UTC_SINCE_TIME_ERROR)
+                return action_result.set_status(phantom.APP_ERROR, LOG_UTC_SINCE_TIME_ERR)
 
             if time >= end_time:
-                message = LOG_GREATER_EQUAL_TIME_ERROR.format(LOG_CONFIG_TIME_POLL_NOW)
+                message = LOG_GREATER_EQUAL_TIME_ERR.format(LOG_CONFIG_TIME_POLL_NOW)
                 return action_result.set_status(phantom.APP_ERROR, message)
         except Exception as e:
             message = "Invalid date string received. Error occurred while checking date format. Error: {}".format(str(e))

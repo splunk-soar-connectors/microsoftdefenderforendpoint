@@ -1,6 +1,6 @@
 **Unreleased**
 
-* Added 'on poll' action for Defender for Endpoint alerts [PAPP-34605] 
+* Added 'on poll' ingestion for Defender for Endpoint to ingest alerts [PAPP-34605] 
 * Added 'create alert' action for Microsoft Defender for Endpoint [PAPP-34605]
 * Added 'get alert user' action for Microsoft Defender for Endpoint [PAPP-34605]
 * Added 'get alert files' action for Microsoft Defender for Endpoint [PAPP-34605]

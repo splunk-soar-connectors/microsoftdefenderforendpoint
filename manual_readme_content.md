@@ -80,9 +80,8 @@ default ports used by Splunk SOAR.
 
 ## Explanation of On Poll Behavior
 
--   Alert Ordering - By default, alerts are sorted by the lastUpdateTime property, ensuring that the most recently updated alerts are ingested first. This allows the system to prioritize the latest security events.
--   Start Time Parameter - The start_time parameter directly correlates with the lastUpdateTime property of the alerts, ensuring that only alerts updated after this time are included in the ingestion process.
--   Max Alerts Parameter - This setting works only with scheduled or interval polling, controlling how many alerts are ingested per cycle. For instance, if this value is set to 100, the system will ingest up to 100 distinct alerts, applying the provided filters and start time.
+-   Start Time Parameter - The `start_time` parameter directly correlates with the lastUpdateTime property of the alerts, ensuring that only alerts updated after this time are included in the ingestion process.
+-   Max Alerts Parameter - The `max_alerts_per_poll` setting works only with scheduled or interval polling, controlling how many alerts are ingested per cycle. For instance, if this value is set to 100, the system will ingest up to 100 distinct alerts, applying the provided filters and start time.
 -   Example - If you configure the maximum alerts parameter to 100, the on_poll function will retrieve up to 100 alerts, considering any filter and start time provided. The filtering ensures only relevant alerts based on the time and other criteria are ingested during the polling process.
 
 ## Configure and set up permissions of the app created on the Microsoft Azure portal

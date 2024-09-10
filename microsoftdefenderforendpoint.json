@@ -63,7 +63,7 @@
             "order": 5
         },
         "start_time": {
-            "description": "Start time for schedule/interval/manual poll (Use this format: 1970-01-01T00:00:00Z)",
+            "description": "Start time for schedule/interval/manual poll (Use this format: 2024-09-04T16:26:58.87Z)",
             "data_type": "string",
             "order": 6
         },
@@ -94,13 +94,13 @@
         {
             "action": "on poll",
             "description": "Callback action for the on_poll ingest functionality for Defender for Endpoint",
-            "type": "investigate",
+            "type": "ingest",
             "identifier": "on_poll",
             "read_only": true,
             "parameters": {
                 "start_time": {
                     "data_type": "numeric",
-                    "description": "The start time to filter alerts by their last updated time. If not provided, defaults to the last 7 days.",
+                    "description": "The start time to filter alerts by their last updated time. If not provided, defaults to the last 7 days",
                     "order": 0
                 },
                 "end_time": {
@@ -110,7 +110,7 @@
                 },
                 "container_count": {
                     "data_type": "numeric",
-                    "description": "The number of alerts to ingest in each poll. Default is 1000.",
+                    "description": "The number of alerts to ingest in each poll. Default is 1000",
                     "order": 2
                 },
                 "artifact_count": {
@@ -3040,6 +3040,20 @@
                     "example_values": [
                         "Retrieved Assigned User for Alert"
                     ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -3130,28 +3144,34 @@
                     "data_type": "boolean"
                 },
                 {
+                    "data_path": "action_result.data.*.size",
+                    "data_type": "numeric",
+                    "column_name": "Size",
+                    "column_order": 0
+                },
+                {
                     "data_path": "action_result.data.*.issuer",
                     "data_type": "string",
                     "column_name": "Issuer",
-                    "column_order": 3
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.globalFirstObserved",
                     "data_type": "string",
                     "column_name": "Global First Observed",
-                    "column_order": 5
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.globalPrevalence",
                     "data_type": "numeric",
                     "column_name": "Global Prevalence",
-                    "column_order": 4
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.globalLastObserved",
                     "data_type": "string",
                     "column_name": "Global Last Observed",
-                    "column_order": 6
+                    "column_order": 4
                 },
                 {
                     "data_path": "action_result.data.*.md5",
@@ -3192,12 +3212,6 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.size",
-                    "data_type": "numeric",
-                    "column_name": "Size",
-                    "column_order": 2
-                },
-                {
                     "data_path": "action_result.summary.global_prevalence",
                     "data_type": "numeric"
                 },
@@ -3214,6 +3228,20 @@
                 },
                 {
                     "data_path": "summary.total_results",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
                     "data_type": "numeric",
                     "example_values": [
                         1
@@ -3294,7 +3322,7 @@
                     "data_path": "summary.action_taken",
                     "data_type": "string",
                     "example_values": [
-                        "Retrieved Files for Alert"
+                        "Retrieved IPs for Alert"
                     ]
                 },
                 {
@@ -3302,6 +3330,20 @@
                     "data_type": "numeric",
                     "example_values": [
                         5
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],
@@ -3388,6 +3430,20 @@
                     "example_values": [
                         5
                     ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -3397,8 +3453,8 @@
         },
         {
             "action": "create alert",
-            "description": "Create a new alert in Microsoft Defender for Endpoint",
-            "type": "investigate",
+            "description": "Create a new alert in Defender for Endpoint",
+            "type": "generic",
             "identifier": "create_alert",
             "read_only": false,
             "parameters": {
@@ -3409,13 +3465,13 @@
                     "order": 0
                 },
                 "event_time": {
-                    "description": "UTC event time of associated event",
+                    "description": "UTC event time of associated event (Use this format: %Y-%m-%dT%H:%M:%SZ in UTC timezone)",
                     "data_type": "string",
                     "required": true,
                     "order": 1
                 },
-                "machine_id": {
-                    "description": "Machine/Device ID of associated event",
+                "device_id": {
+                    "description": "Device ID of associated event",
                     "data_type": "string",
                     "required": true,
                     "order": 2
@@ -3453,17 +3509,22 @@
                 "category": {
                     "description": "Category of alert",
                     "value_list": [
-                        "SuspiciousActivity",
-                        "Malware",
-                        "Phishing",
-                        "UnauthorizedAccess",
-                        "DataExfiltration",
+                        "General",
                         "CommandAndControl",
-                        "LateralMovement",
-                        "DefenseEvasion",
+                        "Collection",
                         "CredentialAccess",
+                        "DefenseEvasion",
+                        "Discovery",
+                        "Exfiltration",
+                        "Exploit",
+                        "Execution",
+                        "InitialAccess",
+                        "LateralMovement",
+                        "Malware",
                         "Persistence",
-                        "PrivilegeEscalation"
+                        "PrivilegeEscalation",
+                        "Ransomware",
+                        "SuspiciousActivity"
                     ],
                     "data_type": "string",
                     "required": true,
@@ -3488,7 +3549,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameter.machine_id",
+                    "data_path": "action_result.parameter.device_id",
                     "data_type": "string",
                     "contains": [
                         "defender atp device id"
@@ -3512,20 +3573,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.category",
-                    "data_type": "string",
-                    "example_values": [
-                        "SuspiciousActivity",
-                        "Malware",
-                        "Phishing",
-                        "UnauthorizedAccess",
-                        "DataExfiltration",
-                        "CommandAndControl",
-                        "LateralMovement",
-                        "DefenseEvasion",
-                        "CredentialAccess",
-                        "Persistence",
-                        "PrivilegeEscalation"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.aadTenantId",
@@ -3805,7 +3853,14 @@
                     ]
                 },
                 {
-                    "data_path": "summary.total_results",
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
                     "data_type": "numeric",
                     "example_values": [
                         1
@@ -6281,7 +6336,7 @@
             "read_only": true,
             "parameters": {
                 "indicator_id": {
-                    "description": "The ID of the indicator to retrieve.",
+                    "description": "The ID of the indicator to retrieve",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -6298,6 +6353,13 @@
                     "example_values": [
                         "success",
                         "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp indicator id"
                     ]
                 },
                 {
@@ -6464,6 +6526,20 @@
                     "data_type": "string",
                     "example_values": [
                         "Retrieved Indicator"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],
@@ -6932,7 +7008,7 @@
             "read_only": false,
             "parameters": {
                 "indicator_value": {
-                    "description": "The value of the indicator to update.",
+                    "description": "The identity value of the indicator to update",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -6949,12 +7025,14 @@
                     "order": 0
                 },
                 "indicator_type": {
-                    "description": "The type of indicator.",
+                    "description": "The type of indicator",
                     "data_type": "string",
                     "required": true,
                     "value_list": [
                         "FileSha1",
                         "FileSha256",
+                        "FileMd5",
+                        "CertificateThumbprint",
                         "IpAddress",
                         "DomainName",
                         "Url"
@@ -6962,18 +7040,22 @@
                     "order": 1
                 },
                 "action": {
-                    "description": "Action taken if the indicator is discovered.",
+                    "description": "Action taken if the indicator is discovered",
                     "data_type": "string",
                     "required": true,
                     "value_list": [
+                        "Warn",
+                        "Block",
+                        "Audit",
                         "Alert",
                         "AlertAndBlock",
+                        "BlockAndRemediate",
                         "Allowed"
                     ],
                     "order": 2
                 },
                 "severity": {
-                    "description": "The severity of the malicious behavior identified by the indicator.",
+                    "description": "The severity of the malicious behavior identified by the indicator",
                     "data_type": "string",
                     "value_list": [
                         "Informational",
@@ -6984,34 +7066,34 @@
                     "order": 3
                 },
                 "indicator_description": {
-                    "description": "A brief description of the threat represented by the indicator.",
+                    "description": "Description of the indicator",
                     "data_type": "string",
                     "required": true,
                     "order": 4
                 },
                 "indicator_title": {
-                    "description": "Title for the indicator alert.",
+                    "description": "Indicator alert title",
                     "data_type": "string",
                     "required": true,
                     "order": 5
                 },
                 "expiration_time": {
-                    "description": "The expiration time of the indicator (in DateTime format: YYYY-MM-DDTHH:MM:SSZ).",
+                    "description": "The expiration time of the indicator (Use this format: %Y-%m-%dT%H:%M:%SZ in UTC timezone)",
                     "data_type": "string",
                     "order": 6
                 },
                 "indicator_application": {
-                    "description": "The application associated with the indicator.",
+                    "description": "The application associated with the indicator",
                     "data_type": "string",
                     "order": 7
                 },
                 "recommended_actions": {
-                    "description": "Recommended actions for the indicator.",
+                    "description": "TI indicator alert recommended actions",
                     "data_type": "string",
                     "order": 8
                 },
                 "rbac_group_names": {
-                    "description": "Comma-separated list of RBAC group names.",
+                    "description": "JSON formatted list of RBAC group names",
                     "data_type": "string",
                     "order": 9
                 }
@@ -7027,21 +7109,11 @@
                 },
                 {
                     "data_path": "action_result.parameter.action",
-                    "data_type": "string",
-                    "example_values": [
-                        "Alert",
-                        "AlertAndBlock",
-                        "Allowed"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.parameter.severity",
-                    "data_type": "string",
-                    "example_values": [
-                        "Low",
-                        "Medium",
-                        "High"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.parameter.indicator_value",
@@ -7062,10 +7134,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.expiration_time",
-                    "data_type": "string",
-                    "example_values": [
-                        "2024-12-01T00:00:00Z"
-                    ]
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.id",
@@ -7096,6 +7165,20 @@
                     "example_values": [
                         "Updated Indicator"
                     ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -7116,9 +7199,6 @@
                     "data_type": "string",
                     "required": true,
                     "primary": true,
-                    "contains": [
-                        "defender atp indicator value"
-                    ],
                     "order": 0
                 }
             },
@@ -7171,6 +7251,20 @@
                     "example_values": [
                         5
                     ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -7187,7 +7281,7 @@
             "read_only": true,
             "parameters": {
                 "file_hash": {
-                    "description": "The file hash (e.g., SHA1) used to retrieve related alerts.",
+                    "description": "The file hash (e.g., SHA1) used to retrieve related alerts",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -7212,6 +7306,8 @@
                     "data_path": "action_result.parameter.file_hash",
                     "data_type": "string",
                     "contains": [
+                        "sha1",
+                        "sha256",
                         "file_hash"
                     ]
                 },
@@ -7498,6 +7594,20 @@
                     "example_values": [
                         5
                     ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -7507,18 +7617,18 @@
         },
         {
             "action": "get device alerts",
-            "description": "Retrieve all alerts related to a specific device using deviceId",
+            "description": "Retrieve all alerts related to a specific device",
             "type": "investigate",
             "identifier": "get_device_alerts",
             "read_only": true,
             "parameters": {
                 "device_id": {
-                    "description": "The deviceId of the device to retrieve related alerts.",
+                    "description": "The device ID of the device to retrieve related alerts",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
                     "contains": [
-                        "deviceId"
+                        "defender atp device id"
                     ],
                     "order": 0
                 }
@@ -7536,16 +7646,12 @@
                     "data_path": "action_result.parameter.device_id",
                     "data_type": "string",
                     "contains": [
-                        "deviceId"
+                        "defender atp device id"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
-                    "example_values": [
-                        "alertId1",
-                        "alertId2"
-                    ],
                     "contains": [
                         "defender atp alert id"
                     ],
@@ -7835,6 +7941,20 @@
                     "example_values": [
                         10
                     ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -7844,13 +7964,13 @@
         },
         {
             "action": "get user alerts",
-            "description": "Retrieve alerts related to a specific user.",
+            "description": "Retrieve alerts related to a specific user",
             "type": "investigate",
             "identifier": "get_user_alerts",
             "read_only": true,
             "parameters": {
                 "user": {
-                    "description": "The user to retrieve alerts for.",
+                    "description": "The user to retrieve alerts for",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -8153,6 +8273,20 @@
                     "example_values": [
                         5
                     ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -8162,13 +8296,13 @@
         },
         {
             "action": "get domain alerts",
-            "description": "Retrieve alerts related to a specific domain address.",
+            "description": "Retrieve alerts related to a specific domain address",
             "type": "investigate",
             "identifier": "get_domain_alerts",
             "read_only": true,
             "parameters": {
                 "domain": {
-                    "description": "The domain address to retrieve alerts for.",
+                    "description": "The domain address to retrieve alerts for",
                     "data_type": "string",
                     "required": true,
                     "primary": true,
@@ -8476,6 +8610,20 @@
                     "data_type": "numeric",
                     "example_values": [
                         5
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],
