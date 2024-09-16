@@ -2497,6 +2497,36 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_affected_devices(self, param):
+        """ This function retrieves a list of devices affected by a vulnerability using CVE IDs.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        cve_id = param.get("cve_id")
+
+        if not cve_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: cve_id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_VULNERABILITY_AFFECTED_DEVICES_ENDPOINT.format(cve_id=cve_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response.get('value', []))
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Affected Devices"
+        summary['total_results'] = len(response.get('value', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_get_indicator(self, param):
         """This function is used to retrieve an indicator by its ID.
 

@@ -7369,6 +7369,92 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get affected devices",
+            "description": "Retrieve a list of devices affected by a vulnerability using CVE IDs",
+            "verbose": "This action retrieves a list of devices affected by a vulnerability using CVE IDs. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-vulnerability).",
+            "type": "investigate",
+            "identifier": "get_affected_devices",
+            "read_only": true,
+            "parameters": {
+                "cve_id": {
+                    "description": "CVE ID of the vulnerability",
+                    "data_type": "string",
+                    "required": true,
+                    "contains": [
+                        "cve id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.cve_id",
+                    "data_type": "string",
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string",
+                    "column_name": "Computer DNS Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.osPlatform",
+                    "data_type": "string",
+                    "column_name": "Operating System",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string",
+                    "column_name": "RBAC Group Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Affected Devices"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get indicator",
             "description": "Retrieve an Indicator entity by its ID",
             "type": "investigate",
