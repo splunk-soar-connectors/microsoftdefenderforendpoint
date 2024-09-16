@@ -1935,9 +1935,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if vendor:
             endpoint += "&vendor={}".format(vendor)
 
-        url = "{0}{1}".format(self._graph_url, endpoint)
+        endpoint = "{0}{1}".format(self._graph_url, endpoint)
 
-        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -1969,9 +1969,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not software_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
 
-        url = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT.format(software_id))
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT.format(software_id))
 
-        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -2003,9 +2003,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not software_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
 
-        url = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_DEVICES_ENDPOINT.format(software_id))
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_DEVICES_ENDPOINT.format(software_id))
 
-        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -2037,9 +2037,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not software_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
 
-        url = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT.format(software_id))
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT.format(software_id))
 
-        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -2170,9 +2170,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if filters:
             endpoint += "&$filter={}".format(" and ".join(filters))
 
-        url = "{0}{1}".format(self._graph_url, endpoint)
+        endpoint = "{0}{1}".format(self._graph_url, endpoint)
 
-        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -3595,6 +3595,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "list_devices": self._handle_list_devices,
             "list_alerts": self._handle_list_alerts,
             "list_sessions": self._handle_list_sessions,
+            'list_software': self._handle_list_software,
+            'list_software_versions': self._handle_list_software_versions,
+            'list_software_devices': self._handle_list_software_devices,
+            'list_software_vulnerabilities': self._handle_list_software_vulnerabilities,
+            'list_device_vulnerabilities': self._handle_list_device_vulnerabilities,
+            'list_vulnerabilities': self._handle_list_vulnerabilities,
             "get_alert": self._handle_get_alert,
             "get_alert_user": self._handle_get_alert_user,
             "get_alert_files": self._handle_get_alert_files,
@@ -3615,6 +3621,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_installed_software": self._handle_get_installed_software,
             "restrict_app_execution": self._handle_restrict_app_execution,
             "remove_app_restriction": self._handle_remove_app_restriction,
+            'collect_investigation_package': self._handle_collect_investigation_package,
+            'get_investigation_uri': self._handle_get_investigation_uri,
+            'get_device_details': self._handle_get_device_details,
+            'get_affected_devices': self._handle_get_affected_devices,
             "get_indicator": self._handle_get_indicator,
             "list_indicators": self._handle_list_indicators,
             "delete_indicator": self._handle_delete_indicator,
@@ -3628,6 +3638,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_secure_score": self._handle_get_secure_score,
             "get_file_live_response": self._handle_get_file_live_response,
             "put_file_live_response": self._handle_put_file_live_response,
+            'cancel_live_response': self._handle_cancel_live_response,
             "run_script_live_response": self._handle_run_script_live_response,
             "get_missing_kbs": self._handle_get_missing_kbs,
             "update_device_tag": self._handle_update_device_tag,
