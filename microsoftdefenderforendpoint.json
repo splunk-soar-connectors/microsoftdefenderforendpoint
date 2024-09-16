@@ -7315,6 +7315,64 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get investigation uri",
+            "description": "Retrieve a URI for downloading an investigation package by its action ID",
+            "verbose": "This action retrieves a URI for downloading an investigation package by its action ID. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-package-sas-uri).",
+            "type": "investigate",
+            "identifier": "get_investigation_uri",
+            "read_only": true,
+            "parameters": {
+                "action_id": {
+                    "description": "ID of the investigation action",
+                    "data_type": "string",
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.action_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.value",
+                    "data_type": "string",
+                    "column_name": "Investigation Package URI",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Investigation URI"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get device details",
             "description": "Retrieve details for multiple devices by their device IDs",
             "verbose": "This action retrieves details for multiple devices by their device IDs. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-by-id).",
