@@ -1875,6 +1875,55 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_list_software(self, param):
+        """ This function retrieves the organization's software inventory.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        software_id = param.get("id")
+        software_name = param.get("name")
+        vendor = param.get("vendor")
+        limit = param.get("limit", DEFENDERATP_SOFTWARE_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_SOFTWARE_DEFAULT_OFFSET)
+
+        ret_val, limit = self._validate_integer(action_result, limit, "limit", allow_zero=False)
+        ret_val, offset = self._validate_integer(action_result, offset, "offset", allow_zero=True)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_SOFTWARE_ENDPOINT, limit, offset)
+
+        if software_id:
+            endpoint += "&id={}".format(software_id)
+        if software_name:
+            endpoint += "&name={}".format(software_name)
+        if vendor:
+            endpoint += "&vendor={}".format(vendor)
+
+        url = "{0}{1}".format(self._graph_url, endpoint)
+
+        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        software_list = response.get('value', [])
+        for software in software_list:
+            action_result.add_data(software)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_ERROR, "No software found")
+
+        summary = action_result.update_summary({})
+        summary['total_software'] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_ip_prevalence(self, param):
         action_identifier = self.get_action_identifier()
         self.save_progress("In action handler for {}".format(action_identifier))
