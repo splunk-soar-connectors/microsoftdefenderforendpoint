@@ -1992,6 +1992,40 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_list_software_vulnerabilities(self, param):
+        """ This function retrieves vulnerabilities associated with a specific software by its software ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        software_id = param.get("id")
+
+        if not software_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
+
+        url = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT.format(software_id))
+
+        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        vulnerabilities = response.get('value', [])
+        for vulnerability in vulnerabilities:
+            action_result.add_data(vulnerability)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_ERROR, "No vulnerabilities found for specified software")
+
+        summary = action_result.update_summary({})
+        summary['total_vulnerabilities'] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_ip_prevalence(self, param):
         action_identifier = self.get_action_identifier()
         self.save_progress("In action handler for {}".format(action_identifier))
