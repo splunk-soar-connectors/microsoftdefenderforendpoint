@@ -12376,6 +12376,133 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "cancel live response",
+            "description": "Cancel a live response action.",
+            "verbose": "This action cancels a live response action that is still unfinished. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/cancel-machine-action).",
+            "type": "generic",
+            "identifier": "cancel_live_response",
+            "read_only": false,
+            "parameters": {
+                "action_id": {
+                    "description": "ID of the live response action to cancel",
+                    "data_type": "string",
+                    "required": true
+                },
+                "comment": {
+                    "description": "Comment explaining the reason for cancellation",
+                    "data_type": "string",
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.action_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameters.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.id",
+                    "data_type": "string",
+                    "column_name": "Action ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.type",
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.scope",
+                    "data_type": "string",
+                    "column_name": "Scope",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.requestor",
+                    "data_type": "string",
+                    "column_name": "Requestor",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.requestorComment",
+                    "data_type": "string",
+                    "column_name": "Requestor Comment",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.machineId",
+                    "data_type": "string",
+                    "column_name": "Machine ID",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.computerDnsName",
+                    "data_type": "string",
+                    "column_name": "Computer DNS Name",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.creationDateTimeUtc",
+                    "data_type": "string",
+                    "column_name": "Creation DateTime (UTC)",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.lastUpdateDateTimeUtc",
+                    "data_type": "string",
+                    "column_name": "Last Update DateTime (UTC)",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Canceled Live Response Action"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "run script",
             "description": "Run a script from the library on a device using live response",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-live-response?view=o365-worldwide\" target=\"_blank\">Run live response commands on a device API Documentation</a>), the user can run a script from the library on a device. The script_args parameter is passed to your script, rate limitations for this API are 10 calls per minute.<br>The action tries to execute the script using script_name along with the device_id. This action can take a while to complete the execution. The action retries at an interval of 5 seconds within a specified timeout to check if event execution is completed. If not, the action would return the latest status of the event along with the event ID. The get status action can be used to fetch the latest status of the event with the event ID. If the status is 'Succeded', the event ID can be used in the same action to get the script output. If all the parameters are given, the action gives higher priority to the event ID parameter.<br><br><b>Notes:</b><ul><li>The maximum timeout period for the script execution is 10 minutes.</li><li>Live response actions cannot be queued up and can only be executed one at a time.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group.</li></ul>",
