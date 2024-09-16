@@ -1639,7 +1639,7 @@
                     "example_values": [
                         "Retrieved Active Users"
                     ]
-                }
+                },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string"

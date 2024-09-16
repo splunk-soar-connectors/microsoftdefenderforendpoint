@@ -2147,7 +2147,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT, limit, offset)
+        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_VULNERABILITIES_ENDPOINT, limit, offset)
 
         filters = []
         if vulnerability_id:
