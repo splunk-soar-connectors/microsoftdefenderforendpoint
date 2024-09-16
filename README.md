@@ -471,9 +471,16 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get status](#action-get-status) - Get status of the event on a machine  
 [scan device](#action-scan-device) - Scan a device for virus  
 [quarantine file](#action-quarantine-file) - Quarantine a file  
+[get active users](#action-get-active-users) - Get active users on a device  
 [list devices](#action-list-devices) - List of recently seen devices  
 [list alerts](#action-list-alerts) - List all alerts of a given type  
 [list sessions](#action-list-sessions) - List all logged in users on a machine  
+[list software](#action-list-software) - Retrieve the organization's software inventory.  
+[list software versions](#action-list-software-versions) - Retrieves a list of organization's software version distribution.  
+[list software devices](#action-list-software-devices) - Retrieve a list of devices that have a specific software installed.  
+[list software vulnerabilities](#action-list-software-vulnerabilities) - Retrieve vulnerabilities associated with a specific software.  
+[list device vulnerabilities](#action-list-device-vulnerabilities) - Retrieve vulnerabilities affecting devices or software in organization.  
+[list vulnerabilities](#action-list-vulnerabilities) - Retrieve a list of vulnerabilities based on filters.  
 [get alert](#action-get-alert) - Retrieve specific Alert by its ID  
 [get alert user](#action-get-alert-user) - Retrieve user for specific Alert from its ID  
 [get alert files](#action-get-alert-files) - Retrieve files for specific Alert from its ID  
@@ -490,6 +497,10 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get installed software](#action-get-installed-software) - Retrieve a collection of installed software related to a given device ID  
 [restrict app execution](#action-restrict-app-execution) - Restrict execution of all applications on the device except a predefined set  
 [list indicators](#action-list-indicators) - Retrieve a collection of all active Indicators  
+[collect investigation package](#action-collect-investigation-package) - Collect an investigation package from a device by its device ID  
+[get investigation uri](#action-get-investigation-uri) - Retrieve a URI for downloading an investigation package by its action ID  
+[get device details](#action-get-device-details) - Retrieve details for multiple devices by their device IDs  
+[get affected devices](#action-get-affected-devices) - Retrieve a list of devices affected by a vulnerability using CVE IDs  
 [get indicator](#action-get-indicator) - Retrieve an Indicator entity by its ID  
 [submit indicator](#action-submit-indicator) - Submit or Update new Indicator entity  
 [update indicator](#action-update-indicator) - Update an existing Indicator entity  
@@ -508,6 +519,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get secure score](#action-get-secure-score) - Retrieve your Microsoft Secure Score for devices  
 [get file](#action-get-file) - Download a file from a device using live response  
 [put file](#action-put-file) - Put a file from the library to a device using live response  
+[cancel live response](#action-cancel-live-response) - Cancel a live response action.  
 [run script](#action-run-script) - Run a script from the library on a device using live response  
 [get missing kbs](#action-get-missing-kbs) - Retrieve missing KBs (security updates) by given device ID  
 
@@ -801,6 +813,38 @@ action_result.message | string |  |   Event id: 76e82ecd-54b8-400d-83be-a05d582b
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
+## action: 'get active users'
+Get active users on a device
+
+Type: **investigate**  
+Read only: **True**
+
+This action retrieves a collection of users currently logged on to a specific device by its device ID. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-log-on-users).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.device_id | string |  `defender atp device id`  |  
+action_result.data.\*.id | string |  |  
+action_result.data.\*.accountName | string |  |  
+action_result.data.\*.accountDomain | string |  |  
+action_result.data.\*.firstSeen | string |  |  
+action_result.data.\*.lastSeen | string |  |  
+action_result.data.\*.logonTypes | string |  |  
+action_result.data.\*.isDomainAdmin | boolean |  |  
+action_result.data.\*.isOnlyNetworkUser | boolean |  |  
+action_result.summary.total_results | numeric |  |  
+action_result.summary.action_taken | string |  |   Retrieved Active Users 
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
 ## action: 'list devices'
 List of recently seen devices
 
@@ -990,6 +1034,217 @@ action_result.message | string |  |   Total sessions: 1
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
+## action: 'list software'
+Retrieve the organization's software inventory.
+
+Type: **investigate**  
+Read only: **True**
+
+Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-software" target="_blank">Get Software API Documentation</a>)
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**id** |  optional  | ID of the software | string |  `defender atp software id` 
+**name** |  optional  | Name of the software | string | 
+**vendor** |  optional  | Vendor of the software | string | 
+**limit** |  optional  | Maximum number of results to return | numeric | 
+**offset** |  optional  | Number of results to skip | numeric | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.id | string |  `defender atp software id`  |  
+action_result.data.\*.id | string |  `defender atp software id`  |  
+action_result.data.\*.name | string |  |  
+action_result.data.\*.version | string |  |  
+action_result.data.\*.vendor | string |  |  
+action_result.data.\*.installDate | string |  |  
+action_result.data.\*.category | string |  |  
+action_result.data.\*.detectedBy | string |  |  
+action_result.summary.total_software | numeric |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'list software versions'
+Retrieves a list of organization's software version distribution.
+
+Type: **investigate**  
+Read only: **True**
+
+Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-software-ver-distribution" target="_blank">Get Software Distribution API Documentation</a>)
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**id** |  required  | ID of the software | string |  `defender atp software id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.id | string |  `defender atp software id`  |  
+action_result.data.\*.version | string |  |  
+action_result.data.\*.installations | numeric |  |  
+action_result.data.\*.vulnerabilities | numeric |  |  
+action_result.summary.total_versions | numeric |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'list software devices'
+Retrieve a list of devices that have a specific software installed.
+
+Type: **investigate**  
+Read only: **True**
+
+This action retrieves a list of devices that have a specific software installed, based on its ID. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-software).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**id** |  required  | ID of the software | string |  `defender atp software id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.id | string |  `defender atp software id`  |  
+action_result.data.\*.id | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.osPlatform | string |  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.summary.total_devices | numeric |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'list software vulnerabilities'
+Retrieve vulnerabilities associated with a specific software.
+
+Type: **investigate**  
+Read only: **True**
+
+This action retrieves vulnerabilities associated with a specific software. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-vuln-by-software).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**id** |  required  | ID of the software | string |  `defender atp software id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.id | string |  `defender atp software id`  |  
+action_result.data.\*.id | string |  |  
+action_result.data.\*.name | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.cvssV3 | numeric |  |  
+action_result.data.\*.exposedMachines | numeric |  |  
+action_result.data.\*.publishedOn | string |  |  
+action_result.data.\*.updatedOn | string |  |  
+action_result.data.\*.publicExploit | boolean |  |  
+action_result.data.\*.exploitVerified | boolean |  |  
+action_result.data.\*.exploitInKit | boolean |  |  
+action_result.summary.total_vulnerabilities | numeric |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'list device vulnerabilities'
+Retrieve vulnerabilities affecting devices or software in organization.
+
+Type: **investigate**  
+Read only: **True**
+
+This action retrieves vulnerabilities affecting devices or software in the organization. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-vulnerability).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**device_id** |  optional  | ID of the device | string |  `defender atp device id` 
+**software_id** |  optional  | ID of the software | string |  `defender atp software id` 
+**cve_id** |  optional  | CVE ID | string |  `cve id` 
+**product_name** |  optional  | Name of the product | string | 
+**product_version** |  optional  | Version of the product | string | 
+**severity** |  optional  | Severity of the vulnerability | string | 
+**product_vendor** |  optional  | Vendor of the product | string | 
+**limit** |  optional  | Maximum number of results to return | numeric | 
+**offset** |  optional  | Number of results to skip | numeric | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.device_id | string |  `defender atp device id`  |  
+action_result.parameters.software_id | string |  `defender atp software id`  |  
+action_result.parameters.cve_id | string |  `cve id`  |  
+action_result.parameters.product_name | string |  |  
+action_result.parameters.product_version | string |  |  
+action_result.parameters.severity | string |  |  
+action_result.parameters.product_vendor | string |  |  
+action_result.parameters.limit | numeric |  |  
+action_result.parameters.offset | numeric |  |  
+action_result.data.\*.id | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.osPlatform | string |  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.summary.total_vulnerabilities | numeric |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'list vulnerabilities'
+Retrieve a list of vulnerabilities based on filters.
+
+Type: **investigate**  
+Read only: **True**
+
+This action retrieves a list of vulnerabilities based on filters. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**id** |  optional  | ID of the vulnerability | string |  `cve id` 
+**name_equal** |  optional  | Exact name of the vulnerability | string | 
+**name_contains** |  optional  | Name contains this string | string | 
+**description_contains** |  optional  | Description contains this string | string | 
+**published_on** |  optional  | Date when the vulnerability was published | string | 
+**cvss** |  optional  | CVSS score | numeric | 
+**severity** |  optional  | Severity of the vulnerability | string | 
+**updated_on** |  optional  | Date when the vulnerability was last updated | string | 
+**limit** |  optional  | Maximum number of results to return | numeric | 
+**offset** |  optional  | Number of results to skip | numeric | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.id | string |  `cve id`  |  
+action_result.data.\*.id | string |  |  
+action_result.data.\*.name | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.cvssV3 | numeric |  |  
+action_result.data.\*.cvssVector | string |  |  
+action_result.data.\*.exposedMachines | numeric |  |  
+action_result.data.\*.publishedOn | string |  |  
+action_result.data.\*.updatedOn | string |  |  
+action_result.data.\*.firstDetected | string |  |  
+action_result.data.\*.publicExploit | boolean |  |  
+action_result.data.\*.exploitVerified | boolean |  |  
+action_result.data.\*.exploitInKit | boolean |  |  
+action_result.data.\*.cveSupportability | string |  |  
+action_result.data.\*.epss | numeric |  |  
+action_result.summary.total_vulnerabilities | numeric |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
 ## action: 'get alert'
 Retrieve specific Alert by its ID
 
@@ -1143,8 +1398,12 @@ action_result.data.\*.sha1 | string |  `sha1`  |   954e0fd64a1242d0fa860b2201981
 action_result.data.\*.sha256 | string |  `sha256`  |   1a563e59bfcdc9e7b4d8ac81c6b6579e2d215952f6dd98e0ab1ab026ac616896 
 action_result.data.\*.signer | string |  |  
 action_result.data.\*.signerHash | string |  |  
+action_result.summary.global_prevalence | numeric |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved Files for Alert 
+summary.total_results | numeric |  |   1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 summary.total_results | numeric |  |   1 
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
@@ -1781,6 +2040,134 @@ action_result.message | string |  |   Total indicators: 1
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
+## action: 'collect investigation package'
+Collect an investigation package from a device by its device ID
+
+Type: **generic**  
+Read only: **False**
+
+This action collects an investigation package from a device by its device ID. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/collect-investigation-package).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**device_id** |  required  | ID of the device | string |  `defender atp device id` 
+**comment** |  required  | Comment to include in the investigation package | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.device_id | string |  `defender atp device id`  |  
+action_result.parameters.comment | string |  |  
+action_result.data.id | string |  |  
+action_result.data.type | string |  |  
+action_result.data.scope | string |  |  
+action_result.data.requestor | string |  |  
+action_result.data.requestorComment | string |  |  
+action_result.data.status | string |  |  
+action_result.data.machineId | string |  |  
+action_result.data.computerDnsName | string |  |  
+action_result.data.creationDateTimeUtc | string |  |  
+action_result.data.lastUpdateDateTimeUtc | string |  |  
+action_result.summary.action_taken | string |  |   Collected Investigation Package 
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'get investigation uri'
+Retrieve a URI for downloading an investigation package by its action ID
+
+Type: **investigate**  
+Read only: **True**
+
+This action retrieves a URI for downloading an investigation package by its action ID. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-package-sas-uri).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**action_id** |  required  | ID of the investigation action | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.action_id | string |  |  
+action_result.data.value | string |  |  
+action_result.summary.action_taken | string |  |   Retrieved Investigation URI 
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'get device details'
+Retrieve details for multiple devices by their device IDs
+
+Type: **investigate**  
+Read only: **True**
+
+This action retrieves details for multiple devices by their device IDs. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-by-id).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**device_ids** |  required  | Comma-separated list of device IDs | string |  `defender atp device id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.device_ids | string |  `defender atp device id`  |  
+action_result.data.\*.id | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.firstSeen | string |  |  
+action_result.data.\*.lastSeen | string |  |  
+action_result.data.\*.osPlatform | string |  |  
+action_result.data.\*.version | string |  |  
+action_result.data.\*.osProcessor | string |  |  
+action_result.data.\*.lastIpAddress | string |  |  
+action_result.data.\*.lastExternalIpAddress | string |  |  
+action_result.data.\*.osBuild | numeric |  |  
+action_result.data.\*.healthStatus | string |  |  
+action_result.data.\*.rbacGroupId | numeric |  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.riskScore | string |  |  
+action_result.data.\*.exposureLevel | string |  |  
+action_result.data.\*.isAadJoined | boolean |  |  
+action_result.data.\*.aadDeviceId | string |  |  
+action_result.message | string |  |  
+action_result.summary.action_taken | string |  |   Retrieved Device Details 
+action_result.total_results | numeric |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'get affected devices'
+Retrieve a list of devices affected by a vulnerability using CVE IDs
+
+Type: **investigate**  
+Read only: **True**
+
+This action retrieves a list of devices affected by a vulnerability using CVE IDs. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-vulnerability).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**cve_id** |  required  | CVE ID of the vulnerability | string |  `cve id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.cve_id | string |  `cve id`  |  
+action_result.data.\*.id | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.osPlatform | string |  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.summary.action_taken | string |  |   Retrieved Affected Devices 
+action_result.summary.total_results | numeric |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
 ## action: 'get indicator'
 Retrieve an Indicator entity by its ID
 
@@ -1930,6 +2317,8 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
+action_result.parameter.action | string |  |  
+action_result.parameter.severity | string |  |  
 action_result.parameter.indicator_value | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain`  |   domain.com 
 action_result.parameter.indicator_type | string |  |  
 action_result.parameter.action | string |  |  
@@ -2788,6 +3177,41 @@ action_result.data.\*.type | string |  |   LiveResponse
 action_result.summary.event_id | string |  `defender atp event id`  |   6925706d-3a7e-4596-b2d7-321fca9cd965 
 action_result.summary.put_file_status | string |  |   Succeeded 
 action_result.message | string |  |   Event id: 30f736e4-1538-46ca-b21f-8f315b096077, Put file status: Succeeded 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'cancel live response'
+Cancel a live response action.
+
+Type: **generic**  
+Read only: **False**
+
+This action cancels a live response action that is still unfinished. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/cancel-machine-action).
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**action_id** |  required  | ID of the live response action to cancel | string | 
+**comment** |  required  | Comment explaining the reason for cancellation | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameters.action_id | string |  |  
+action_result.parameters.comment | string |  |  
+action_result.data.id | string |  |  
+action_result.data.type | string |  |  
+action_result.data.scope | string |  |  
+action_result.data.requestor | string |  |  
+action_result.data.requestorComment | string |  |  
+action_result.data.status | string |  |  
+action_result.data.machineId | string |  |  
+action_result.data.computerDnsName | string |  |  
+action_result.data.creationDateTimeUtc | string |  |  
+action_result.data.lastUpdateDateTimeUtc | string |  |  
+action_result.summary.action_taken | string |  |   Canceled Live Response Action 
+action_result.message | string |  |  
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
