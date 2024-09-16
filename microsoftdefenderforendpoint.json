@@ -7078,6 +7078,170 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get device details",
+            "description": "Retrieve details for multiple devices by their device IDs",
+            "verbose": "This action retrieves details for multiple devices by their device IDs. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-by-id).",
+            "type": "investigate",
+            "identifier": "get_device_details",
+            "read_only": true,
+            "parameters": {
+                "device_ids": {
+                    "description": "Comma-separated list of device IDs",
+                    "data_type": "string",
+                    "required": true,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.device_ids",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string",
+                    "column_name": "Computer DNS Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.firstSeen",
+                    "data_type": "string",
+                    "column_name": "First Seen",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.lastSeen",
+                    "data_type": "string",
+                    "column_name": "Last Seen",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.osPlatform",
+                    "data_type": "string",
+                    "column_name": "Operating System",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string",
+                    "column_name": "Version",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.osProcessor",
+                    "data_type": "string",
+                    "column_name": "OS Processor",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.lastIpAddress",
+                    "data_type": "string",
+                    "column_name": "Last IP Address",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.*.lastExternalIpAddress",
+                    "data_type": "string",
+                    "column_name": "Last External IP Address",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.*.osBuild",
+                    "data_type": "numeric",
+                    "column_name": "OS Build",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.data.*.healthStatus",
+                    "data_type": "string",
+                    "column_name": "Health Status",
+                    "column_order": 10
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupId",
+                    "data_type": "numeric",
+                    "column_name": "RBAC Group ID",
+                    "column_order": 11
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string",
+                    "column_name": "RBAC Group Name",
+                    "column_order": 12
+                },
+                {
+                    "data_path": "action_result.data.*.riskScore",
+                    "data_type": "string",
+                    "column_name": "Risk Score",
+                    "column_order": 13
+                },
+                {
+                    "data_path": "action_result.data.*.exposureLevel",
+                    "data_type": "string",
+                    "column_name": "Exposure Level",
+                    "column_order": 14
+                },
+                {
+                    "data_path": "action_result.data.*.isAadJoined",
+                    "data_type": "boolean",
+                    "column_name": "AAD Joined",
+                    "column_order": 15
+                },
+                {
+                    "data_path": "action_result.data.*.aadDeviceId",
+                    "data_type": "string",
+                    "column_name": "AAD Device ID",
+                    "column_order": 16
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Device Details"
+                    ]
+                },
+                {
+                    "data_path": "action_result.total_results",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get indicator",
             "description": "Retrieve an Indicator entity by its ID",
             "type": "investigate",

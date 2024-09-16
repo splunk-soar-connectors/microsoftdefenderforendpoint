@@ -2423,6 +2423,46 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_device_details(self, param):
+        """ This function retrieves details for multiple devices by their device IDs.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_ids = param.get("device_ids")
+
+        if not device_ids:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_ids")
+
+        device_id_list = device_ids.split(',')
+
+        all_device_details = []
+        for device_id in device_id_list:
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DEVICE_DETAILS_ENDPOINT.format(device_id=device_id))
+
+            ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
+
+            if response:
+                all_device_details.append(response)
+
+        if not all_device_details:
+            return action_result.set_status(phantom.APP_SUCCESS, "No details found for the specified devices")
+
+        action_result.add_data(all_device_details)
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Device Details"
+        summary['total_results'] = len(all_device_details)
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_get_indicator(self, param):
         """This function is used to retrieve an indicator by its ID.
 
