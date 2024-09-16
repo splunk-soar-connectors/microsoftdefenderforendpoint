@@ -83,6 +83,7 @@ DEFENDER_DEVICE_DETAILS_ENDPOINT = '/machines/{device_id}'
 DEFENDER_COLLECT_INVESTIGATION_PACKAGE_ENDPOINT = '/machines/{device_id}/collectInvestigationPackage'
 DEFENDER_GET_VULNERABILITY_AFFECTED_DEVICES_ENDPOINT = '/vulnerabilities/{cve_id}/machineReferences'
 DEFENDER_LIVE_RESPONSE_CANCEL_ENDPOINT = '/machineactions/{action_id}/cancel'
+DEFENDER_GET_ACTIVE_DEVICE_USERS = '/machines/{device_id}/logonusers'
 
 DEFENDERATP_IP_PARAM_CONST = "ip"
 DEFENDERATP_DOMAIN_PARAM_CONST = "domain"

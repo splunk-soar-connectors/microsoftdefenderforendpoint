@@ -1549,6 +1549,116 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get active users",
+            "description": "Get active users on a device",
+            "verbose": "This action retrieves a collection of users currently logged on to a specific device by its device ID. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-log-on-users).",
+            "type": "investigate",
+            "identifier": "get_active_users",
+            "read_only": true,
+            "parameters": {
+                "device_id": {
+                    "description": "ID of the device",
+                    "data_type": "string",
+                    "required": true,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.device_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "User ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.accountName",
+                    "data_type": "string",
+                    "column_name": "Account Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.accountDomain",
+                    "data_type": "string",
+                    "column_name": "Account Domain",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.firstSeen",
+                    "data_type": "string",
+                    "column_name": "First Seen",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.lastSeen",
+                    "data_type": "string",
+                    "column_name": "Last Seen",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.logonTypes",
+                    "data_type": "string",
+                    "column_name": "Logon Types",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.isDomainAdmin",
+                    "data_type": "boolean",
+                    "column_name": "Is Domain Admin",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.isOnlyNetworkUser",
+                    "data_type": "boolean",
+                    "column_name": "Is Only Network User",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Active Users"
+                    ]
+                }
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "list devices",
             "description": "List of recently seen devices",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/get-machines\" target=\"_blank\">List Machines API Documentation</a>), the user can get devices last seen in the past 30 days; the maximum page size is 10,000; rate limitations for this action are 100 calls per minute and 1500 calls per hour. If the user does not specify the limit value, it will fetch 100 devices by default.",

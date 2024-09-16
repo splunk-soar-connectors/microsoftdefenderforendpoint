@@ -1846,6 +1846,36 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_active_users(self, param):
+        """ This function retrieves a collection of logged on users on a specific device by its device ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_id = param.get("device_id")
+
+        if not device_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_ACTIVE_DEVICE_USERS.format(device_id=device_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response.get('value', []))
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Retrieved Active Users"
+        summary['total_results'] = len(response.get('value', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_list_sessions(self, param):
         """This function is used to handle the list sessions action.
 
