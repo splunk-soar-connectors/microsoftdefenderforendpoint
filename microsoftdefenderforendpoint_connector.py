@@ -2423,6 +2423,40 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_collect_investigation_package(self, param):
+        """ This function collects an investigation package from a device by its device ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_id = param.get("device_id")
+        comment = param.get("comment")
+
+        if not device_id or not comment:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_COLLECT_INVESTIGATION_PACKAGE_ENDPOINT.format(device_id=device_id))
+
+        payload = {
+            "Comment": comment
+        }
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=payload)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary['action_taken'] = "Collected Investigation Package"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_get_device_details(self, param):
         """ This function retrieves details for multiple devices by their device IDs.
 

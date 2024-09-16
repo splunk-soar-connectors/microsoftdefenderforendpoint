@@ -80,6 +80,7 @@ DEFENDER_LIST_SOFTWARE_DEVICES_ENDPOINT = '/software/{software_id}/machineRefere
 DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT = '/software/{software_id}/vulnerabilities'
 DEFENDER_LIST_DEVICE_VULNERABILITIES_ENDPOINT = '/vulnerabilities/machinesVulnerabilities'
 DEFENDER_DEVICE_DETAILS_ENDPOINT = '/machines/{device_id}'
+DEFENDER_COLLECT_INVESTIGATION_PACKAGE_ENDPOINT = '/machines/{device_id}/collectInvestigationPackage'
 
 DEFENDERATP_IP_PARAM_CONST = "ip"
 DEFENDERATP_DOMAIN_PARAM_CONST = "domain"

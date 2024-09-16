@@ -7078,6 +7078,133 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "collect investigation package",
+            "description": "Collect an investigation package from a device by its device ID",
+            "verbose": "This action collects an investigation package from a device by its device ID. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/collect-investigation-package).",
+            "type": "generic",
+            "identifier": "collect_investigation_package",
+            "read_only": false,
+            "parameters": {
+                "device_id": {
+                    "description": "ID of the device",
+                    "data_type": "string",
+                    "required": true,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                "comment": {
+                    "description": "Comment to include in the investigation package",
+                    "data_type": "string",
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.device_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.id",
+                    "data_type": "string",
+                    "column_name": "Action ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.type",
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.scope",
+                    "data_type": "string",
+                    "column_name": "Scope",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.requestor",
+                    "data_type": "string",
+                    "column_name": "Requestor",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.requestorComment",
+                    "data_type": "string",
+                    "column_name": "Requestor Comment",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.machineId",
+                    "data_type": "string",
+                    "column_name": "Machine ID",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.computerDnsName",
+                    "data_type": "string",
+                    "column_name": "Computer DNS Name",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.creationDateTimeUtc",
+                    "data_type": "string",
+                    "column_name": "Creation DateTime (UTC)",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.lastUpdateDateTimeUtc",
+                    "data_type": "string",
+                    "column_name": "Last Update DateTime (UTC)",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Collected Investigation Package"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get device details",
             "description": "Retrieve details for multiple devices by their device IDs",
             "verbose": "This action retrieves details for multiple devices by their device IDs. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-by-id).",
