@@ -2627,7 +2627,7 @@
                     "data_path": "action_result.parameters.id",
                     "data_type": "string",
                     "contains": [
-                      "defender atp software id"
+                        "defender atp software id"
                     ]
                 },
                 {
@@ -2677,6 +2677,79 @@
                 },
                 {
                     "data_path": "action_result.summary.total_software",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list software versions",
+            "description": "Retrieves a list of organization's software version distribution.",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-software-ver-distribution\" target=\"_blank\">Get Software Distribution API Documentation</a>)",
+            "type": "investigate",
+            "identifier": "list_software_versions",
+            "read_only": true,
+            "parameters": {
+                "id": {
+                    "description": "ID of the software",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ],
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string",
+                    "column_name": "Version",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.installations",
+                    "data_type": "numeric",
+                    "column_name": "Installations",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.vulnerabilities",
+                    "data_type": "numeric",
+                    "column_name": "Vulnerabilities",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.summary.total_versions",
                     "data_type": "numeric"
                 },
                 {

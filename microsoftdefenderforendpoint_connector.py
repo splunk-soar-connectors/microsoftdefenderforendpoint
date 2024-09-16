@@ -1924,6 +1924,40 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_list_software_versions(self, param):
+        """ This function retrieves the software version distribution for a specific software ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        software_id = param.get("id")
+
+        if not software_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
+
+        url = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT.format(software_id))
+
+        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        version_distribution = response.get('value', [])
+        for version in version_distribution:
+            action_result.add_data(version)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_ERROR, "No software versions found")
+
+        summary = action_result.update_summary({})
+        summary['total_versions'] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_ip_prevalence(self, param):
         action_identifier = self.get_action_identifier()
         self.save_progress("In action handler for {}".format(action_identifier))

@@ -75,6 +75,7 @@ DEFENDER_DEVICE_ALERTS_ENDPOINT = "/machines/{device_id}/alerts"
 DEFENDER_GET_INDICATOR_ENDPOINT = "/indicators/{indicator_id}"
 DEFENDER_UPDATE_INDICATOR_ENDPOINT = "/indicators/import"
 DEFENDER_LIST_SOFTWARE_ENDPOINT = '/software'
+DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT = '/software/{software_id}/distributions'
 
 DEFENDERATP_IP_PARAM_CONST = "ip"
 DEFENDERATP_DOMAIN_PARAM_CONST = "domain"
