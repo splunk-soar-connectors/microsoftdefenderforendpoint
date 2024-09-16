@@ -2091,6 +2091,74 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_list_vulnerabilities(self, param):
+        """ This function retrieves a list of vulnerabilities based on filters.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        vulnerability_id = param.get("id")
+        name_equal = param.get("name_equal")
+        name_contains = param.get("name_contains")
+        description_contains = param.get("description_contains")
+        published_on = param.get("published_on")
+        cvss = param.get("cvss")
+        severity = param.get("severity")
+        updated_on = param.get("updated_on")
+        limit = param.get("limit", DEFENDERATP_VULNERABILITIES_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_VULNERABILITIES_DEFAULT_OFFSET)
+
+        ret_val, limit = self._validate_integer(action_result, limit, "limit", allow_zero=False)
+        ret_val, offset = self._validate_integer(action_result, offset, "offset", allow_zero=True)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT, limit, offset)
+
+        filters = []
+        if vulnerability_id:
+            filters.append("id eq '{}'".format(vulnerability_id))
+        if name_equal:
+            filters.append("name eq '{}'".format(name_equal))
+        if name_contains:
+            filters.append("contains(name, '{}')".format(name_contains))
+        if description_contains:
+            filters.append("contains(description, '{}')".format(description_contains))
+        if published_on:
+            filters.append("publishedOn eq '{}'".format(published_on))
+        if cvss:
+            filters.append("cvss eq '{}'".format(cvss))
+        if severity:
+            filters.append("severity eq '{}'".format(severity))
+        if updated_on:
+            filters.append("updatedOn eq '{}'".format(updated_on))
+
+        if filters:
+            endpoint += "&$filter={}".format(" and ".join(filters))
+
+        url = "{0}{1}".format(self._graph_url, endpoint)
+
+        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        vulnerabilities = response.get('value', [])
+        for vulnerability in vulnerabilities:
+            action_result.add_data(vulnerability)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_ERROR, "No vulnerabilities found")
+
+        summary = action_result.update_summary({})
+        summary['total_vulnerabilities'] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_ip_prevalence(self, param):
         action_identifier = self.get_action_identifier()
         self.save_progress("In action handler for {}".format(action_identifier))

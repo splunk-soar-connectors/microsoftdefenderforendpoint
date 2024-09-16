@@ -3127,6 +3127,188 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "list vulnerabilities",
+            "description": "Retrieve a list of vulnerabilities based on filters.",
+            "verbose": "This action retrieves a list of vulnerabilities based on filters. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities).",
+            "type": "investigate",
+            "identifier": "list_vulnerabilities",
+            "read_only": true,
+            "parameters": {
+                "id": {
+                    "description": "ID of the vulnerability",
+                    "data_type": "string",
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                "name_equal": {
+                    "description": "Exact name of the vulnerability",
+                    "data_type": "string"
+                },
+                "name_contains": {
+                    "description": "Name contains this string",
+                    "data_type": "string"
+                },
+                "description_contains": {
+                    "description": "Description contains this string",
+                    "data_type": "string"
+                },
+                "published_on": {
+                    "description": "Date when the vulnerability was published",
+                    "data_type": "string"
+                },
+                "cvss": {
+                    "description": "CVSS score",
+                    "data_type": "numeric"
+                },
+                "severity": {
+                    "description": "Severity of the vulnerability",
+                    "data_type": "string"
+                },
+                "updated_on": {
+                    "description": "Date when the vulnerability was last updated",
+                    "data_type": "string"
+                },
+                "limit": {
+                    "description": "Maximum number of results to return",
+                    "data_type": "numeric",
+                    "default": 100
+                },
+                "offset": {
+                    "description": "Number of results to skip",
+                    "data_type": "numeric",
+                    "default": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.id",
+                    "data_type": "string",
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Vulnerability ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Vulnerability Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.cvssV3",
+                    "data_type": "numeric",
+                    "column_name": "CVSS v3 Score",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.cvssVector",
+                    "data_type": "string",
+                    "column_name": "CVSS Vector",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.exposedMachines",
+                    "data_type": "numeric",
+                    "column_name": "Exposed Machines",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.data.*.publishedOn",
+                    "data_type": "string",
+                    "column_name": "Published On",
+                    "column_order": 7
+                },
+                {
+                    "data_path": "action_result.data.*.updatedOn",
+                    "data_type": "string",
+                    "column_name": "Updated On",
+                    "column_order": 8
+                },
+                {
+                    "data_path": "action_result.data.*.firstDetected",
+                    "data_type": "string",
+                    "column_name": "First Detected",
+                    "column_order": 9
+                },
+                {
+                    "data_path": "action_result.data.*.publicExploit",
+                    "data_type": "boolean",
+                    "column_name": "Public Exploit",
+                    "column_order": 10
+                },
+                {
+                    "data_path": "action_result.data.*.exploitVerified",
+                    "data_type": "boolean",
+                    "column_name": "Exploit Verified",
+                    "column_order": 11
+                },
+                {
+                    "data_path": "action_result.data.*.exploitInKit",
+                    "data_type": "boolean",
+                    "column_name": "Exploit In Kit",
+                    "column_order": 12
+                },
+                {
+                    "data_path": "action_result.data.*.cveSupportability",
+                    "data_type": "string",
+                    "column_name": "CVE Supportability",
+                    "column_order": 13
+                },
+                {
+                    "data_path": "action_result.data.*.epss",
+                    "data_type": "numeric",
+                    "column_name": "EPSS Score",
+                    "column_order": 14
+                },
+                {
+                    "data_path": "action_result.summary.total_vulnerabilities",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get alert",
             "description": "Retrieve specific Alert by its ID",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-alert-info-by-id\" target=\"_blank\">Get Alert Information by ID API Documentation</a>), user can get alerts last updated according to your configured retention period.; rate limitations for this action are 100 calls per minute and 1500 calls per hour.",
