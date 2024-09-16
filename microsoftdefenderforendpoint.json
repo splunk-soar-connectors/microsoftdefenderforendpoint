@@ -2971,6 +2971,162 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "list device vulnerabilities",
+            "description": "Retrieve vulnerabilities affecting devices or software in organization.",
+            "verbose": "This action retrieves vulnerabilities affecting devices or software in the organization. Documentation can be found [here](https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-vulnerability).",
+            "type": "investigate",
+            "identifier": "list_device_vulnerabilities",
+            "read_only": true,
+            "parameters": {
+                "device_id": {
+                    "description": "ID of the device",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                "software_id": {
+                    "description": "ID of the software",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                "cve_id": {
+                    "description": "CVE ID",
+                    "data_type": "string",
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                "product_name": {
+                    "description": "Name of the product",
+                    "data_type": "string"
+                },
+                "product_version": {
+                    "description": "Version of the product",
+                    "data_type": "string"
+                },
+                "severity": {
+                    "description": "Severity of the vulnerability",
+                    "data_type": "string"
+                },
+                "product_vendor": {
+                    "description": "Vendor of the product",
+                    "data_type": "string"
+                },
+                "limit": {
+                    "description": "Maximum number of results to return",
+                    "data_type": "numeric",
+                    "default": 100
+                },
+                "offset": {
+                    "description": "Number of results to skip",
+                    "data_type": "numeric",
+                    "default": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.device_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.software_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.cve_id",
+                    "data_type": "string",
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameters.product_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameters.product_version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameters.severity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameters.product_vendor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameters.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameters.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.osPlatform",
+                    "data_type": "string",
+                    "column_name": "Operating System",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string",
+                    "column_name": "RBAC Group Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.summary.total_vulnerabilities",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get alert",
             "description": "Retrieve specific Alert by its ID",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-alert-info-by-id\" target=\"_blank\">Get Alert Information by ID API Documentation</a>), user can get alerts last updated according to your configured retention period.; rate limitations for this action are 100 calls per minute and 1500 calls per hour.",

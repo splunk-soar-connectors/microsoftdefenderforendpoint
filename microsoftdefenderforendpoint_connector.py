@@ -2026,6 +2026,71 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_list_device_vulnerabilities(self, param):
+        """ This function retrieves vulnerabilities affecting the organization per device or software.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_ids = param.get("device_id")
+        software_ids = param.get("software_id")
+        cve_ids = param.get("cve_id")
+        product_name = param.get("product_name")
+        product_version = param.get("product_version")
+        severity = param.get("severity")
+        product_vendor = param.get("product_vendor")
+        limit = param.get("limit", DEFENDERATP_DEVICE_VULNERABILITIES_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_DEVICE_VULNERABILITIES_DEFAULT_OFFSET)
+
+        ret_val, limit = self._validate_integer(action_result, limit, "limit", allow_zero=False)
+        ret_val, offset = self._validate_integer(action_result, offset, "offset", allow_zero=True)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_DEVICE_VULNERABILITIES_ENDPOINT, limit, offset)
+
+        filters = []
+        if device_ids:
+            filters.append("deviceIds eq '{}'".format(device_ids))
+        if software_ids:
+            filters.append("softwareIds eq '{}'".format(software_ids))
+        if cve_ids:
+            filters.append("cveIds eq '{}'".format(cve_ids))
+        if product_name:
+            filters.append("productNames eq '{}'".format(product_name))
+        if product_version:
+            filters.append("productVersions eq '{}'".format(product_version))
+        if severity:
+            filters.append("severities eq '{}'".format(severity))
+        if product_vendor:
+            filters.append("productVendors eq '{}'".format(product_vendor))
+
+        if filters:
+            endpoint = "{}&$filter={}".format(endpoint, " and ".join(filters))
+
+        url = "{0}{1}".format(self._graph_url, endpoint)
+
+        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        vulnerabilities = response.get('value', [])
+        for vulnerability in vulnerabilities:
+            action_result.add_data(vulnerability)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_ERROR, "No vulnerabilities found for specified device")
+
+        summary = action_result.update_summary({})
+        summary['total_vulnerabilities'] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_ip_prevalence(self, param):
         action_identifier = self.get_action_identifier()
         self.save_progress("In action handler for {}".format(action_identifier))
