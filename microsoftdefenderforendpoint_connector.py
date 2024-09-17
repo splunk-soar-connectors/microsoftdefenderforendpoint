@@ -3138,7 +3138,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved network connections")
 
     def _handle_cover_up(self, param):
-        """This function is used to handle the cover-up actions in advanced hunting.
+        """ This function is used to handle the cover-up actions in advanced hunting.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -3221,6 +3221,85 @@ class WindowsDefenderAtpConnector(BaseConnector):
         summary['total_results'] = len(response.get('Results', []))
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved cover-up actions")
+
+    def _handle_hunting_file_origin(self, param):
+        """ This function handles the file origin hunting action in advanced hunting.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        query_purpose = param.get('query_purpose')
+
+        if not query_purpose:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter")
+
+        device_name = param.get('device_name')
+        file_name = param.get('file_name')
+        sha1 = param.get('sha1')
+        sha256 = param.get('sha256')
+        md5 = param.get('md5')
+        device_id = param.get('device_id')
+        query_operation = param.get('query_operation', 'or')
+        limit = param.get('limit', DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        timeout = param.get('timeout', DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+        time_range = param.get('time_range', '1d')
+        show_query = param.get('show_query', False)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query_templates = {
+            "dropped_file": f"DeviceFileEvents | where DeviceName == '{device_name}' and ActionType == 'FileDropped'",
+            "created_file": f"DeviceFileEvents | where DeviceName == '{device_name}' and ActionType == 'FileCreated'",
+            "network_shared": f"DeviceNetworkEvents | where DeviceName == '{device_name}' and ActionType == 'FileShared'",
+            "execution_chain": f"DeviceProcessEvents | where DeviceName == '{device_name}' and ActionType == 'ProcessCreated'"
+        }
+
+        if query_purpose not in query_templates:
+            return action_result.set_status(phantom.APP_ERROR, "Invalid query_purpose provided")
+
+        query = query_templates[query_purpose]
+
+        optional_conditions = []
+
+        if file_name:
+            optional_conditions.append(f"FileName == '{file_name}'")
+        if sha1:
+            optional_conditions.append(f"SHA1 == '{sha1}'")
+        if sha256:
+            optional_conditions.append(f"SHA256 == '{sha256}'")
+        if md5:
+            optional_conditions.append(f"MD5 == '{md5}'")
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        if show_query:
+            action_result.update_summary({"query": query})
+
+        data = {
+            "Query": query
+        }
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout)
+
+        if phantom.is_fail(ret_val):
+            summary['query_status'] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        action_result.add_data(response)
+        summary['total_results'] = len(response.get('Results', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved file origin details")
 
     def _handle_on_poll(self, param):
         """This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
@@ -3410,6 +3489,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'retrieve_persistence_evidence': self._handle_persistence_evidence,
             'retrieve_network_connections': self._handle_network_connections,
             'retrieve_cover_up': self._handle_cover_up,
+            'retrieve_file_origin': self._handle_hunting_file_origin,
         }
 
         action = self.get_action_identifier()
