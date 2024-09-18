@@ -3357,6 +3357,62 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved privilege escalation evidence")
 
+    def _handle_tampering(self, param):
+        """This function is used to detect evidence of MSDE agent/sensor tampering.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        device_name = param.get('device_name')
+
+        if not device_name:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_name")
+
+        device_id = param.get('device_id')
+        query_operation = param.get('query_operation', 'or')
+        limit = param.get('limit', DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        timeout = param.get('timeout', DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+        time_range = param.get('time_range', '1d')
+        show_query = param.get('show_query', False)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query = f"DeviceEvents | where DeviceName == '{device_name}' and (ActionType == 'SensorTampered' or ActionType == 'AgentTampered')"
+
+        optional_conditions = []
+
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        if show_query:
+            action_result.update_summary({"query": query})
+
+        data = {
+            "Query": query
+        }
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout)
+
+        if phantom.is_fail(ret_val):
+            summary['query_status'] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        action_result.add_data(response)
+        summary['total_results'] = len(response.get('Results', []))
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved tampering evidence")
+
     def _handle_on_poll(self, param):
         """This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
 
@@ -3547,6 +3603,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'retrieve_cover_up': self._handle_cover_up,
             'retrieve_file_origin': self._handle_hunting_file_origin,
             'retrieve_privilege_escalation': self._handle_privilege_escalation,
+            'retrieve_tampering': self._handle_tampering,
         }
 
         action = self.get_action_identifier()
