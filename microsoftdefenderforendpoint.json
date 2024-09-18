@@ -12785,6 +12785,380 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "retrieve privilege escalation",
+            "description": "Retrieve evidence of privilege escalation using advanced hunting queries",
+            "type": "investigate",
+            "identifier": "retrieve_privilege_escalation",
+            "read_only": true,
+            "parameters": {
+                "device_name": {
+                    "description": "Device name to look for",
+                    "data_type": "string",
+                    "order": 0,
+                    "required": true
+                },
+                "device_id": {
+                    "description": "Device ID to look for",
+                    "data_type": "string",
+                    "order": 1
+                },
+                "query_operation": {
+                    "description": "Query operator to use with provided arguments",
+                    "data_type": "string",
+                    "order": 2,
+                    "default": "or",
+                    "value_list": [
+                        "or",
+                        "and"
+                    ]
+                },
+                "limit": {
+                    "description": "Maximum number of results to retrieve. Default is 50",
+                    "data_type": "numeric",
+                    "order": 3,
+                    "default": 50
+                },
+                "timeout": {
+                    "description": "Timeout for query response (in seconds). Default is 10",
+                    "data_type": "numeric",
+                    "order": 4,
+                    "default": 10
+                },
+                "time_range": {
+                    "description": "Time range to look back. Default is '1d'",
+                    "data_type": "string",
+                    "order": 5,
+                    "default": "1d"
+                },
+                "show_query": {
+                    "description": "Show the query as part of the result",
+                    "data_type": "boolean",
+                    "order": 6
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.device_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.device_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.query_operation",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.timeout",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.time_range",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.show_query",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.DeviceId",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.DeviceName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.ActionType",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.Timestamp",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.FileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.FolderPath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.SHA1",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.SHA256",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.MD5",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.FileSize",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.AccountDomain",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.AccountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.AccountSid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RemoteUrl",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RemoteDeviceName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.ProcessId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.ProcessCommandLine",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.ProcessCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.ProcessTokenElevation",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.LogonId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.RegistryKey",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RegistryValueName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RegistryValueData",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RemoteIP",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.RemotePort",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.LocalIP",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.LocalPort",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.FileOriginUrl",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.FileOriginIP",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessSHA1",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessSHA256",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessMD5",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessFileSize",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessFolderPath",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessCommandLine",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountDomain",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountSid",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountUpn",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessAccountObjectId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoCompanyName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoProductName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoProductVersion",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoInternalFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoOriginalFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessVersionInfoFileDescription",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessParentId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessParentFileName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessParentCreationTime",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessLogonId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.ReportId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.AppGuardContainerId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.AdditionalFields",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessSessionId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.IsInitiatingProcessRemoteSession",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessRemoteSessionDeviceName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessRemoteSessionIP",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.CreatedProcessSessionId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.IsProcessRemoteSession",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.ProcessRemoteSessionDeviceName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.ProcessRemoteSessionIP",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.InitiatingProcessUniqueId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "get missing kbs",
             "description": "Retrieve missing KBs (security updates) by given device ID",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-missing-kbs-machine?view=o365-worldwide\" target=\"_blank\">Get missing KBs API Documentation</a>), the user can retrieve a collection of missing security updated related to a given device ID.",
