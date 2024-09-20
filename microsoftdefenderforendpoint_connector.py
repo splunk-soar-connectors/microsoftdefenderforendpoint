@@ -1580,7 +1580,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not alert_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
-        endpoint = "{0}{1}/users".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
+        endpoint = "{0}{1}/user".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1853,7 +1853,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not user:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: user")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_USER_ALERTS_ENDPOINT.format(user=user))
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_USER_ALERTS_ENDPOINT.format(user_id=user))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1952,7 +1952,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not device_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DEVICE_ALERTS_ENDPOINT.format(machine_id=device_id))
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DEVICE_ALERTS_ENDPOINT.format(device_id=device_id))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
