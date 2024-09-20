@@ -1,22 +1,22 @@
 {
     "appid": "e85407b7-91f0-4019-8fa4-0d29bca741d5",
-    "name": "Windows Defender ATP",
-    "description": "This app integrates with Windows Defender Advanced Threat Protection(ATP) to execute various containment, corrective, generic, and investigative actions",
+    "name": "Microsoft Defender for Endpoint",
+    "description": "This app integrates with Microsoft Defender for Endpoint to execute various containment, corrective, generic, and investigative actions",
     "type": "endpoint",
     "product_vendor": "Microsoft",
-    "logo": "logo_windowsdefenderatp.svg",
-    "logo_dark": "logo_windowsdefenderatp_dark.svg",
-    "product_name": "Windows Defender ATP",
+    "logo": "logo_microsoftdefenderforendpoint.svg",
+    "logo_dark": "logo_microsoftdefenderforendpoint_dark.svg",
+    "product_name": "Microsoft Defender for Endpoint",
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2024 Splunk Inc.",
     "app_version": "3.8.2",
     "utctime_updated": "2022-10-06T07:32:27.000000Z",
-    "package_name": "phantom_windowsdefenderatp",
-    "main_module": "windowsdefenderatp_connector.py",
+    "package_name": "phantom_microsoftdefenderforendpoint",
+    "main_module": "microsoftdefenderforendpoint_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "6.1.1",
+    "min_phantom_version": "6.2.1",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
         "Cloud November 11, 2022"
@@ -26,7 +26,7 @@
             "name": "Adam Gold"
         }
     ],
-    "rest_handler": "windowsdefenderatp_connector._handle_rest_request",
+    "rest_handler": "microsoftdefenderforendpoint_connector._handle_rest_request",
     "configuration": {
         "tenant_id": {
             "description": "Tenant ID",
@@ -2345,7 +2345,7 @@
                 "type": "custom",
                 "width": 10,
                 "height": 5,
-                "view": "windowsdefenderatp_view.display_alerts",
+                "view": "microsoftdefenderforendpoint_view.display_alerts",
                 "title": "List Alerts"
             },
             "versions": "EQ(*)"
@@ -2893,7 +2893,7 @@
                 "type": "custom",
                 "width": 10,
                 "height": 5,
-                "view": "windowsdefenderatp_view.get_alert",
+                "view": "microsoftdefenderforendpoint_view.get_alert",
                 "title": "Get Alert"
             },
             "versions": "EQ(*)"
@@ -3319,7 +3319,7 @@
                 "type": "custom",
                 "width": 10,
                 "height": 5,
-                "view": "windowsdefenderatp_view.update_alert",
+                "view": "microsoftdefenderforendpoint_view.update_alert",
                 "title": "Update Alert"
             },
             "versions": "EQ(*)"
@@ -4311,7 +4311,7 @@
                 "type": "custom",
                 "width": 10,
                 "height": 5,
-                "view": "windowsdefenderatp_view.display_devices",
+                "view": "microsoftdefenderforendpoint_view.display_devices",
                 "title": "Get File Devices"
             },
             "versions": "EQ(*)"
@@ -4622,7 +4622,7 @@
                 "type": "custom",
                 "width": 10,
                 "height": 5,
-                "view": "windowsdefenderatp_view.display_devices",
+                "view": "microsoftdefenderforendpoint_view.display_devices",
                 "title": "Get User Devices"
             },
             "versions": "EQ(*)"
@@ -6621,7 +6621,7 @@
                 "type": "custom",
                 "width": 10,
                 "height": 5,
-                "view": "windowsdefenderatp_view.display_devices",
+                "view": "microsoftdefenderforendpoint_view.display_devices",
                 "title": "Get Domain Devices"
             },
             "versions": "EQ(*)"
@@ -8544,7 +8544,7 @@
                 "type": "custom",
                 "width": 10,
                 "height": 5,
-                "view": "windowsdefenderatp_view.run_script",
+                "view": "microsoftdefenderforendpoint_view.run_script",
                 "title": "Run Script"
             },
             "versions": "EQ(*)"

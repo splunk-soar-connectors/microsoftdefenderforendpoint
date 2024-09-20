@@ -1,4 +1,4 @@
-# File: windowsdefenderatp_connector.py
+# File: microsoftdefenderforendpoint_connector.py
 #
 # Copyright (c) 2019-2024 Splunk Inc.
 #
@@ -45,7 +45,7 @@ from django.http import HttpResponse
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
-from windowsdefenderatp_consts import *
+from microsoftdefenderforendpoint_consts import *
 
 
 def _handle_login_redirect(request, key):
@@ -906,7 +906,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         # wait-time while status updates for specified timeout period
         for _ in range(0, int(timeout / 5)):
             # This sleep-time is the time required (0-5 seconds) for the machineaction's command ID details to get reflected
-            # on the Windows Defender ATP server. Hence, this sleep-time is explicitly added and added before the first fetch of status.
+            # on the Defender for Endpoint server. Hence, this sleep-time is explicitly added and added before the first fetch of status.
             time.sleep(DEFENDERATP_STATUS_CHECK_SLEEP)
 
             # make rest call
