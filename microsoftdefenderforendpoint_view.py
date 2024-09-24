@@ -1,4 +1,4 @@
-# File: windowsdefenderatp_view.py
+# File: microsoftdefenderforendpoint_view.py
 #
 # Copyright (c) 2019-2024 Splunk Inc.
 #
@@ -19,82 +19,82 @@ def get_ctx_result(result):
     summary = result.get_summary()
     data = result.get_data()
 
-    ctx_result['param'] = param
+    ctx_result["param"] = param
 
     if data:
-        ctx_result['data'] = data
+        ctx_result["data"] = data
 
     if summary:
-        ctx_result['summary'] = summary
+        ctx_result["summary"] = summary
 
     return ctx_result
 
 
 def display_alerts(provides, all_app_runs, context):
 
-    context['results'] = results = []
+    context["results"] = results = []
 
     for summary, action_results in all_app_runs:
         for result in action_results:
             ctx_result = get_ctx_result(result)
-            if (not ctx_result):
+            if not ctx_result:
                 continue
             results.append(ctx_result)
 
-    return 'windowsdefenderatp_list_alerts.html'
+    return "microsoftdefenderforendpoint_list_alerts.html"
 
 
 def display_devices(provides, all_app_runs, context):
 
-    context['results'] = results = []
+    context["results"] = results = []
 
     for summary, action_results in all_app_runs:
         for result in action_results:
             ctx_result = get_ctx_result(result)
-            if (not ctx_result):
+            if not ctx_result:
                 continue
             results.append(ctx_result)
 
-    return 'windowsdefenderatp_get_devices.html'
+    return "microsoftdefenderforendpoint_get_devices.html"
 
 
 def get_alert(provides, all_app_runs, context):
 
-    context['results'] = results = []
+    context["results"] = results = []
 
     for summary, action_results in all_app_runs:
         for result in action_results:
             ctx_result = get_ctx_result(result)
-            if (not ctx_result):
+            if not ctx_result:
                 continue
             results.append(ctx_result)
 
-    return 'windowsdefenderatp_get_alert.html'
+    return "microsoftdefenderforendpoint_get_alert.html"
 
 
 def run_script(provides, all_app_runs, context):
 
-    context['results'] = results = []
+    context["results"] = results = []
 
     for summary, action_results in all_app_runs:
         for result in action_results:
             ctx_result = get_ctx_result(result)
-            if (not ctx_result):
+            if not ctx_result:
                 continue
             results.append(ctx_result)
 
-    return 'windowsdefenderatp_run_script.html'
+    return "microsoftdefenderforendpoint_run_script.html"
 
 
 def update_alert(provides, all_app_runs, context):
 
-    context['results'] = results = []
+    context["results"] = results = []
 
     for summary, action_results in all_app_runs:
         for result in action_results:
             ctx_result = get_ctx_result(result)
-            if (not ctx_result):
+            if not ctx_result:
                 continue
             results.append(ctx_result)
 
-    return 'windowsdefenderatp_update_alert.html'
+    return "microsoftdefenderforendpoint_update_alert.html"

@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "64b9eb6b-0bf6-4fcc-a20b-f629e2b5fd6c",
-		"name": "Windows Defender ATP",
-		"description": "# Postman Collection of Endpoints for Windows Defender ATP App on Splunk SOAR.\n\n- ### Prerequisite\n\nThe below mentioned are the required fields to use this collection. So, make sure that all these fields are set before running the request.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| tenant_id  | Tenant ID ( in environment variables) |\n| client_id  | Client ID ( in environment variables) |\n| client_secret |Client Secret ( in environment variables) |\n| base_url | EWS URL ( in local variables) |",
+		"name": "Microsoft Defender for Endpoint",
+		"description": "# Postman Collection of Endpoints for Microsoft Defender for Endpoint App on Splunk SOAR.\n\n- ### Prerequisite\n\nThe below mentioned are the required fields to use this collection. So, make sure that all these fields are set before running the request.\n\n| **Variable Name** | **Description** |\n| ------ | ------ |\n| tenant_id  | Tenant ID ( in environment variables) |\n| client_id  | Client ID ( in environment variables) |\n| client_secret |Client Secret ( in environment variables) |\n| base_url | EWS URL ( in local variables) |",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
