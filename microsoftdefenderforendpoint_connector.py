@@ -1478,95 +1478,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_create_alert(self, param):
-        """ This function is used to handle the create alert action.
-
-        :param param: Dictionary of input parameters
-        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
-        """
-
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        action_result = self.add_action_result(ActionResult(dict(param)))
-
-        report_id = param.get("report_id")
-        event_time = param.get("event_time")
-        machine_id = param.get("machine_id")
-        severity = param.get("severity")
-        title = param.get("title")
-        description = param.get("description")
-        recommended_action = param.get("recommended_action")
-        category = param.get("category")
-
-        # Validation
-        if not all([report_id, event_time, machine_id, severity, title, description, recommended_action, category]):
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
-
-        request_body = {
-            "reportId": report_id,
-            "eventTime": event_time,
-            "machineId": machine_id,
-            "severity": severity,
-            "title": title,
-            "description": description,
-            "recommendedAction": recommended_action,
-            "category": category
-        }
-
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_CREATE_ALERT_ENDPOINT)
-
-        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post",
-                                                data=json.dumps(request_body))
-
-        if phantom.is_fail(ret_val):
-            return action_result.get_status()
-
-        action_result.add_data(response)
-
-        summary = action_result.update_summary({})
-        summary['action_taken'] = "Created Alert"
-
-        return action_result.set_status(phantom.APP_SUCCESS)
-
     def _handle_get_alert_user(self, param):
-        """ This function is used to handle the get alert user action.
-
-        :param param: Dictionary of input parameters
-        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
-        """
-
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        action_result = self.add_action_result(ActionResult(dict(param)))
-
-        alert_id = param.get("alert_id")
-
-        if not alert_id:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
-
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
-
-        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
-
-        if phantom.is_fail(ret_val):
-            return action_result.get_status()
-
-        if not response:
-            return action_result.set_status(phantom.APP_SUCCESS, "No alert found")
-
-        assigned_user = response.get('assignedTo')
-
-        if not assigned_user:
-            return action_result.set_status(phantom.APP_SUCCESS, "No user assigned to the alert")
-
-        # Get user now
-        action_result.add_data({"assignedUser": assigned_user})
-
-        summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Assigned User for Alert"
-
-        return action_result.set_status(phantom.APP_SUCCESS)
-
-    def _handle_get_alert_user(self, param):
-        """ This function is used to handle the get alert user action.
+        """This function is used to handle the get alert user action.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1587,15 +1500,16 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Assigned User for Alert"
+        summary["action_taken"] = "Retrieved Assigned User for Alert"
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_alert_files(self, param):
-        """ This function is used to handle the get alert files action.
+        """This function is used to handle the get alert files action.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1612,10 +1526,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
         endpoint = "{0}{1}/files?$top={2}&$skip={3}".format(
-            self._graph_url,
-            DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id),
-            limit,
-            offset
+            self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id), limit, offset
         )
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -1623,16 +1534,17 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Files for Alert"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved Files for Alert"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_alert_ips(self, param):
-        """ This function is used to handle the get alert IPs action.
+        """This function is used to handle the get alert IPs action.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1648,28 +1560,24 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not alert_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
-        endpoint = "{0}{1}/ips?$top={2}&$skip={3}".format(
-            self._graph_url,
-            DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id),
-            limit,
-            offset
-        )
+        endpoint = "{0}{1}/ips?$top={2}&$skip={3}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id), limit, offset)
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved IPs for Alert"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved IPs for Alert"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_alert_domains(self, param):
-        """ This function is used to handle the get alert domains action.
+        """This function is used to handle the get alert domains action.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1686,10 +1594,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
         endpoint = "{0}{1}/domains?$top={2}&$skip={3}".format(
-            self._graph_url,
-            DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id),
-            limit,
-            offset
+            self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id), limit, offset
         )
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -1697,16 +1602,17 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Domains for Alert"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved Domains for Alert"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_create_alert(self, param):
-        """ This function is used to handle the create alert action.
+        """This function is used to handle the create alert action.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1736,13 +1642,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "title": title,
             "description": description,
             "recommendedAction": recommended_action,
-            "category": category
+            "category": category,
         }
 
         endpoint = "{0}{1}".format(self._graph_url, DEFENDER_CREATE_ALERT_ENDPOINT)
 
-        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post",
-                                                data=json.dumps(request_body))
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(request_body))
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -1750,7 +1655,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Created Alert"
+        summary["action_taken"] = "Created Alert"
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -1807,39 +1712,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_user_alerts(self, param):
-        """ This function retrieves alerts related to a specific user.
-
-        :param param: Dictionary of input parameters
-        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
-        """
-
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        action_result = self.add_action_result(ActionResult(dict(param)))
-
-        user = param.get("user")
-
-        if not user:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: user")
-
-        endpoint = "{0}/api/Users/{1}/alerts".format(self._graph_url, user)
-
-        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
-
-        if phantom.is_fail(ret_val):
-            return action_result.get_status()
-
-        if not response or not response.get('value', []):
-            return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified user")
-
-        action_result.add_data(response.get('value', []))
-
-        summary = action_result.update_summary({})
-        summary['total_results'] = len(response.get('value', []))
-
-        return action_result.set_status(phantom.APP_SUCCESS)
-
-    def _handle_get_user_alerts(self, param):
-        """ This function retrieves alerts related to a specific user.
+        """This function retrieves alerts related to a specific user.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1860,19 +1733,20 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        if not response or not response.get('value', []):
+        if not response or not response.get("value", []):
             return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified user")
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Alerts for User"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved Alerts for User"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_domain_alerts(self, param):
-        """ This function retrieves alerts related to a specific domain address.
+        """This function retrieves alerts related to a specific domain address.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1893,19 +1767,20 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        if not response or not response.get('value', []):
+        if not response or not response.get("value", []):
             return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified domain")
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Alerts for Domain"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved Alerts for Domain"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_file_alerts(self, param):
-        """ This function retrieves alerts related to a specific file hash.
+        """This function retrieves alerts related to a specific file hash.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1926,19 +1801,20 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        if not response or not response.get('value', []):
+        if not response or not response.get("value", []):
             return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified file hash")
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Alerts for File"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved Alerts for File"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_device_alerts(self, param):
-        """ This function retrieves all alerts related to a specific device using the machineId.
+        """This function retrieves all alerts related to a specific device using the machineId.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1959,14 +1835,15 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        if not response or not response.get('value', []):
+        if not response or not response.get("value", []):
             return action_result.set_status(phantom.APP_SUCCESS, "No alerts found for the specified device")
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Alerts for Device"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved Alerts for Device"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -2264,37 +2141,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_indicator(self, param):
-        """ This function is used to retrieve an indicator by its ID.
-
-        :param param: Dictionary of input parameters
-        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
-        """
-
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        action_result = self.add_action_result(ActionResult(dict(param)))
-
-        indicator_id = param.get("indicator_id")
-
-        if not indicator_id:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_id")
-
-        endpoint = "{0}/api/indicators/{1}".format(self._graph_url, indicator_id)
-
-        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
-
-        if phantom.is_fail(ret_val):
-            return action_result.get_status()
-
-        action_result.add_data(response)
-
-        summary = action_result.update_summary({})
-        summary['indicator_id'] = indicator_id
-        summary['action_taken'] = "Retrieved Indicator"
-
-        return action_result.set_status(phantom.APP_SUCCESS)
-
-    def _handle_get_indicator(self, param):
-        """ This function is used to retrieve an indicator by its ID.
+        """This function is used to retrieve an indicator by its ID.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2318,7 +2165,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Indicator"
+        summary["action_taken"] = "Retrieved Indicator"
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -2367,7 +2214,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_update_indicator(self, param):
-        """ This function is used to update an indicator.
+        """This function is used to update an indicator.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2392,7 +2239,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "indicatorType": indicator_type,
             "action": action_taken,
             "description": description,
-            "title": title
+            "title": title,
         }
 
         severity = param.get("severity")
@@ -2415,23 +2262,22 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if rbac_group_names:
             payload["rbacGroupNames"] = rbac_group_names
 
-        payload = {
-            "Indicators": [payload]
-        }
+        payload = {"Indicators": [payload]}
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, data=json.dumps(payload), method="post")
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response)
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Updated Indicator"
+        summary["action_taken"] = "Updated Indicator"
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_update_indicator_batch(self, param):
-        """ This function is used to update a batch of indicators
+        """This function is used to update a batch of indicators
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2454,21 +2300,20 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         endpoint = "{0}{1}".format(self._graph_url, DEFENDER_UPDATE_INDICATOR_ENDPOINT)
 
-        payload = {
-            "Indicators": indicator_batch
-        }
+        payload = {"Indicators": indicator_batch}
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, data=json.dumps(payload), method="post")
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response)
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
 
         # Update the summary and return success
         summary = action_result.update_summary({})
-        summary['total_results'] = len(indicator_batch)
-        summary['action_taken'] = "Updated batch of indicators"
+        summary["total_results"] = len(indicator_batch)
+        summary["action_taken"] = "Updated batch of indicators"
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -3131,86 +2976,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         config = self.get_config()
 
-        # Validation
-        poll_filter, offset, orderby = config.get(DEFENDER_FILTER, ""), 0, "lastUpdateTime"
-        last_modified_time = (datetime.now() - timedelta(days=7)).strftime(DEFENDER_APP_DT_STR_FORMAT)  # Default to last 7 days
-
-        start_time_scheduled_poll = config.get(DEFENDER_CONFIG_START_TIME_SCHEDULED_POLL)
-        if start_time_scheduled_poll:
-            ret_val = self._check_date_format(action_result, start_time_scheduled_poll)
-            if phantom.is_fail(ret_val):
-                self.save_progress(action_result.get_message())
-                return action_result.set_status(phantom.APP_ERROR)
-
-            last_modified_time = start_time_scheduled_poll
-
-        # Max alerts to ingest
-        if self.is_poll_now():
-            max_alerts = int(param.get(phantom.APP_JSON_CONTAINER_COUNT))
-        else:
-            max_alerts = config.get(DEFENDER_CONFIG_FIRST_RUN_MAX_ALERTS, DEFENDER_ALERT_DEFAULT_LIMIT_FOR_SCHEDULE_POLLING)
-            ret_val, max_alerts = self._validate_integer(action_result, max_alerts, "max_alerts")
-            if phantom.is_fail(ret_val):
-                return action_result.get_status()
-
-            if self._state.get(STATE_FIRST_RUN, True):
-                self._state[STATE_FIRST_RUN] = False
-            elif last_time := self._state.get(STATE_LAST_TIME):
-                last_modified_time = last_time
-
-        start_time_filter = f"lastUpdateTime ge {last_modified_time}"
-        poll_filter += start_time_filter if not poll_filter else f" and {start_time_filter}"
-
-        endpoint = "{0}/api/alerts".format(self._graph_url)
-        alerts_left = max_alerts
-        self.duplicate_container = 0
-
-        while alerts_left > 0:
-            self.debug_print("Making a REST call with offset: {}, alerts_left: {}".format(offset, alerts_left))
-            alert_list = self._paginator(action_result, alerts_left, offset, endpoint, poll_filter, orderby)
-
-            if not alert_list and not isinstance(alert_list, list):  # Failed to fetch alerts
-                self.save_progress("Failed to retrieve alerts")
-                return action_result.get_status()
-
-            self.save_progress(f"Successfully fetched {len(alert_list)} alerts.")
-
-            # Ingest the alerts
-            self.debug_print("Creating alert artifacts")
-            for alert in alert_list:
-                try:
-                    self._ingest_alert(alert)
-                except Exception as e:
-                    self.debug_print("Error occurred while saving alert artifacts. Error: {}".format(str(e)))
-
-            if self.is_poll_now():
-                break
-
-            if alert_list:
-                if DEFENDER_JSON_LAST_MODIFIED not in alert_list[-1]:
-                    return action_result.set_status(phantom.APP_ERROR, "Could not extract {} from latest ingested "
-                                                                    "alert.".format(DEFENDER_JSON_LAST_MODIFIED))
-
-                self._state[STATE_LAST_TIME] = alert_list[-1].get(DEFENDER_JSON_LAST_MODIFIED)
-                self.save_state(self._state)
-
-            offset += alerts_left
-            alerts_left = self.duplicate_container
-            self.duplicate_container = 0
-
-        return action_result.set_status(phantom.APP_SUCCESS)
-
-    def _handle_on_poll(self, param):
-        """ This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
-
-        :param param: Dictionary of input parameters
-        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
-        """
-
-        action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
-        config = self.get_config()
-
         poll_filter = config.get(DEFENDER_FILTER, "")
         last_modified_time = (datetime.now() - timedelta(days=DEFENDER_ALERT_DEFAULT_TIME_RANGE)).strftime(DEFENDER_APP_DT_STR_FORMAT)
 
@@ -3242,7 +3007,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         endpoint = "{0}{1}?$top={2}&$filter={3}".format(self._graph_url, DEFENDERATP_ALERTS_ENDPOINT, max_alerts, poll_filter)
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
-        alert_list = response.get('value', [])
+        alert_list = response.get("value", [])
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -3265,31 +3030,31 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _ingest_alert(self, action_result, alert):
-        """ This helper function ingests a single alert as a container with its artifacts.
+        """This helper function ingests a single alert as a container with its artifacts.
 
         :param alert: Dictionary containing alert details
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        acceptable_severities = ['low', 'medium', 'high']
+        acceptable_severities = ["low", "medium", "high"]
 
-        alert_severity = alert.get('severity').lower()
+        alert_severity = alert.get("severity").lower()
 
-        severity = alert_severity if alert_severity in acceptable_severities else 'low'
+        severity = alert_severity if alert_severity in acceptable_severities else "low"
 
         artifact = {
-            'label': 'alert',
-            'name': alert.get('title'),
-            'source_data_identifier': alert.get('id'),
+            "label": "alert",
+            "name": alert.get("title"),
+            "source_data_identifier": alert.get("id"),
             "severity": severity,
-            'data': alert,
-            'cef': alert
+            "data": alert,
+            "cef": alert,
         }
 
         container = {
-            "name": alert.get('title'),
-            "description": 'Alert ingested using MS Defender for Endpoint',
-            "source_data_identifier": alert.get('id'),
+            "name": alert.get("title"),
+            "description": "Alert ingested using MS Defender for Endpoint",
+            "source_data_identifier": alert.get("id"),
             "severity": severity,
         }
 
@@ -3302,13 +3067,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if message in "Duplicate container found":
             self.save_progress("Duplicate container found. Continuing with the same container.")
 
-        artifact['container_id'] = cid
+        artifact["container_id"] = cid
         ret_val, message, _ = self.save_artifacts([artifact])
 
         return phantom.APP_SUCCESS
 
     def _check_date_format(self, action_result, date):
-        """ This helper function is used to check date format.
+        """This helper function is used to check date format.
 
         :param action_result: action result object
         :param date: date string
@@ -3340,7 +3105,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         # Dictionary mapping each action with its corresponding actions
         action_mapping = {
             "test_connectivity": self._handle_test_connectivity,
-            'on_poll': self._handle_on_poll,
+            "on_poll": self._handle_on_poll,
             "quarantine_device": self._handle_quarantine_device,
             "unquarantine_device": self._handle_unquarantine_device,
             "get_status": self._handle_get_status,
@@ -3350,16 +3115,16 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "list_alerts": self._handle_list_alerts,
             "list_sessions": self._handle_list_sessions,
             "get_alert": self._handle_get_alert,
-            'get_alert_user': self._handle_get_alert_user,
-            'get_alert_files': self._handle_get_alert_files,
-            'get_alert_ips': self._handle_get_alert_ips,
-            'get_alert_domains': self._handle_get_alert_domains,
-            'create_alert': self._handle_create_alert,
+            "get_alert_user": self._handle_get_alert_user,
+            "get_alert_files": self._handle_get_alert_files,
+            "get_alert_ips": self._handle_get_alert_ips,
+            "get_alert_domains": self._handle_get_alert_domains,
+            "create_alert": self._handle_create_alert,
             "update_alert": self._handle_update_alert,
-            'get_user_alerts': self._handle_get_user_alerts,
-            'get_domain_alerts': self._handle_get_domain_alerts,
-            'get_file_alerts': self._handle_get_file_alerts,
-            'get_device_alerts': self._handle_get_device_alerts,
+            "get_user_alerts": self._handle_get_user_alerts,
+            "get_domain_alerts": self._handle_get_domain_alerts,
+            "get_file_alerts": self._handle_get_file_alerts,
+            "get_device_alerts": self._handle_get_device_alerts,
             "ip_prevalence": self._handle_ip_prevalence,
             "domain_prevalence": self._handle_domain_prevalence,
             "file_prevalence": self._handle_file_prevalence,
@@ -3369,12 +3134,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_installed_software": self._handle_get_installed_software,
             "restrict_app_execution": self._handle_restrict_app_execution,
             "remove_app_restriction": self._handle_remove_app_restriction,
-            'get_indicator': self._handle_get_indicator,
+            "get_indicator": self._handle_get_indicator,
             "list_indicators": self._handle_list_indicators,
             "delete_indicator": self._handle_delete_indicator,
             "submit_indicator": self._handle_submit_indicator,
-            'update_indicator': self._handle_update_indicator,
-            'update_indicator_batch': self._handle_update_indicator_batch,
+            "update_indicator": self._handle_update_indicator,
+            "update_indicator_batch": self._handle_update_indicator_batch,
             "run_query": self._handle_run_query,
             "get_domain_related_devices": self._handle_get_domain_related_devices,
             "get_discovered_vulnerabilities": self._get_discovered_vulnerabilities,

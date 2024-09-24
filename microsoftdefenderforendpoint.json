@@ -2984,27 +2984,39 @@
                     "data_type": "string",
                     "contains": [
                         "defender atp user id"
-                    ]
+                    ],
+                    "column_name": "User ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.accountName",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Account Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.accountDomain",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Account Domain",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.accountSid",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Account SID",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.firstSeen",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "First Seen",
+                    "column_order": 4
                 },
                 {
                     "data_path": "action_result.data.*.lastSeen",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Last Seen",
+                    "column_order": 5
                 },
                 {
                     "data_path": "action_result.data.*.mostPrevalentMachineId",
@@ -3212,10 +3224,6 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.summary.global_prevalence",
-                    "data_type": "numeric"
-                },
-                {
                     "data_path": "action_result.message",
                     "data_type": "string"
                 },
@@ -3310,6 +3318,8 @@
                 {
                     "data_path": "action_result.data.*.ip",
                     "data_type": "string",
+                    "column_name": "IP Address",
+                    "column_order": 0,
                     "contains": [
                         "ip"
                     ]
@@ -3409,6 +3419,8 @@
                 {
                     "data_path": "action_result.data.*.host",
                     "data_type": "string",
+                    "column_name": "Domain",
+                    "column_order": 0,
                     "contains": [
                         "domain"
                     ]
@@ -3474,7 +3486,10 @@
                     "description": "Device ID of associated event",
                     "data_type": "string",
                     "required": true,
-                    "order": 2
+                    "order": 2,
+                    "contains": [
+                        "defender atp device id"
+                    ]
                 },
                 "severity": {
                     "description": "Severity level of alert",
@@ -3762,6 +3777,8 @@
                 {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
+                    "column_name": "Alert ID",
+                    "column_order": 0,
                     "contains": [
                         "defender atp alert id"
                     ]
@@ -5774,7 +5791,6 @@
             "type": "contain",
             "identifier": "restrict_app_execution",
             "read_only": false,
-            "undo": "remove app restriction",
             "parameters": {
                 "device_id": {
                     "description": "ID of the device",
@@ -7139,21 +7155,29 @@
                 {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
+                    "column_name": "Indicator ID",
+                    "column_order": 0,
                     "contains": [
                         "defender atp indicator id"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.indicator",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Indicator Value",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.isFailed",
-                    "data_type": "boolean"
+                    "data_type": "boolean",
+                    "column_name": "Failed",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.failureReason",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Failure Reason",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.message",
@@ -7218,21 +7242,29 @@
                 {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
+                    "column_name": "Indicator ID",
+                    "column_order": 0,
                     "contains": [
                         "defender atp indicator id"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.indicator",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Indicator Value",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.isFailed",
-                    "data_type": "boolean"
+                    "data_type": "boolean",
+                    "column_name": "Failed",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.failureReason",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Failure Reason",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.message",
@@ -7317,7 +7349,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.alertCreationTime",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Alert Creation Time",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.assignedTo",
@@ -7325,7 +7359,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.category",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Category",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.classification",
@@ -7498,6 +7534,8 @@
                 {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
+                    "column_name": "Alert ID",
+                    "column_order": 0,
                     "contains": [
                         "defender atp alert id"
                     ]
@@ -7575,7 +7613,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.title",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Title",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.message",
@@ -7664,7 +7704,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.alertCreationTime",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Alert Creation Time",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.assignedTo",
@@ -7672,7 +7714,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.category",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Category",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.classification",
@@ -7843,13 +7887,6 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.id",
-                    "data_type": "string",
-                    "contains": [
-                        "defender atp alert id"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.incidentId",
                     "data_type": "numeric"
                 },
@@ -7922,7 +7959,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.title",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Title",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.message",
@@ -7996,7 +8035,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.alertCreationTime",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Alert Creation Time",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.assignedTo",
@@ -8004,7 +8045,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.category",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Category",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.classification",
@@ -8177,6 +8220,8 @@
                 {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
+                    "column_name": "Alert ID",
+                    "column_order": 0,
                     "contains": [
                         "defender atp alert id"
                     ]
@@ -8254,7 +8299,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.title",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Title",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.message",
@@ -8334,7 +8381,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.alertCreationTime",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Alert Creation Time",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.assignedTo",
@@ -8342,7 +8391,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.category",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Category",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.classification",
@@ -8515,6 +8566,8 @@
                 {
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
+                    "column_name": "Alert ID",
+                    "column_order": 0,
                     "contains": [
                         "defender atp alert id"
                     ]
@@ -8592,7 +8645,9 @@
                 },
                 {
                     "data_path": "action_result.data.*.title",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Title",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.message",
@@ -10097,7 +10152,6 @@
             "type": "contain",
             "identifier": "remove_app_restriction",
             "read_only": false,
-            "undo": "restrict app execution",
             "parameters": {
                 "device_id": {
                     "description": "ID of the device",
