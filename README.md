@@ -1143,7 +1143,6 @@ action_result.data.\*.sha1 | string |  `sha1`  |   954e0fd64a1242d0fa860b2201981
 action_result.data.\*.sha256 | string |  `sha256`  |   1a563e59bfcdc9e7b4d8ac81c6b6579e2d215952f6dd98e0ab1ab026ac616896 
 action_result.data.\*.signer | string |  |  
 action_result.data.\*.signerHash | string |  |  
-action_result.summary.global_prevalence | numeric |  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved Files for Alert 
 summary.total_results | numeric |  |   1 
@@ -1215,7 +1214,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **report_id** |  required  | Report ID of associated event | string | 
 **event_time** |  required  | UTC event time of associated event (Use this format: %Y-%m-%dT%H:%M:%SZ in UTC timezone) | string | 
-**device_id** |  required  | Device ID of associated event | string | 
+**device_id** |  required  | Device ID of associated event | string |  `defender atp device id` 
 **severity** |  required  | Severity level of alert | string | 
 **title** |  required  | Alert title | string | 
 **description** |  required  | Alert description | string | 
@@ -2112,7 +2111,6 @@ action_result.data.\*.evidence.\*.url | string |  |
 action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
 action_result.data.\*.evidence.\*.userSid | string |  |  
 action_result.data.\*.firstEventTime | string |  |  
-action_result.data.\*.id | string |  `defender atp alert id`  |  
 action_result.data.\*.incidentId | numeric |  |  
 action_result.data.\*.investigationId | numeric |  |  
 action_result.data.\*.investigationState | string |  |  
