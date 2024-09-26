@@ -1500,8 +1500,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        for obj in response.get("value", []):
-            action_result.add_data(obj)
+        action_result.add_data(response)
 
         summary = action_result.update_summary({})
         summary["action_taken"] = "Retrieved Assigned User for Alert"
@@ -2312,8 +2311,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         # Update the summary and return success
         summary = action_result.update_summary({})
-        summary["total_results"] = len(indicator_batch)
         summary["action_taken"] = "Updated batch of indicators"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -2995,11 +2994,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
 
-            # Pick up from last ingested alerts if applicable
-            if self._state.get(STATE_FIRST_RUN, True):
-                self._state[STATE_FIRST_RUN] = False
-            elif last_time := self._state.get(STATE_LAST_TIME):
-                last_modified_time = last_time
+        # Pick up from last ingested alerts if applicable
+        if self._state.get(STATE_FIRST_RUN, True):
+            self._state[STATE_FIRST_RUN] = False
+        elif last_time := self._state.get(STATE_LAST_TIME):
+            last_modified_time = last_time
 
         start_time_filter = f"lastUpdateTime ge {last_modified_time}"
         poll_filter += start_time_filter if not poll_filter else f" and {start_time_filter}"

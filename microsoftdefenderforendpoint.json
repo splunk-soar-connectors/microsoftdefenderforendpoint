@@ -3316,7 +3316,7 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.data.*.ip",
+                    "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "column_name": "IP Address",
                     "column_order": 0,
@@ -7124,14 +7124,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameter.action",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.severity",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.parameter.indicator_value",
                     "data_type": "string",
                     "example_values": [
@@ -7147,6 +7139,42 @@
                         "url",
                         "domain"
                     ]
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_type",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.action",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.severity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_description",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_title",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.expiration_time",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.indicator_application",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.recommended_actions",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.rbac_group_names",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.parameter.expiration_time",
