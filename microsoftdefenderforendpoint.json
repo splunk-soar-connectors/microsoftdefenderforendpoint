@@ -2754,7 +2754,7 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.*.id",
+                    "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
@@ -2763,53 +2763,53 @@
                     "column_order": 0
                 },
                 {
-                    "data_path": "action_result.*.name",
+                    "data_path": "action_result.data.*.name",
                     "data_type": "string",
                     "column_name": "Software Name",
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.*.vendor",
+                    "data_path": "action_result.data.*.vendor",
                     "data_type": "string",
                     "column_name": "Vendor",
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.*.weaknesses",
+                    "data_path": "action_result.data.*.weaknesses",
                     "data_type": "numeric",
                     "column_name": "Weaknesses",
                     "column_order": 3
                 },
                 {
-                    "data_path": "action_result.*.publicExploit",
+                    "data_path": "action_result.data.*.publicExploit",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.*.activeAlert",
+                    "data_path": "action_result.data.*.activeAlert",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.*.exposedMachines",
+                    "data_path": "action_result.data.*.exposedMachines",
                     "data_type": "numeric",
                     "column_name": "Exposed Machines",
                     "column_order": 4
                 },
                 {
-                    "data_path": "action_result.*.installedMachines",
+                    "data_path": "action_result.data.*.installedMachines",
                     "data_type": "numeric",
                     "column_name": "Installed Machines",
                     "column_order": 5
                 },
                 {
-                    "data_path": "action_result.*.impactScore",
+                    "data_path": "action_result.data.*.impactScore",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.*.isNormalized",
+                    "data_path": "action_result.data.*.isNormalized",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.*.category",
+                    "data_path": "action_result.data.*.category",
                     "data_type": "string"
                 },
                 {
@@ -3238,14 +3238,17 @@
                     "column_name": "ID",
                     "column_order": 0,
                     "contains": [
-                        "defender atp vulnerability id"
+                        "defender atp software id"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.cveId",
                     "data_type": "string",
                     "column_name": "CVE ID",
-                    "column_order": 1
+                    "column_order": 1,
+                    "contains": [
+                        "cve id"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.machineId",
@@ -3421,7 +3424,10 @@
                     "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "column_name": "Vulnerability ID",
-                    "column_order": 0
+                    "column_order": 0,
+                    "contains": [
+                        "cve id"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.name",
@@ -7325,7 +7331,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.id",
+                    "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "column_name": "Action ID",
                     "column_order": 0,
@@ -7334,47 +7340,47 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.type",
+                    "data_path": "action_result.data.*.type",
                     "data_type": "string",
                     "column_name": "Action Type",
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.data.scope",
+                    "data_path": "action_result.data.*.scope",
                     "data_type": "string",
                     "column_name": "Scope",
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.data.requestor",
+                    "data_path": "action_result.data.*.requestor",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.requestorComment",
+                    "data_path": "action_result.data.*.requestorComment",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.status",
+                    "data_path": "action_result.data.*.status",
                     "data_type": "string",
                     "column_name": "Status",
                     "column_order": 5
                 },
                 {
-                    "data_path": "action_result.data.machineId",
+                    "data_path": "action_result.data.*.machineId",
                     "data_type": "string",
                     "column_name": "Machine ID",
                     "column_order": 6
                 },
                 {
-                    "data_path": "action_result.data.computerDnsName",
+                    "data_path": "action_result.data.*.computerDnsName",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.creationDateTimeUtc",
+                    "data_path": "action_result.data.*.creationDateTimeUtc",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.lastUpdateDateTimeUtc",
+                    "data_path": "action_result.data.*.lastUpdateDateTimeUtc",
                     "data_type": "string"
                 },
                 {
@@ -7436,7 +7442,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.value",
+                    "data_path": "action_result.data.*.value",
                     "data_type": "string",
                     "column_name": "Investigation Package URI",
                     "column_order": 0
@@ -12658,7 +12664,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.id",
+                    "data_path": "action_result.data.*.id",
                     "data_type": "string",
                     "column_name": "Action ID",
                     "column_order": 0,
@@ -12667,45 +12673,45 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.type",
+                    "data_path": "action_result.data.*.type",
                     "data_type": "string",
                     "column_name": "Action Type",
                     "column_order": 1
                 },
                 {
-                    "data_path": "action_result.data.scope",
+                    "data_path": "action_result.data.*.scope",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.requestor",
+                    "data_path": "action_result.data.*.requestor",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.requestorComment",
+                    "data_path": "action_result.data.*.requestorComment",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.status",
+                    "data_path": "action_result.data.*.status",
                     "data_type": "string",
                     "column_name": "Status",
                     "column_order": 5
                 },
                 {
-                    "data_path": "action_result.data.machineId",
+                    "data_path": "action_result.data.*.machineId",
                     "data_type": "string",
                     "column_name": "Machine ID",
                     "column_order": 6
                 },
                 {
-                    "data_path": "action_result.data.computerDnsName",
+                    "data_path": "action_result.data.*.computerDnsName",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.creationDateTimeUtc",
+                    "data_path": "action_result.data.*.creationDateTimeUtc",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.lastUpdateDateTimeUtc",
+                    "data_path": "action_result.data.*.lastUpdateDateTimeUtc",
                     "data_type": "string"
                 },
                 {

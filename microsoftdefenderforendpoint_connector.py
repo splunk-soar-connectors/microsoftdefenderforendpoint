@@ -1868,7 +1868,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get('value', []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
         summary['action_taken'] = "Retrieved Active Users"
@@ -1947,7 +1948,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             action_result.add_data(software)
 
         if not action_result.get_data_size():
-            return action_result.set_status(phantom.APP_ERROR, "No software found")
+            return action_result.set_status(phantom.APP_SUCCESS, "No software found")
 
         summary = action_result.update_summary({})
         summary['total_software'] = action_result.get_data_size()
@@ -1969,7 +1970,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not software_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT.format(software_id))
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT.format(software_id=software_id))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1981,7 +1982,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             action_result.add_data(version)
 
         if not action_result.get_data_size():
-            return action_result.set_status(phantom.APP_ERROR, "No software versions found")
+            return action_result.set_status(phantom.APP_SUCCESS, "No software versions found for specified software")
 
         summary = action_result.update_summary({})
         summary['total_versions'] = action_result.get_data_size()
@@ -2003,7 +2004,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not software_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_DEVICES_ENDPOINT.format(software_id))
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_DEVICES_ENDPOINT.format(software_id=software_id))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -2015,7 +2016,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             action_result.add_data(device)
 
         if not action_result.get_data_size():
-            return action_result.set_status(phantom.APP_ERROR, "No devices found for specified software")
+            return action_result.set_status(phantom.APP_SUCCESS, "No devices found for specified software")
 
         summary = action_result.update_summary({})
         summary['total_devices'] = action_result.get_data_size()
@@ -2035,9 +2036,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         software_id = param.get("id")
 
         if not software_id:
-            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
+            return action_result.set_status(phantom.APP_SUCCESS, "Missing required parameter: id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT.format(software_id))
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT.format(software_id=software_id))
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -2114,7 +2115,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             action_result.add_data(vulnerability)
 
         if not action_result.get_data_size():
-            return action_result.set_status(phantom.APP_ERROR, "No vulnerabilities found for specified device")
+            return action_result.set_status(phantom.APP_SUCCESS, "No vulnerabilities found for specified device")
 
         summary = action_result.update_summary({})
         summary['total_vulnerabilities'] = action_result.get_data_size()
@@ -2182,7 +2183,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             action_result.add_data(vulnerability)
 
         if not action_result.get_data_size():
-            return action_result.set_status(phantom.APP_ERROR, "No vulnerabilities found")
+            return action_result.set_status(phantom.APP_SUCCESS, "No vulnerabilities found")
 
         summary = action_result.update_summary({})
         summary['total_vulnerabilities'] = action_result.get_data_size()
@@ -2475,7 +2476,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "Comment": comment
         }
 
-        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=payload)
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(payload))
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -2509,7 +2510,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response.get('value', "No URI found for the specified action"))
+        action_result.add_data(response)
 
         summary = action_result.update_summary({})
         summary['action_taken'] = "Retrieved Investigation URI"
@@ -2531,7 +2532,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not device_ids:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_ids")
 
-        device_id_list = device_ids.split(',')
+        device_id_list = [device_id.strip() for device_id in device_ids.split(',') if device_id.strip()]
 
         all_device_details = []
         for device_id in device_id_list:
@@ -2543,12 +2544,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 return action_result.get_status()
 
             if response:
-                all_device_details.append(response)
-
-        if not all_device_details:
-            return action_result.set_status(phantom.APP_SUCCESS, "No details found for the specified devices")
-
-        action_result.add_data(all_device_details)
+                action_result.add_data(response)
 
         summary = action_result.update_summary({})
         summary['action_taken'] = "Retrieved Device Details"
@@ -2578,7 +2574,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        action_result.add_data(response.get('value', []))
+        for obj in response.get('value', []):
+            action_result.add_data(obj)
 
         summary = action_result.update_summary({})
         summary['action_taken'] = "Retrieved Affected Devices"
@@ -3303,7 +3300,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "Comment": comment
         }
 
-        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=payload)
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(payload))
 
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -3624,6 +3621,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             'collect_investigation_package': self._handle_collect_investigation_package,
             'get_investigation_uri': self._handle_get_investigation_uri,
             'get_device_details': self._handle_get_device_details,
+            'get_active_users': self._handle_get_active_users,
             'get_affected_devices': self._handle_get_affected_devices,
             "get_indicator": self._handle_get_indicator,
             "list_indicators": self._handle_list_indicators,
