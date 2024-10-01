@@ -2292,10 +2292,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         try:
             indicator_batch = json.loads(indicator_batch)
-            if not isinstance(indicator_batch, list):
-                return action_result.set_status(phantom.APP_ERROR, "indicator_batch must be a list of dictionaries")
         except Exception as e:
             return action_result.set_status(phantom.APP_ERROR, f"Error processing batch: {str(e)}")
+
+        if not isinstance(indicator_batch, list):
+            return action_result.set_status(phantom.APP_ERROR, "indicator_batch must be a list of dictionaries")
 
         endpoint = "{0}{1}".format(self._graph_url, DEFENDER_UPDATE_INDICATOR_ENDPOINT)
 
