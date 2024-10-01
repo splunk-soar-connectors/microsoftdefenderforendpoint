@@ -460,7 +460,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **client_secret** |  required  | password | Client Secret
 **non_interactive** |  optional  | boolean | Non Interactive Auth
 **max_alerts_per_poll** |  optional  | numeric | Maximum Alerts for scheduled/interval polling for each cycle
-**start_time** |  optional  | string | Start time for schedule/interval/manual poll (Use this format: 2024-09-04T16:26:58.87Z)
+**start_time** |  optional  | string | Start time for schedule/interval/manual poll (Use ISO 8601 UTC format: 2024-09-04T16:26:58.87Z)
 **environment** |  required  | string | Azure environment to connect
 
 ### Supported Actions  
@@ -1169,7 +1169,7 @@ action_result.status | string |  |   success  failed
 action_result.parameter.alert_id | string |  `defender atp alert id`  |  
 action_result.parameter.limit | numeric |  |  
 action_result.parameter.offset | numeric |  |  
-action_result.data.\*.ip | string |  `ip`  |  
+action_result.data.\*.id | string |  `ip`  |  
 action_result.message | string |  |  
 summary.action_taken | string |  |   Retrieved IPs for Alert 
 summary.total_results | numeric |  |   5 
@@ -1930,9 +1930,16 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string |  |   success  failed 
+action_result.parameter.indicator_value | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain`  |   domain.com 
+action_result.parameter.indicator_type | string |  |  
 action_result.parameter.action | string |  |  
 action_result.parameter.severity | string |  |  
-action_result.parameter.indicator_value | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain`  |   domain.com 
+action_result.parameter.indicator_description | string |  |  
+action_result.parameter.indicator_title | string |  |  
+action_result.parameter.expiration_time | string |  |  
+action_result.parameter.indicator_application | string |  |  
+action_result.parameter.recommended_actions | string |  |  
+action_result.parameter.rbac_group_names | string |  |  
 action_result.parameter.expiration_time | string |  |  
 action_result.data.\*.id | string |  `defender atp indicator id`  |  
 action_result.data.\*.indicator | string |  |  
