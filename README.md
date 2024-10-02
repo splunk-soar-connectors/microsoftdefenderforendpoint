@@ -83,6 +83,19 @@ default ports used by Splunk SOAR.
     non interactive auth will be used otherwise interactive auth will be used. Whenever this
     checkbox is toggled then the test connectivity action must be run again.
 
+## Explanation of Asset Configuration Parameters for On Poll
+
+-   Max Alerts for Polling - During each polling cycle, the specified number of alerts is retrieved for scheduled or interval polling (Default: 1000). Each alert is ingested as a container. This parameter determines the maximum number of alerts that can be fetched in a single poll cycle.
+-   Start Time - This parameter is used to filter alerts based on their last updated time. If no value is provided, the default behavior is a week.<br>
+**Note: The start time filters alerts based on their lastUpdateTime property.**
+-   Filter - Allows additional filtering to be applied to alert properties (such as severity or status). This is useful for targeting specific types of alerts during polling.
+
+## Explanation of On Poll Behavior
+
+-   Start Time Parameter - The `start_time` parameter directly correlates with the lastUpdateTime property of the alerts, ensuring that only alerts updated after this time are included in the ingestion process.
+-   Max Alerts Parameter - The `max_alerts_per_poll` setting works only with scheduled or interval polling, controlling how many alerts are ingested per cycle. For instance, if this value is set to 100, the system will ingest up to 100 distinct alerts, applying the provided filters and start time.
+-   Example - If you configure the maximum alerts parameter to 100, the on_poll function will retrieve up to 100 alerts, considering any filter and start time provided. The filtering ensures only relevant alerts based on the time and other criteria are ingested during the polling process.
+
 ## Configure and set up permissions of the app created on the Microsoft Azure portal
 
 <div style="margin-left: 2em">
@@ -446,10 +459,13 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **client_id** |  required  | string | Client ID
 **client_secret** |  required  | password | Client Secret
 **non_interactive** |  optional  | boolean | Non Interactive Auth
+**max_alerts_per_poll** |  optional  | numeric | Maximum Alerts for scheduled/interval polling for each cycle
+**start_time** |  optional  | string | Start time for schedule/interval/manual poll (Use ISO 8601 UTC format: 2024-09-04T16:26:58.87Z)
 **environment** |  required  | string | Azure environment to connect
 
 ### Supported Actions  
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using the supplied configuration  
+[on poll](#action-on-poll) - Callback action for the on_poll ingest functionality for Defender for Endpoint  
 [quarantine device](#action-quarantine-device) - Quarantine the device  
 [unquarantine device](#action-unquarantine-device) - Unquarantine the device  
 [get status](#action-get-status) - Get status of the event on a machine  
@@ -459,6 +475,11 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [list alerts](#action-list-alerts) - List all alerts of a given type  
 [list sessions](#action-list-sessions) - List all logged in users on a machine  
 [get alert](#action-get-alert) - Retrieve specific Alert by its ID  
+[get alert user](#action-get-alert-user) - Retrieve user for specific Alert from its ID  
+[get alert files](#action-get-alert-files) - Retrieve files for specific Alert from its ID  
+[get alert ips](#action-get-alert-ips) - Retrieve IP addresses for a specific Alert from its ID  
+[get alert domains](#action-get-alert-domains) - Retrieve domains for a specific Alert from its ID  
+[create alert](#action-create-alert) - Create a new alert in Defender for Endpoint  
 [update alert](#action-update-alert) - Update properties of existing Alert  
 [domain prevalence](#action-domain-prevalence) - Return statistics for the specified domain  
 [ip prevalence](#action-ip-prevalence) - Return statistics for the specified IP  
@@ -469,7 +490,14 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get installed software](#action-get-installed-software) - Retrieve a collection of installed software related to a given device ID  
 [restrict app execution](#action-restrict-app-execution) - Restrict execution of all applications on the device except a predefined set  
 [list indicators](#action-list-indicators) - Retrieve a collection of all active Indicators  
+[get indicator](#action-get-indicator) - Retrieve an Indicator entity by its ID  
 [submit indicator](#action-submit-indicator) - Submit or Update new Indicator entity  
+[update indicator](#action-update-indicator) - Update an existing Indicator entity  
+[update indicator batch](#action-update-indicator-batch) - Update or create a batch of Indicator entities  
+[get file alerts](#action-get-file-alerts) - Retrieve alerts related to a specific file hash  
+[get device alerts](#action-get-device-alerts) - Retrieve all alerts related to a specific device  
+[get user alerts](#action-get-user-alerts) - Retrieve alerts related to a specific user  
+[get domain alerts](#action-get-domain-alerts) - Retrieve alerts related to a specific domain address  
 [delete indicator](#action-delete-indicator) - Delete an Indicator entity by ID  
 [run query](#action-run-query) - An advanced search query  
 [get domain devices](#action-get-domain-devices) - Retrieve a collection of devices that have communicated to or from a given domain address  
@@ -491,6 +519,24 @@ Read only: **True**
 
 #### Action Parameters
 No parameters are required for this action
+
+#### Action Output
+No Output  
+
+## action: 'on poll'
+Callback action for the on_poll ingest functionality for Defender for Endpoint
+
+Type: **ingest**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**start_time** |  optional  | The start time to filter alerts by their last updated time. If not provided, defaults to the last 7 days | numeric | 
+**end_time** |  optional  | Parameter ignored in this app | numeric | 
+**container_count** |  optional  | The number of alerts to ingest in each poll. Default is 1000 | numeric | 
+**artifact_count** |  optional  | Parameter ignored in this app | numeric | 
+**container_id** |  optional  | Parameter ignored in this app | numeric | 
 
 #### Action Output
 No Output  
@@ -1027,6 +1073,230 @@ action_result.message | string |  |   Action taken: Retrieved Alert
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
+## action: 'get alert user'
+Retrieve user for specific Alert from its ID
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**alert_id** |  required  | ID of alert | string |  `defender atp alert id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.alert_id | string |  `defender atp alert id`  |  
+action_result.data.\*.id | string |  `defender atp user id`  |  
+action_result.data.\*.accountName | string |  |  
+action_result.data.\*.accountDomain | string |  |  
+action_result.data.\*.accountSid | string |  |  
+action_result.data.\*.firstSeen | string |  |  
+action_result.data.\*.lastSeen | string |  |  
+action_result.data.\*.mostPrevalentMachineId | string |  |  
+action_result.data.\*.leastPrevalentMachineId | string |  |  
+action_result.data.\*.logonTypes | string |  |  
+action_result.data.\*.logOnMachinesCount | numeric |  |  
+action_result.data.\*.isDomainAdmin | boolean |  |  
+action_result.data.\*.isOnlyNetworkUser | boolean |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved Assigned User for Alert 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'get alert files'
+Retrieve files for specific Alert from its ID
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**alert_id** |  required  | ID of the alert | string |  `defender atp alert id` 
+**limit** |  optional  | Maximum number of files to return | numeric | 
+**offset** |  optional  | Offset for pagination | numeric | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.alert_id | string |  `defender atp alert id`  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.offset | numeric |  |  
+action_result.data.\*.determinationType | string |  |  
+action_result.data.\*.determinationValue | string |  |  
+action_result.data.\*.fileProductName | string |  |  
+action_result.data.\*.filePublisher | string |  |  
+action_result.data.\*.fileType | string |  |  
+action_result.data.\*.isPeFile | boolean |  |  
+action_result.data.\*.isValidCertificate | boolean |  |  
+action_result.data.\*.size | numeric |  |  
+action_result.data.\*.issuer | string |  |  
+action_result.data.\*.globalFirstObserved | string |  |  
+action_result.data.\*.globalPrevalence | numeric |  |  
+action_result.data.\*.globalLastObserved | string |  |  
+action_result.data.\*.md5 | string |  `md5`  |   44adb27786eb24e5bbfd06b69e84d252 
+action_result.data.\*.sha1 | string |  `sha1`  |   954e0fd64a1242d0fa860b220198118268e35018 
+action_result.data.\*.sha256 | string |  `sha256`  |   1a563e59bfcdc9e7b4d8ac81c6b6579e2d215952f6dd98e0ab1ab026ac616896 
+action_result.data.\*.signer | string |  |  
+action_result.data.\*.signerHash | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved Files for Alert 
+summary.total_results | numeric |  |   1 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'get alert ips'
+Retrieve IP addresses for a specific Alert from its ID
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**alert_id** |  required  | ID of the alert | string |  `defender atp alert id` 
+**limit** |  optional  | Maximum number of IP addresses to return | numeric | 
+**offset** |  optional  | Offset for pagination | numeric | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.alert_id | string |  `defender atp alert id`  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.offset | numeric |  |  
+action_result.data.\*.id | string |  `ip`  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved IPs for Alert 
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'get alert domains'
+Retrieve domains for a specific Alert from its ID
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**alert_id** |  required  | ID of the alert | string |  `defender atp alert id` 
+**limit** |  optional  | Maximum number of domains to return | numeric | 
+**offset** |  optional  | Offset for pagination | numeric | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.alert_id | string |  `defender atp alert id`  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.offset | numeric |  |  
+action_result.data.\*.host | string |  `domain`  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved Domains for Alert 
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'create alert'
+Create a new alert in Defender for Endpoint
+
+Type: **generic**  
+Read only: **False**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**report_id** |  required  | Report ID of associated event | string | 
+**event_time** |  required  | UTC event time of associated event (Use this format: %Y-%m-%dT%H:%M:%SZ in UTC timezone) | string | 
+**device_id** |  required  | Device ID of associated event | string |  `defender atp device id` 
+**severity** |  required  | Severity level of alert | string | 
+**title** |  required  | Alert title | string | 
+**description** |  required  | Alert description | string | 
+**recommended_action** |  required  | Recommended action for alert | string | 
+**category** |  required  | Category of alert | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.report_id | string |  |  
+action_result.parameter.event_time | string |  |  
+action_result.parameter.device_id | string |  `defender atp device id`  |  
+action_result.parameter.severity | string |  |  
+action_result.parameter.title | string |  |  
+action_result.parameter.description | string |  |  
+action_result.parameter.recommended_action | string |  |  
+action_result.parameter.category | string |  |  
+action_result.data.\*.aadTenantId | string |  |  
+action_result.data.\*.alertCreationTime | string |  |  
+action_result.data.\*.assignedTo | string |  |  
+action_result.data.\*.category | string |  |  
+action_result.data.\*.classification | string |  |  
+action_result.data.\*.comments.\*.comment | string |  |  
+action_result.data.\*.comments.\*.createdBy | string |  |  
+action_result.data.\*.comments.\*.createdTime | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.detectionSource | string |  |  
+action_result.data.\*.detectorId | string |  |  
+action_result.data.\*.determination | string |  |  
+action_result.data.\*.evidence.\*.aadUserId | string |  |  
+action_result.data.\*.evidence.\*.accountName | string |  |  
+action_result.data.\*.evidence.\*.detectionStatus | string |  |  
+action_result.data.\*.evidence.\*.domainName | string |  `domain`  |  
+action_result.data.\*.evidence.\*.entityType | string |  |  
+action_result.data.\*.evidence.\*.evidenceCreationTime | string |  |  
+action_result.data.\*.evidence.\*.fileName | string |  `file name`  |  
+action_result.data.\*.evidence.\*.filePath | string |  `file path`  |  
+action_result.data.\*.evidence.\*.ipAddress | string |  `ip`  |  
+action_result.data.\*.evidence.\*.parentProcessCreationTime | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFileName | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFilePath | string |  |  
+action_result.data.\*.evidence.\*.parentProcessId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.processCommandLine | string |  |  
+action_result.data.\*.evidence.\*.processCreationTime | string |  |  
+action_result.data.\*.evidence.\*.processId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.registryHive | string |  |  
+action_result.data.\*.evidence.\*.registryKey | string |  |  
+action_result.data.\*.evidence.\*.registryValue | string |  |  
+action_result.data.\*.evidence.\*.registryValueName | string |  |  
+action_result.data.\*.evidence.\*.registryValueType | string |  |  
+action_result.data.\*.evidence.\*.sha1 | string |  `sha1`  |  
+action_result.data.\*.evidence.\*.sha256 | string |  `sha256`  |  
+action_result.data.\*.evidence.\*.url | string |  |  
+action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
+action_result.data.\*.evidence.\*.userSid | string |  |  
+action_result.data.\*.firstEventTime | string |  |  
+action_result.data.\*.id | string |  `defender atp alert id`  |  
+action_result.data.\*.incidentId | numeric |  |  
+action_result.data.\*.investigationId | numeric |  |  
+action_result.data.\*.investigationState | string |  |  
+action_result.data.\*.lastEventTime | string |  |  
+action_result.data.\*.lastUpdateTime | string |  |  
+action_result.data.\*.loggedOnUsers.\*.accountName | string |  |  
+action_result.data.\*.loggedOnUsers.\*.domainName | string |  |  
+action_result.data.\*.machineId | string |  `defender atp device id`  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.relatedUser | string |  |  
+action_result.data.\*.relatedUser.domainName | string |  |  
+action_result.data.\*.relatedUser.userName | string |  |  
+action_result.data.\*.resolvedTime | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.status | string |  |  
+action_result.data.\*.threatFamilyName | string |  |  
+action_result.data.\*.threatName | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Created Alert 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
 ## action: 'update alert'
 Update properties of existing Alert
 
@@ -1511,6 +1781,59 @@ action_result.message | string |  |   Total indicators: 1
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
+## action: 'get indicator'
+Retrieve an Indicator entity by its ID
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**indicator_id** |  required  | The ID of the indicator to retrieve | string |  `defender atp indicator id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.indicator_id | string |  `defender atp indicator id`  |  
+action_result.data.\*.action | string |  |  
+action_result.data.\*.additionalInfo | string |  |  
+action_result.data.\*.application | string |  |  
+action_result.data.\*.bypassDurationHours | string |  |  
+action_result.data.\*.category | numeric |  |  
+action_result.data.\*.certificateInfo | string |  |  
+action_result.data.\*.certificateInfo.issuer | string |  |  
+action_result.data.\*.certificateInfo.serial | string |  |  
+action_result.data.\*.certificateInfo.sha256 | string |  |  
+action_result.data.\*.certificateInfo.subject | string |  |  
+action_result.data.\*.createdBy | string |  |  
+action_result.data.\*.createdByDisplayName | string |  |  
+action_result.data.\*.createdBySource | string |  |  
+action_result.data.\*.creationTimeDateTimeUtc | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.educateUrl | string |  |  
+action_result.data.\*.expirationTime | string |  |  
+action_result.data.\*.externalId | string |  |  
+action_result.data.\*.generateAlert | boolean |  |  
+action_result.data.\*.historicalDetection | boolean |  |  
+action_result.data.\*.id | string |  `defender atp indicator id`  |  
+action_result.data.\*.indicatorType | string |  |  
+action_result.data.\*.indicatorValue | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `domain`  `ip`  `ipv6`  `url`  |  
+action_result.data.\*.lastUpdateTime | string |  |  
+action_result.data.\*.lastUpdatedBy | string |  |  
+action_result.data.\*.lookBackPeriod | string |  |  
+action_result.data.\*.notificationBody | string |  |  
+action_result.data.\*.notificationId | string |  |  
+action_result.data.\*.recommendedActions | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.data.\*.version | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved Indicator 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
 ## action: 'submit indicator'
 Submit or Update new Indicator entity
 
@@ -1580,6 +1903,404 @@ action_result.data.\*.title | string |  |   Test 1
 action_result.data.\*.version | string |  |  
 action_result.summary.indicator_id | string |  `defender atp indicator id`  |   17 
 action_result.message | string |  |   Indicator id: 17 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'update indicator'
+Update an existing Indicator entity
+
+Type: **generic**  
+Read only: **False**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**indicator_value** |  required  | The identity value of the indicator to update | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain` 
+**indicator_type** |  required  | The type of indicator | string | 
+**action** |  required  | Action taken if the indicator is discovered | string | 
+**severity** |  optional  | The severity of the malicious behavior identified by the indicator | string | 
+**indicator_description** |  required  | Description of the indicator | string | 
+**indicator_title** |  required  | Indicator alert title | string | 
+**expiration_time** |  optional  | The expiration time of the indicator (Use this format: %Y-%m-%dT%H:%M:%SZ in UTC timezone) | string | 
+**indicator_application** |  optional  | The application associated with the indicator | string | 
+**recommended_actions** |  optional  | TI indicator alert recommended actions | string | 
+**rbac_group_names** |  optional  | JSON formatted list of RBAC group names | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.indicator_value | string |  `defender atp indicator value`  `sha1`  `sha256`  `md5`  `ip`  `ipv6`  `url`  `domain`  |   domain.com 
+action_result.parameter.indicator_type | string |  |  
+action_result.parameter.action | string |  |  
+action_result.parameter.severity | string |  |  
+action_result.parameter.indicator_description | string |  |  
+action_result.parameter.indicator_title | string |  |  
+action_result.parameter.expiration_time | string |  |  
+action_result.parameter.indicator_application | string |  |  
+action_result.parameter.recommended_actions | string |  |  
+action_result.parameter.rbac_group_names | string |  |  
+action_result.parameter.expiration_time | string |  |  
+action_result.data.\*.id | string |  `defender atp indicator id`  |  
+action_result.data.\*.indicator | string |  |  
+action_result.data.\*.isFailed | boolean |  |  
+action_result.data.\*.failureReason | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Updated Indicator 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'update indicator batch'
+Update or create a batch of Indicator entities
+
+Type: **generic**  
+Read only: **False**
+
+This action updates or creates a batch of indicators from a json object. Based on (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/import-ti-indicators" target="_blank">Batch Update Indicator API Documentation</a>). New indicators will be created if they do not exist.
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**indicator_batch** |  required  | A JSON object with a list of indicators to update or create. Each indicator should include properties like indicatorValue, indicatorType, action, title, etc. | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.indicator_batch | string |  |  
+action_result.data.\*.id | string |  `defender atp indicator id`  |  
+action_result.data.\*.indicator | string |  |  
+action_result.data.\*.isFailed | boolean |  |  
+action_result.data.\*.failureReason | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Updated batch of indicators 
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'get file alerts'
+Retrieve alerts related to a specific file hash
+
+Type: **investigate**  
+Read only: **True**
+
+Retrieve alerts related to a specific file hash, such as a SHA1 or SHA256 hash.
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**file_hash** |  required  | The file hash (e.g., SHA1) used to retrieve related alerts | string |  `sha1`  `sha256`  `file_hash` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.file_hash | string |  `sha1`  `sha256`  `file_hash`  |  
+action_result.data.\*.aadTenantId | string |  |  
+action_result.data.\*.alertCreationTime | string |  |  
+action_result.data.\*.assignedTo | string |  |  
+action_result.data.\*.category | string |  |  
+action_result.data.\*.classification | string |  |  
+action_result.data.\*.comments.\*.comment | string |  |  
+action_result.data.\*.comments.\*.createdBy | string |  |  
+action_result.data.\*.comments.\*.createdTime | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.detectionSource | string |  |  
+action_result.data.\*.detectorId | string |  |  
+action_result.data.\*.determination | string |  |  
+action_result.data.\*.evidence.\*.aadUserId | string |  |  
+action_result.data.\*.evidence.\*.accountName | string |  |  
+action_result.data.\*.evidence.\*.detectionStatus | string |  |  
+action_result.data.\*.evidence.\*.domainName | string |  `domain`  |  
+action_result.data.\*.evidence.\*.entityType | string |  |  
+action_result.data.\*.evidence.\*.evidenceCreationTime | string |  |  
+action_result.data.\*.evidence.\*.fileName | string |  `file name`  |  
+action_result.data.\*.evidence.\*.filePath | string |  `file path`  |  
+action_result.data.\*.evidence.\*.ipAddress | string |  `ip`  |  
+action_result.data.\*.evidence.\*.parentProcessCreationTime | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFileName | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFilePath | string |  |  
+action_result.data.\*.evidence.\*.parentProcessId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.processCommandLine | string |  |  
+action_result.data.\*.evidence.\*.processCreationTime | string |  |  
+action_result.data.\*.evidence.\*.processId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.registryHive | string |  |  
+action_result.data.\*.evidence.\*.registryKey | string |  |  
+action_result.data.\*.evidence.\*.registryValue | string |  |  
+action_result.data.\*.evidence.\*.registryValueName | string |  |  
+action_result.data.\*.evidence.\*.registryValueType | string |  |  
+action_result.data.\*.evidence.\*.sha1 | string |  `sha1`  |  
+action_result.data.\*.evidence.\*.sha256 | string |  `sha256`  |  
+action_result.data.\*.evidence.\*.url | string |  |  
+action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
+action_result.data.\*.evidence.\*.userSid | string |  |  
+action_result.data.\*.firstEventTime | string |  |  
+action_result.data.\*.id | string |  `defender atp alert id`  |  
+action_result.data.\*.incidentId | numeric |  |  
+action_result.data.\*.investigationId | numeric |  |  
+action_result.data.\*.investigationState | string |  |  
+action_result.data.\*.lastEventTime | string |  |  
+action_result.data.\*.lastUpdateTime | string |  |  
+action_result.data.\*.loggedOnUsers.\*.accountName | string |  |  
+action_result.data.\*.loggedOnUsers.\*.domainName | string |  |  
+action_result.data.\*.machineId | string |  `defender atp device id`  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.relatedUser | string |  |  
+action_result.data.\*.relatedUser.domainName | string |  |  
+action_result.data.\*.relatedUser.userName | string |  |  
+action_result.data.\*.resolvedTime | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.status | string |  |  
+action_result.data.\*.threatFamilyName | string |  |  
+action_result.data.\*.threatName | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved Alerts for File 
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'get device alerts'
+Retrieve all alerts related to a specific device
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**device_id** |  required  | The device ID of the device to retrieve related alerts | string |  `defender atp device id` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.device_id | string |  `defender atp device id`  |  
+action_result.data.\*.id | string |  `defender atp alert id`  |  
+action_result.data.\*.aadTenantId | string |  |  
+action_result.data.\*.alertCreationTime | string |  |  
+action_result.data.\*.assignedTo | string |  |  
+action_result.data.\*.category | string |  |  
+action_result.data.\*.classification | string |  |  
+action_result.data.\*.comments.\*.comment | string |  |  
+action_result.data.\*.comments.\*.createdBy | string |  |  
+action_result.data.\*.comments.\*.createdTime | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.detectionSource | string |  |  
+action_result.data.\*.detectorId | string |  |  
+action_result.data.\*.determination | string |  |  
+action_result.data.\*.evidence.\*.aadUserId | string |  |  
+action_result.data.\*.evidence.\*.accountName | string |  |  
+action_result.data.\*.evidence.\*.detectionStatus | string |  |  
+action_result.data.\*.evidence.\*.domainName | string |  `domain`  |  
+action_result.data.\*.evidence.\*.entityType | string |  |  
+action_result.data.\*.evidence.\*.evidenceCreationTime | string |  |  
+action_result.data.\*.evidence.\*.fileName | string |  `file name`  |  
+action_result.data.\*.evidence.\*.filePath | string |  `file path`  |  
+action_result.data.\*.evidence.\*.ipAddress | string |  `ip`  |  
+action_result.data.\*.evidence.\*.parentProcessCreationTime | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFileName | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFilePath | string |  |  
+action_result.data.\*.evidence.\*.parentProcessId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.processCommandLine | string |  |  
+action_result.data.\*.evidence.\*.processCreationTime | string |  |  
+action_result.data.\*.evidence.\*.processId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.registryHive | string |  |  
+action_result.data.\*.evidence.\*.registryKey | string |  |  
+action_result.data.\*.evidence.\*.registryValue | string |  |  
+action_result.data.\*.evidence.\*.registryValueName | string |  |  
+action_result.data.\*.evidence.\*.registryValueType | string |  |  
+action_result.data.\*.evidence.\*.sha1 | string |  `sha1`  |  
+action_result.data.\*.evidence.\*.sha256 | string |  `sha256`  |  
+action_result.data.\*.evidence.\*.url | string |  |  
+action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
+action_result.data.\*.evidence.\*.userSid | string |  |  
+action_result.data.\*.firstEventTime | string |  |  
+action_result.data.\*.incidentId | numeric |  |  
+action_result.data.\*.investigationId | numeric |  |  
+action_result.data.\*.investigationState | string |  |  
+action_result.data.\*.lastEventTime | string |  |  
+action_result.data.\*.lastUpdateTime | string |  |  
+action_result.data.\*.loggedOnUsers.\*.accountName | string |  |  
+action_result.data.\*.loggedOnUsers.\*.domainName | string |  |  
+action_result.data.\*.machineId | string |  `defender atp device id`  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.relatedUser | string |  |  
+action_result.data.\*.relatedUser.domainName | string |  |  
+action_result.data.\*.relatedUser.userName | string |  |  
+action_result.data.\*.resolvedTime | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.status | string |  |  
+action_result.data.\*.threatFamilyName | string |  |  
+action_result.data.\*.threatName | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved Alerts for Device 
+summary.total_results | numeric |  |   10 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'get user alerts'
+Retrieve alerts related to a specific user
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**user** |  required  | The user to retrieve alerts for | string | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.user | string |  |  
+action_result.data.\*.aadTenantId | string |  |  
+action_result.data.\*.alertCreationTime | string |  |  
+action_result.data.\*.assignedTo | string |  |  
+action_result.data.\*.category | string |  |  
+action_result.data.\*.classification | string |  |  
+action_result.data.\*.comments.\*.comment | string |  |  
+action_result.data.\*.comments.\*.createdBy | string |  |  
+action_result.data.\*.comments.\*.createdTime | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.detectionSource | string |  |  
+action_result.data.\*.detectorId | string |  |  
+action_result.data.\*.determination | string |  |  
+action_result.data.\*.evidence.\*.aadUserId | string |  |  
+action_result.data.\*.evidence.\*.accountName | string |  |  
+action_result.data.\*.evidence.\*.detectionStatus | string |  |  
+action_result.data.\*.evidence.\*.domainName | string |  `domain`  |  
+action_result.data.\*.evidence.\*.entityType | string |  |  
+action_result.data.\*.evidence.\*.evidenceCreationTime | string |  |  
+action_result.data.\*.evidence.\*.fileName | string |  `file name`  |  
+action_result.data.\*.evidence.\*.filePath | string |  `file path`  |  
+action_result.data.\*.evidence.\*.ipAddress | string |  `ip`  |  
+action_result.data.\*.evidence.\*.parentProcessCreationTime | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFileName | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFilePath | string |  |  
+action_result.data.\*.evidence.\*.parentProcessId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.processCommandLine | string |  |  
+action_result.data.\*.evidence.\*.processCreationTime | string |  |  
+action_result.data.\*.evidence.\*.processId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.registryHive | string |  |  
+action_result.data.\*.evidence.\*.registryKey | string |  |  
+action_result.data.\*.evidence.\*.registryValue | string |  |  
+action_result.data.\*.evidence.\*.registryValueName | string |  |  
+action_result.data.\*.evidence.\*.registryValueType | string |  |  
+action_result.data.\*.evidence.\*.sha1 | string |  `sha1`  |  
+action_result.data.\*.evidence.\*.sha256 | string |  `sha256`  |  
+action_result.data.\*.evidence.\*.url | string |  |  
+action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
+action_result.data.\*.evidence.\*.userSid | string |  |  
+action_result.data.\*.firstEventTime | string |  |  
+action_result.data.\*.id | string |  `defender atp alert id`  |  
+action_result.data.\*.incidentId | numeric |  |  
+action_result.data.\*.investigationId | numeric |  |  
+action_result.data.\*.investigationState | string |  |  
+action_result.data.\*.lastEventTime | string |  |  
+action_result.data.\*.lastUpdateTime | string |  |  
+action_result.data.\*.loggedOnUsers.\*.accountName | string |  |  
+action_result.data.\*.loggedOnUsers.\*.domainName | string |  |  
+action_result.data.\*.machineId | string |  `defender atp device id`  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.relatedUser | string |  |  
+action_result.data.\*.relatedUser.domainName | string |  |  
+action_result.data.\*.relatedUser.userName | string |  |  
+action_result.data.\*.resolvedTime | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.status | string |  |  
+action_result.data.\*.threatFamilyName | string |  |  
+action_result.data.\*.threatName | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved Alerts for User 
+summary.total_results | numeric |  |   5 
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
+
+## action: 'get domain alerts'
+Retrieve alerts related to a specific domain address
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**domain** |  required  | The domain address to retrieve alerts for | string |  `domain` 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.domain | string |  `domain`  |  
+action_result.data.\*.aadTenantId | string |  |  
+action_result.data.\*.alertCreationTime | string |  |  
+action_result.data.\*.assignedTo | string |  |  
+action_result.data.\*.category | string |  |  
+action_result.data.\*.classification | string |  |  
+action_result.data.\*.comments.\*.comment | string |  |  
+action_result.data.\*.comments.\*.createdBy | string |  |  
+action_result.data.\*.comments.\*.createdTime | string |  |  
+action_result.data.\*.computerDnsName | string |  |  
+action_result.data.\*.description | string |  |  
+action_result.data.\*.detectionSource | string |  |  
+action_result.data.\*.detectorId | string |  |  
+action_result.data.\*.determination | string |  |  
+action_result.data.\*.evidence.\*.aadUserId | string |  |  
+action_result.data.\*.evidence.\*.accountName | string |  |  
+action_result.data.\*.evidence.\*.detectionStatus | string |  |  
+action_result.data.\*.evidence.\*.domainName | string |  `domain`  |  
+action_result.data.\*.evidence.\*.entityType | string |  |  
+action_result.data.\*.evidence.\*.evidenceCreationTime | string |  |  
+action_result.data.\*.evidence.\*.fileName | string |  `file name`  |  
+action_result.data.\*.evidence.\*.filePath | string |  `file path`  |  
+action_result.data.\*.evidence.\*.ipAddress | string |  `ip`  |  
+action_result.data.\*.evidence.\*.parentProcessCreationTime | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFileName | string |  |  
+action_result.data.\*.evidence.\*.parentProcessFilePath | string |  |  
+action_result.data.\*.evidence.\*.parentProcessId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.processCommandLine | string |  |  
+action_result.data.\*.evidence.\*.processCreationTime | string |  |  
+action_result.data.\*.evidence.\*.processId | string |  `pid`  |  
+action_result.data.\*.evidence.\*.registryHive | string |  |  
+action_result.data.\*.evidence.\*.registryKey | string |  |  
+action_result.data.\*.evidence.\*.registryValue | string |  |  
+action_result.data.\*.evidence.\*.registryValueName | string |  |  
+action_result.data.\*.evidence.\*.registryValueType | string |  |  
+action_result.data.\*.evidence.\*.sha1 | string |  `sha1`  |  
+action_result.data.\*.evidence.\*.sha256 | string |  `sha256`  |  
+action_result.data.\*.evidence.\*.url | string |  |  
+action_result.data.\*.evidence.\*.userPrincipalName | string |  |  
+action_result.data.\*.evidence.\*.userSid | string |  |  
+action_result.data.\*.firstEventTime | string |  |  
+action_result.data.\*.id | string |  `defender atp alert id`  |  
+action_result.data.\*.incidentId | numeric |  |  
+action_result.data.\*.investigationId | numeric |  |  
+action_result.data.\*.investigationState | string |  |  
+action_result.data.\*.lastEventTime | string |  |  
+action_result.data.\*.lastUpdateTime | string |  |  
+action_result.data.\*.loggedOnUsers.\*.accountName | string |  |  
+action_result.data.\*.loggedOnUsers.\*.domainName | string |  |  
+action_result.data.\*.machineId | string |  `defender atp device id`  |  
+action_result.data.\*.rbacGroupName | string |  |  
+action_result.data.\*.relatedUser | string |  |  
+action_result.data.\*.relatedUser.domainName | string |  |  
+action_result.data.\*.relatedUser.userName | string |  |  
+action_result.data.\*.resolvedTime | string |  |  
+action_result.data.\*.severity | string |  |  
+action_result.data.\*.status | string |  |  
+action_result.data.\*.threatFamilyName | string |  |  
+action_result.data.\*.threatName | string |  |  
+action_result.data.\*.title | string |  |  
+action_result.message | string |  |  
+summary.action_taken | string |  |   Retrieved Alerts for Domain 
+summary.total_results | numeric |  |   5 
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
 
