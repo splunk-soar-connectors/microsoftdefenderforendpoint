@@ -1847,7 +1847,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_active_users(self, param):
-        """ This function retrieves a collection of logged on users on a specific device by its device ID.
+        """This function retrieves a collection of logged on users on a specific device by its device ID.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1868,12 +1868,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        for obj in response.get('value', []):
+        for obj in response.get("value", []):
             action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Active Users"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved Active Users"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -1907,7 +1907,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_list_software(self, param):
-        """ This function retrieves the organization's software inventory.
+        """This function retrieves the organization's software inventory.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1943,7 +1943,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        software_list = response.get('value', [])
+        software_list = response.get("value", [])
         for software in software_list:
             action_result.add_data(software)
 
@@ -1951,12 +1951,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_SUCCESS, "No software found")
 
         summary = action_result.update_summary({})
-        summary['total_software'] = action_result.get_data_size()
+        summary["total_software"] = action_result.get_data_size()
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_list_software_versions(self, param):
-        """ This function retrieves the software version distribution for a specific software ID.
+        """This function retrieves the software version distribution for a specific software ID.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -1977,7 +1977,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        version_distribution = response.get('value', [])
+        version_distribution = response.get("value", [])
         for version in version_distribution:
             action_result.add_data(version)
 
@@ -1985,12 +1985,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_SUCCESS, "No software versions found for specified software")
 
         summary = action_result.update_summary({})
-        summary['total_versions'] = action_result.get_data_size()
+        summary["total_versions"] = action_result.get_data_size()
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_list_software_devices(self, param):
-        """ This function retrieves a list of devices that have a specific software installed by its software ID.
+        """This function retrieves a list of devices that have a specific software installed by its software ID.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2011,7 +2011,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        devices = response.get('value', [])
+        devices = response.get("value", [])
         for device in devices:
             action_result.add_data(device)
 
@@ -2019,12 +2019,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_SUCCESS, "No devices found for specified software")
 
         summary = action_result.update_summary({})
-        summary['total_devices'] = action_result.get_data_size()
+        summary["total_devices"] = action_result.get_data_size()
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_list_software_vulnerabilities(self, param):
-        """ This function retrieves vulnerabilities associated with a specific software by its software ID.
+        """This function retrieves vulnerabilities associated with a specific software by its software ID.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2045,20 +2045,20 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        vulnerabilities = response.get('value', [])
+        vulnerabilities = response.get("value", [])
         for vulnerability in vulnerabilities:
             action_result.add_data(vulnerability)
 
         if not action_result.get_data_size():
-            return action_result.set_status(phantom.APP_ERROR, "No vulnerabilities found for specified software")
+            return action_result.set_status(phantom.APP_SUCCESS, "No vulnerabilities found for specified software")
 
         summary = action_result.update_summary({})
-        summary['total_vulnerabilities'] = action_result.get_data_size()
+        summary["total_vulnerabilities"] = action_result.get_data_size()
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_list_device_vulnerabilities(self, param):
-        """ This function retrieves vulnerabilities affecting the organization per device or software.
+        """This function retrieves vulnerabilities affecting the organization per device or software.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2110,7 +2110,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        vulnerabilities = response.get('value', [])
+        vulnerabilities = response.get("value", [])
         for vulnerability in vulnerabilities:
             action_result.add_data(vulnerability)
 
@@ -2118,12 +2118,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_SUCCESS, "No vulnerabilities found for specified device")
 
         summary = action_result.update_summary({})
-        summary['total_vulnerabilities'] = action_result.get_data_size()
+        summary["total_vulnerabilities"] = action_result.get_data_size()
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_list_vulnerabilities(self, param):
-        """ This function retrieves a list of vulnerabilities based on filters.
+        """This function retrieves a list of vulnerabilities based on filters.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2178,7 +2178,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        vulnerabilities = response.get('value', [])
+        vulnerabilities = response.get("value", [])
         for vulnerability in vulnerabilities:
             action_result.add_data(vulnerability)
 
@@ -2186,7 +2186,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_SUCCESS, "No vulnerabilities found")
 
         summary = action_result.update_summary({})
-        summary['total_vulnerabilities'] = action_result.get_data_size()
+        summary["total_vulnerabilities"] = action_result.get_data_size()
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -2455,7 +2455,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_collect_investigation_package(self, param):
-        """ This function collects an investigation package from a device by its device ID.
+        """This function collects an investigation package from a device by its device ID.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2472,9 +2472,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         endpoint = "{0}{1}".format(self._graph_url, DEFENDER_COLLECT_INVESTIGATION_PACKAGE_ENDPOINT.format(device_id=device_id))
 
-        payload = {
-            "Comment": comment
-        }
+        payload = {"Comment": comment}
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(payload))
 
@@ -2484,12 +2482,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Collected Investigation Package"
+        summary["action_taken"] = "Collected Investigation Package"
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_investigation_uri(self, param):
-        """ This function retrieves a URI for downloading an investigation package by its action ID.
+        """This function retrieves a URI for downloading an investigation package by its action ID.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2513,12 +2511,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Investigation URI"
+        summary["action_taken"] = "Retrieved Investigation URI"
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_device_details(self, param):
-        """ This function retrieves details for multiple devices by their device IDs.
+        """This function retrieves details for multiple devices by their device IDs.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2532,7 +2530,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not device_ids:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_ids")
 
-        device_id_list = [device_id.strip() for device_id in device_ids.split(',') if device_id.strip()]
+        device_id_list = [device_id.strip() for device_id in device_ids.split(",") if device_id.strip()]
 
         all_device_details = []
         for device_id in device_id_list:
@@ -2547,13 +2545,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Device Details"
-        summary['total_results'] = len(all_device_details)
+        summary["action_taken"] = "Retrieved Device Details"
+        summary["total_results"] = len(all_device_details)
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_get_affected_devices(self, param):
-        """ This function retrieves a list of devices affected by a vulnerability using CVE IDs.
+        """This function retrieves a list of devices affected by a vulnerability using CVE IDs.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -2574,12 +2572,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        for obj in response.get('value', []):
+        for obj in response.get("value", []):
             action_result.add_data(obj)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Retrieved Affected Devices"
-        summary['total_results'] = len(response.get('value', []))
+        summary["action_taken"] = "Retrieved Affected Devices"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -3279,7 +3277,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_cancel_live_response(self, param):
-        """ This function cancels a live response action with an unfinished status.
+        """This function cancels a live response action with an unfinished status.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -3296,9 +3294,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIVE_RESPONSE_CANCEL_ENDPOINT.format(action_id=action_id))
 
-        payload = {
-            "Comment": comment
-        }
+        payload = {"Comment": comment}
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(payload))
 
@@ -3308,7 +3304,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result.add_data(response)
 
         summary = action_result.update_summary({})
-        summary['action_taken'] = "Canceled Live Response Action"
+        summary["action_taken"] = "Canceled Live Response Action"
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -3592,12 +3588,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "list_devices": self._handle_list_devices,
             "list_alerts": self._handle_list_alerts,
             "list_sessions": self._handle_list_sessions,
-            'list_software': self._handle_list_software,
-            'list_software_versions': self._handle_list_software_versions,
-            'list_software_devices': self._handle_list_software_devices,
-            'list_software_vulnerabilities': self._handle_list_software_vulnerabilities,
-            'list_device_vulnerabilities': self._handle_list_device_vulnerabilities,
-            'list_vulnerabilities': self._handle_list_vulnerabilities,
+            "list_software": self._handle_list_software,
+            "list_software_versions": self._handle_list_software_versions,
+            "list_software_devices": self._handle_list_software_devices,
+            "list_software_vulnerabilities": self._handle_list_software_vulnerabilities,
+            "list_device_vulnerabilities": self._handle_list_device_vulnerabilities,
+            "list_vulnerabilities": self._handle_list_vulnerabilities,
             "get_alert": self._handle_get_alert,
             "get_alert_user": self._handle_get_alert_user,
             "get_alert_files": self._handle_get_alert_files,
@@ -3618,11 +3614,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_installed_software": self._handle_get_installed_software,
             "restrict_app_execution": self._handle_restrict_app_execution,
             "remove_app_restriction": self._handle_remove_app_restriction,
-            'collect_investigation_package': self._handle_collect_investigation_package,
-            'get_investigation_uri': self._handle_get_investigation_uri,
-            'get_device_details': self._handle_get_device_details,
-            'get_active_users': self._handle_get_active_users,
-            'get_affected_devices': self._handle_get_affected_devices,
+            "collect_investigation_package": self._handle_collect_investigation_package,
+            "get_investigation_uri": self._handle_get_investigation_uri,
+            "get_device_details": self._handle_get_device_details,
+            "get_active_users": self._handle_get_active_users,
+            "get_affected_devices": self._handle_get_affected_devices,
             "get_indicator": self._handle_get_indicator,
             "list_indicators": self._handle_list_indicators,
             "delete_indicator": self._handle_delete_indicator,
@@ -3636,7 +3632,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_secure_score": self._handle_get_secure_score,
             "get_file_live_response": self._handle_get_file_live_response,
             "put_file_live_response": self._handle_put_file_live_response,
-            'cancel_live_response': self._handle_cancel_live_response,
+            "cancel_live_response": self._handle_cancel_live_response,
             "run_script_live_response": self._handle_run_script_live_response,
             "get_missing_kbs": self._handle_get_missing_kbs,
             "update_device_tag": self._handle_update_device_tag,

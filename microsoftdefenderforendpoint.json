@@ -1551,7 +1551,7 @@
         {
             "action": "get active users",
             "description": "Get active users on a device",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-log-on-users\" target=\"_blank\">Get Active Users API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-log-on-users\" target=\"_blank\">Get Active Users API Documentation</a>).",
             "type": "investigate",
             "identifier": "get_active_users",
             "read_only": true,
@@ -1560,6 +1560,7 @@
                     "description": "ID of the device",
                     "data_type": "string",
                     "required": true,
+                    "order": 0,
                     "contains": [
                         "defender atp device id"
                     ]
@@ -1575,7 +1576,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.device_id",
+                    "data_path": "action_result.parameter.device_id",
                     "data_type": "string",
                     "contains": [
                         "defender atp device id"
@@ -2685,7 +2686,7 @@
         {
             "action": "list software",
             "description": "Retrieve the organization's software inventory",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-software\" target=\"_blank\">Get Software API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-software\" target=\"_blank\">Get Software API Documentation</a>).",
             "type": "investigate",
             "identifier": "list_software",
             "read_only": true,
@@ -2731,26 +2732,26 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.id",
+                    "data_path": "action_result.parameter.id",
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.name",
+                    "data_path": "action_result.parameter.name",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.vendor",
+                    "data_path": "action_result.parameter.vendor",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.limit",
+                    "data_path": "action_result.parameter.limit",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.parameters.offset",
+                    "data_path": "action_result.parameter.offset",
                     "data_type": "numeric"
                 },
                 {
@@ -2837,13 +2838,14 @@
         {
             "action": "list software versions",
             "description": "Retrieves a list of organization's software version distribution",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-software-ver-distribution\" target=\"_blank\">Get Software Distribution API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-software-ver-distribution\" target=\"_blank\">Get Software Distribution API Documentation</a>).",
             "type": "investigate",
             "identifier": "list_software_versions",
             "read_only": true,
             "parameters": {
                 "id": {
                     "description": "ID of the software",
+                    "order": 0,
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
@@ -2861,7 +2863,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.id",
+                    "data_path": "action_result.parameter.id",
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
@@ -2910,13 +2912,14 @@
         {
             "action": "list software devices",
             "description": "Retrieve a list of devices that have a specific software installed",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-software\" target=\"_blank\">Get Devices With Software Installed API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-software\" target=\"_blank\">Get Devices With Software Installed API Documentation</a>).",
             "type": "investigate",
             "identifier": "list_software_devices",
             "read_only": true,
             "parameters": {
                 "id": {
                     "description": "ID of the software",
+                    "order": 0,
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
@@ -2934,7 +2937,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.id",
+                    "data_path": "action_result.parameter.id",
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
@@ -2998,13 +3001,14 @@
         {
             "action": "list software vulnerabilities",
             "description": "Retrieve vulnerabilities associated with a specific software",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-vuln-by-software\" target=\"_blank\">Get Vulnerabilities By Software API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-vuln-by-software\" target=\"_blank\">Get Vulnerabilities By Software API Documentation</a>).",
             "type": "investigate",
             "identifier": "list_software_vulnerabilities",
             "read_only": true,
             "parameters": {
                 "id": {
                     "description": "ID of the software",
+                    "order": 0,
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
@@ -3022,7 +3026,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.id",
+                    "data_path": "action_result.parameter.id",
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
@@ -3116,7 +3120,7 @@
         {
             "action": "list device vulnerabilities",
             "description": "Retrieve vulnerabilities affecting devices or software in organization",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities-by-machines\" target=\"_blank\">Get Machines by Vulnerability API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities-by-machines\" target=\"_blank\">Get Machines by Vulnerability API Documentation</a>).",
             "type": "investigate",
             "identifier": "list_device_vulnerabilities",
             "read_only": true,
@@ -3188,48 +3192,48 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.device_id",
+                    "data_path": "action_result.parameter.device_id",
                     "data_type": "string",
                     "contains": [
                         "defender atp device id"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.software_id",
+                    "data_path": "action_result.parameter.software_id",
                     "data_type": "string",
                     "contains": [
                         "defender atp software id"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.cve_id",
+                    "data_path": "action_result.parameter.cve_id",
                     "data_type": "string",
                     "contains": [
                         "cve id"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.product_name",
+                    "data_path": "action_result.parameter.product_name",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.product_version",
+                    "data_path": "action_result.parameter.product_version",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.severity",
+                    "data_path": "action_result.parameter.severity",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.product_vendor",
+                    "data_path": "action_result.parameter.product_vendor",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.limit",
+                    "data_path": "action_result.parameter.limit",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.parameters.offset",
+                    "data_path": "action_result.parameter.offset",
                     "data_type": "numeric"
                 },
                 {
@@ -3308,7 +3312,8 @@
         {
             "action": "list vulnerabilities",
             "description": "Retrieve a list of vulnerabilities based on filters",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities\" target=\"_blank\">Get Vulnerabilities API Documentation</a>)",            "type": "investigate",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities\" target=\"_blank\">Get Vulnerabilities API Documentation</a>).",
+            "type": "investigate",
             "identifier": "list_vulnerabilities",
             "read_only": true,
             "parameters": {
@@ -3378,46 +3383,46 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.id",
+                    "data_path": "action_result.parameter.id",
                     "data_type": "string",
                     "contains": [
                         "cve id"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.name_equal",
+                    "data_path": "action_result.parameter.name_equal",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.name_contains",
+                    "data_path": "action_result.parameter.name_contains",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.description_contains",
+                    "data_path": "action_result.parameter.description_contains",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.published_on",
+                    "data_path": "action_result.parameter.published_on",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.cvss",
+                    "data_path": "action_result.parameter.cvss",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.parameters.severity",
+                    "data_path": "action_result.parameter.severity",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.updated_on",
+                    "data_path": "action_result.parameter.updated_on",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameters.limit",
+                    "data_path": "action_result.parameter.limit",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.parameters.offset",
+                    "data_path": "action_result.parameter.offset",
                     "data_type": "numeric"
                 },
                 {
@@ -7289,7 +7294,7 @@
         {
             "action": "collect investigation package",
             "description": "Collect an investigation package from a device by its device ID",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/collect-investigation-package\" target=\"_blank\">Collect Investigation Package API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/collect-investigation-package\" target=\"_blank\">Collect Investigation Package API Documentation</a>).",
             "type": "generic",
             "identifier": "collect_investigation_package",
             "read_only": false,
@@ -7320,14 +7325,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.device_id",
+                    "data_path": "action_result.parameter.device_id",
                     "data_type": "string",
                     "contains": [
                         "defender atp device id"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.comment",
+                    "data_path": "action_result.parameter.comment",
                     "data_type": "string"
                 },
                 {
@@ -7363,13 +7368,13 @@
                     "data_path": "action_result.data.*.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 5
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.machineId",
                     "data_type": "string",
                     "column_name": "Machine ID",
-                    "column_order": 6
+                    "column_order": 4
                 },
                 {
                     "data_path": "action_result.data.*.computerDnsName",
@@ -7411,13 +7416,14 @@
         {
             "action": "get investigation uri",
             "description": "Retrieve a URI for downloading an investigation package by its action ID",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-package-sas-uri\" target=\"_blank\">Get Package SAS URI API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-package-sas-uri\" target=\"_blank\">Get Package SAS URI API Documentation</a>).",
             "type": "investigate",
             "identifier": "get_investigation_uri",
             "read_only": true,
             "parameters": {
                 "action_id": {
                     "description": "ID of the investigation action",
+                    "order": 0,
                     "data_type": "string",
                     "required": true,
                     "contains": [
@@ -7435,7 +7441,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.action_id",
+                    "data_path": "action_result.parameter.action_id",
                     "data_type": "string",
                     "contains": [
                         "defender atp action id"
@@ -7475,13 +7481,14 @@
         {
             "action": "get device details",
             "description": "Retrieve details for multiple devices by their device IDs",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-by-id\" target=\"_blank\">Get Machine by ID API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-by-id\" target=\"_blank\">Get Machine by ID API Documentation</a>).",
             "type": "investigate",
             "identifier": "get_device_details",
             "read_only": true,
             "parameters": {
                 "device_ids": {
                     "description": "Comma-separated list of device IDs",
+                    "order": 0,
                     "data_type": "string",
                     "required": true
                 }
@@ -7496,7 +7503,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.device_ids",
+                    "data_path": "action_result.parameter.device_ids",
                     "data_type": "string"
                 },
                 {
@@ -7612,13 +7619,14 @@
         {
             "action": "get affected devices",
             "description": "Retrieve a list of devices affected by a vulnerability using CVE IDs",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-vulnerability\" target=\"_blank\">Get Machines by Vulnerability API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-vulnerability\" target=\"_blank\">Get Machines by Vulnerability API Documentation</a>).",
             "type": "investigate",
             "identifier": "get_affected_devices",
             "read_only": true,
             "parameters": {
                 "cve_id": {
                     "description": "CVE ID of the vulnerability",
+                    "order": 0,
                     "data_type": "string",
                     "required": true,
                     "contains": [
@@ -7636,7 +7644,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.cve_id",
+                    "data_path": "action_result.parameter.cve_id",
                     "data_type": "string",
                     "contains": [
                         "cve id"
@@ -12622,7 +12630,7 @@
         {
             "action": "cancel live response",
             "description": "Cancel a live response action",
-            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/cancel-machine-action\" target=\"_blank\">Cancel Machine Action API Documentation</a>)",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/cancel-machine-action\" target=\"_blank\">Cancel Machine Action API Documentation</a>).",
             "type": "generic",
             "identifier": "cancel_live_response",
             "read_only": false,
@@ -12653,14 +12661,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.action_id",
+                    "data_path": "action_result.parameter.action_id",
                     "data_type": "string",
                     "contains": [
                         "defender atp action id"
                     ]
                 },
                 {
-                    "data_path": "action_result.parameters.comment",
+                    "data_path": "action_result.parameter.comment",
                     "data_type": "string"
                 },
                 {
@@ -12694,13 +12702,13 @@
                     "data_path": "action_result.data.*.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 5
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.machineId",
                     "data_type": "string",
                     "column_name": "Machine ID",
-                    "column_order": 6
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.computerDnsName",
