@@ -1,15 +1,1 @@
 **Unreleased**
-
-* Added 'on poll' ingestion for Defender for Endpoint to ingest alerts [PAPP-34605] 
-* Added 'create alert' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get alert user' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get alert files' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get alert ips' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get alert domains' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'update indicator' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get indicator' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'batch indicator update' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get device alerts' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get domain alerts' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get file alerts' action for Microsoft Defender for Endpoint [PAPP-34605]
-* Added 'get user alerts' action for Microsoft Defender for Endpoint [PAPP-34605]
