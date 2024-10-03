@@ -11486,7 +11486,6 @@
                 "device_name": {
                     "description": "Device name to look for",
                     "data_type": "string",
-                    "required": true,
                     "order": 1
                 },
                 "file_name": {
@@ -11620,19 +11619,27 @@
                     "data_type": "string",
                     "contains": [
                         "defender atp device id"
-                    ]
+                    ],
+                    "column_name": "Device ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.DeviceName",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.ActionType",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.Timestamp",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Timestamp",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.FileName",
@@ -11887,6 +11894,12 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.summary.query",
+                    "data_type": "string",
+                    "column_name": "Query",
+                    "column_order": 6
+                },
+                {
                     "data_path": "summary.total_objects",
                     "data_type": "numeric"
                 },
@@ -11921,8 +11934,7 @@
                 "device_name": {
                     "description": "Device name to look for",
                     "data_type": "string",
-                    "order": 1,
-                    "required": true
+                    "order": 1
                 },
                 "file_name": {
                     "description": "File name to look for",
@@ -12041,20 +12053,28 @@
                     "data_type": "boolean"
                 },
                 {
-                    "data_path": "action_result.data.*.Timestamp",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.DeviceId",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.DeviceName",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.ActionType",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.Timestamp",
+                    "data_type": "string",
+                    "column_name": "Timestamp",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.RemoteIP",
@@ -12229,6 +12249,12 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.summary.query",
+                    "data_type": "string",
+                    "column_name": "Query",
+                    "column_order": 4
+                },
+                {
                     "data_path": "summary.total_objects",
                     "data_type": "numeric"
                 },
@@ -12384,20 +12410,28 @@
                     "data_type": "boolean"
                 },
                 {
-                    "data_path": "action_result.data.*.Timestamp",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.DeviceId",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.DeviceName",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.ActionType",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.Timestamp",
+                    "data_type": "string",
+                    "column_name": "Timestamp",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.FileName",
@@ -12496,12 +12530,26 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.query",
+                    "data_type": "string",
+                    "column_name": "Query",
+                    "column_order": 4
+                },
+                {
                     "data_path": "action_result.summary.total_results",
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.message",
-                    "data_type": "string"
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
@@ -12531,8 +12579,7 @@
                 "device_name": {
                     "description": "Device name to look for",
                     "data_type": "string",
-                    "order": 1,
-                    "required": true
+                    "order": 1
                 },
                 "file_name": {
                     "description": "File name to look for",
@@ -12651,20 +12698,28 @@
                     "data_type": "boolean"
                 },
                 {
-                    "data_path": "action_result.data.*.Timestamp",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.DeviceId",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.DeviceName",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.ActionType",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.Timestamp",
+                    "data_type": "string",
+                    "column_name": "Timestamp",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.FileName",
@@ -12769,6 +12824,12 @@
                 {
                     "data_path": "action_result.message",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.query",
+                    "data_type": "string",
+                    "column_name": "Query",
+                    "column_order": 4
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -12878,19 +12939,27 @@
                     "data_type": "string",
                     "contains": [
                         "defender atp device id"
-                    ]
+                    ],
+                    "column_name": "Device ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.DeviceName",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.ActionType",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.Timestamp",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Timestamp",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.FileName",
@@ -13143,6 +13212,12 @@
                 {
                     "data_path": "action_result.message",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.query",
+                    "data_type": "string",
+                    "column_name": "Query",
+                    "column_order": 4
                 },
                 {
                     "data_path": "summary.total_objects",
@@ -13252,19 +13327,27 @@
                     "data_type": "string",
                     "contains": [
                         "defender atp device id"
-                    ]
+                    ],
+                    "column_name": "Device ID",
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.data.*.DeviceName",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.data.*.ActionType",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.Timestamp",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Timestamp",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.data.*.FileName",
@@ -13519,6 +13602,12 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.summary.query",
+                    "data_type": "string",
+                    "column_name": "Query",
+                    "column_order": 4
+                },
+                {
                     "data_path": "summary.total_objects",
                     "data_type": "numeric"
                 },
@@ -13556,8 +13645,7 @@
                 "device_name": {
                     "description": "Device name to look for",
                     "data_type": "string",
-                    "order": 1,
-                    "required": true
+                    "order": 1
                 },
                 "file_name": {
                     "description": "File name to look for",
@@ -13632,8 +13720,28 @@
                     "data_type": "string"
                 },
                 {
+                    "data_path": "action_result.parameter.device_id",
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0
+                },
+                {
                     "data_path": "action_result.parameter.device_name",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.ActionType",
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.Timestamp",
+                    "data_type": "string",
+                    "column_name": "Timestamp",
+                    "column_order": 3
                 },
                 {
                     "data_path": "action_result.parameter.file_name",
@@ -13649,10 +13757,6 @@
                 },
                 {
                     "data_path": "action_result.parameter.md5",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.device_id",
                     "data_type": "string"
                 },
                 {
@@ -13676,19 +13780,11 @@
                     "data_type": "boolean"
                 },
                 {
-                    "data_path": "action_result.data.*.Timestamp",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.DeviceId",
                     "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.DeviceName",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.ActionType",
                     "data_type": "string"
                 },
                 {
@@ -13918,6 +14014,28 @@
                 {
                     "data_path": "action_result.data.*.ProcessRemoteSessionIP",
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.query",
+                    "data_type": "string",
+                    "column_name": "Query",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
