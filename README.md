@@ -509,6 +509,13 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get file](#action-get-file) - Download a file from a device using live response  
 [put file](#action-put-file) - Put a file from the library to a device using live response  
 [run script](#action-run-script) - Run a script from the library on a device using live response  
+[retrieve persistence evidence](#action-retrieve-persistence-evidence) - Retrieve persistence evidence using advanced hunting queries  
+[retrieve network connections](#action-retrieve-network-connections) - Retrieve network connections using advanced hunting queries  
+[retrieve cover-up actions](#action-retrieve-cover-up-actions) - Retrieve cover-up actions using advanced hunting queries  
+[retrieve file origin details](#action-retrieve-file-origin-details) - Retrieve file origin details using advanced hunting queries  
+[retrieve privilege escalation](#action-retrieve-privilege-escalation) - Retrieve evidence of privilege escalation using advanced hunting queries  
+[retrieve tampering evidence](#action-retrieve-tampering-evidence) - Retrieve evidence of MSDE agent/sensor tampering using advanced hunting queries  
+[retrieve process details](#action-retrieve-process-details) - Retrieve process details using advanced hunting queries  
 [get missing kbs](#action-get-missing-kbs) - Retrieve missing KBs (security updates) by given device ID  
 
 ## action: 'test connectivity'
@@ -2830,6 +2837,653 @@ action_result.summary.script_status | string |  |   Succeeded
 action_result.message | string |  |   Successfully executed script 
 summary.total_objects | numeric |  |   1 
 summary.total_objects_successful | numeric |  |   1   
+
+## action: 'retrieve persistence evidence'
+Retrieve persistence evidence using advanced hunting queries
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**query_purpose** |  required  | The purpose of the query, selecting a designated query template | string | 
+**device_name** |  optional  | Device name to look for | string | 
+**file_name** |  optional  | File name to look for | string | 
+**sha1** |  optional  | SHA1 hash to look for | string | 
+**sha256** |  optional  | SHA256 hash to look for | string | 
+**md5** |  optional  | MD5 hash to look for | string | 
+**device_id** |  optional  | Device ID to look for | string | 
+**query_operation** |  optional  | Query operator to use with provided arguments | string | 
+**limit** |  optional  | Maximum number of results to retrieve. Default is 50 | numeric | 
+**time_range** |  optional  | Time range to look back | string | 
+**timeout** |  optional  | The amount of time (in seconds) that a request waits for the query response before a timeout occurs. Default is 10 | numeric | 
+**process_cmd** |  optional  | Process command line that initiated the registry entry. Can only be used with 'registry_entry' query_purpose | string | 
+**show_query** |  optional  | Show the query as part of the entry result | boolean | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.query_purpose | string |  |  
+action_result.parameter.device_name | string |  |  
+action_result.parameter.file_name | string |  |  
+action_result.parameter.sha1 | string |  |  
+action_result.parameter.sha256 | string |  |  
+action_result.parameter.md5 | string |  |  
+action_result.parameter.device_id | string |  |  
+action_result.parameter.query_operation | string |  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.time_range | string |  |  
+action_result.parameter.timeout | numeric |  |  
+action_result.parameter.process_cmd | string |  |  
+action_result.parameter.show_query | string |  |  
+action_result.data.\*.DeviceId | string |  `defender atp device id`  |  
+action_result.data.\*.DeviceName | string |  |  
+action_result.data.\*.ActionType | string |  |  
+action_result.data.\*.Timestamp | string |  |  
+action_result.data.\*.FileName | string |  |  
+action_result.data.\*.FolderPath | string |  |  
+action_result.data.\*.SHA1 | string |  |  
+action_result.data.\*.SHA256 | string |  |  
+action_result.data.\*.MD5 | string |  |  
+action_result.data.\*.FileSize | numeric |  |  
+action_result.data.\*.AccountDomain | string |  |  
+action_result.data.\*.AccountName | string |  |  
+action_result.data.\*.AccountSid | string |  |  
+action_result.data.\*.RemoteUrl | string |  |  
+action_result.data.\*.RemoteDeviceName | string |  |  
+action_result.data.\*.ProcessId | numeric |  |  
+action_result.data.\*.ProcessCommandLine | string |  |  
+action_result.data.\*.ProcessCreationTime | string |  |  
+action_result.data.\*.ProcessTokenElevation | string |  |  
+action_result.data.\*.LogonId | numeric |  |  
+action_result.data.\*.RegistryKey | string |  |  
+action_result.data.\*.RegistryValueName | string |  |  
+action_result.data.\*.RegistryValueData | string |  |  
+action_result.data.\*.RemoteIP | string |  |  
+action_result.data.\*.RemotePort | numeric |  |  
+action_result.data.\*.LocalIP | string |  |  
+action_result.data.\*.LocalPort | numeric |  |  
+action_result.data.\*.FileOriginUrl | string |  |  
+action_result.data.\*.FileOriginIP | string |  |  
+action_result.data.\*.InitiatingProcessSHA1 | string |  |  
+action_result.data.\*.InitiatingProcessSHA256 | string |  |  
+action_result.data.\*.InitiatingProcessMD5 | string |  |  
+action_result.data.\*.InitiatingProcessFileName | string |  |  
+action_result.data.\*.InitiatingProcessFileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessFolderPath | string |  |  
+action_result.data.\*.InitiatingProcessId | numeric |  |  
+action_result.data.\*.InitiatingProcessCommandLine | string |  |  
+action_result.data.\*.InitiatingProcessCreationTime | string |  |  
+action_result.data.\*.InitiatingProcessAccountDomain | string |  |  
+action_result.data.\*.InitiatingProcessAccountName | string |  |  
+action_result.data.\*.InitiatingProcessAccountSid | string |  |  
+action_result.data.\*.InitiatingProcessAccountUpn | string |  |  
+action_result.data.\*.InitiatingProcessAccountObjectId | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoCompanyName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductVersion | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoInternalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoOriginalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoFileDescription | string |  |  
+action_result.data.\*.InitiatingProcessParentId | numeric |  |  
+action_result.data.\*.InitiatingProcessParentFileName | string |  |  
+action_result.data.\*.InitiatingProcessParentCreationTime | string |  |  
+action_result.data.\*.InitiatingProcessLogonId | numeric |  |  
+action_result.data.\*.ReportId | numeric |  |  
+action_result.data.\*.AppGuardContainerId | string |  |  
+action_result.data.\*.AdditionalFields | string |  |  
+action_result.data.\*.InitiatingProcessSessionId | numeric |  |  
+action_result.data.\*.IsInitiatingProcessRemoteSession | numeric |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionIP | string |  |  
+action_result.data.\*.CreatedProcessSessionId | numeric |  |  
+action_result.data.\*.IsProcessRemoteSession | numeric |  |  
+action_result.data.\*.ProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.ProcessRemoteSessionIP | string |  |  
+action_result.data.\*.InitiatingProcessUniqueId | string |  |  
+action_result.summary.total_results | numeric |  |  
+action_result.message | string |  |  
+action_result.summary.query | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'retrieve network connections'
+Retrieve network connections using advanced hunting queries
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**query_purpose** |  required  | Designated query template for hunting | string | 
+**device_name** |  optional  | Device name to look for | string | 
+**file_name** |  optional  | File name to look for | string | 
+**sha1** |  optional  | SHA1 hash to look for | string | 
+**sha256** |  optional  | SHA256 hash to look for | string | 
+**md5** |  optional  | MD5 hash to look for | string | 
+**device_id** |  optional  | Device ID to look for | string | 
+**query_operation** |  optional  | Query operator to use with provided arguments | string | 
+**limit** |  optional  | Maximum number of results to retrieve. Default is 50 | numeric | 
+**timeout** |  optional  | Timeout for query response (in seconds). Default is 10 | numeric | 
+**time_range** |  optional  | Time range to look back. Default is '1d' | string | 
+**show_query** |  optional  | Show the query as part of the result | boolean | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.query_purpose | string |  |  
+action_result.parameter.device_name | string |  |  
+action_result.parameter.file_name | string |  |  
+action_result.parameter.sha1 | string |  |  
+action_result.parameter.sha256 | string |  |  
+action_result.parameter.md5 | string |  |  
+action_result.parameter.device_id | string |  |  
+action_result.parameter.query_operation | string |  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.timeout | numeric |  |  
+action_result.parameter.time_range | string |  |  
+action_result.parameter.show_query | boolean |  |  
+action_result.data.\*.DeviceId | string |  |  
+action_result.data.\*.DeviceName | string |  |  
+action_result.data.\*.ActionType | string |  |  
+action_result.data.\*.Timestamp | string |  |  
+action_result.data.\*.RemoteIP | string |  |  
+action_result.data.\*.RemotePort | numeric |  |  
+action_result.data.\*.RemoteUrl | string |  |  
+action_result.data.\*.LocalIP | string |  |  
+action_result.data.\*.LocalPort | numeric |  |  
+action_result.data.\*.Protocol | string |  |  
+action_result.data.\*.LocalIPType | string |  |  
+action_result.data.\*.RemoteIPType | string |  |  
+action_result.data.\*.InitiatingProcessSHA1 | string |  |  
+action_result.data.\*.InitiatingProcessSHA256 | string |  |  
+action_result.data.\*.InitiatingProcessMD5 | string |  |  
+action_result.data.\*.InitiatingProcessFileName | string |  |  
+action_result.data.\*.InitiatingProcessFileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessVersionInfoCompanyName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductVersion | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoInternalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoOriginalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoFileDescription | string |  |  
+action_result.data.\*.InitiatingProcessId | numeric |  |  
+action_result.data.\*.InitiatingProcessCommandLine | string |  |  
+action_result.data.\*.InitiatingProcessCreationTime | string |  |  
+action_result.data.\*.InitiatingProcessFolderPath | string |  |  
+action_result.data.\*.InitiatingProcessParentFileName | string |  |  
+action_result.data.\*.InitiatingProcessParentId | numeric |  |  
+action_result.data.\*.InitiatingProcessParentCreationTime | string |  |  
+action_result.data.\*.InitiatingProcessAccountDomain | string |  |  
+action_result.data.\*.InitiatingProcessAccountName | string |  |  
+action_result.data.\*.InitiatingProcessAccountSid | string |  |  
+action_result.data.\*.InitiatingProcessAccountUpn | string |  |  
+action_result.data.\*.InitiatingProcessAccountObjectId | string |  |  
+action_result.data.\*.InitiatingProcessIntegrityLevel | string |  |  
+action_result.data.\*.InitiatingProcessTokenElevation | string |  |  
+action_result.data.\*.ReportId | numeric |  |  
+action_result.data.\*.AppGuardContainerId | string |  |  
+action_result.data.\*.AdditionalFields | string |  |  
+action_result.data.\*.InitiatingProcessSessionId | numeric |  |  
+action_result.data.\*.IsInitiatingProcessRemoteSession | numeric |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionIP | string |  |  
+action_result.data.\*.InitiatingProcessUniqueId | string |  |  
+action_result.summary.total_results | numeric |  |  
+action_result.message | string |  |  
+action_result.summary.query | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'retrieve cover-up actions'
+Retrieve cover-up actions using advanced hunting queries
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**query_purpose** |  required  | Designated query template for hunting | string | 
+**device_name** |  optional  | Device name to look for | string | 
+**file_name** |  optional  | File name to look for | string | 
+**sha1** |  optional  | SHA1 hash to look for | string | 
+**sha256** |  optional  | SHA256 hash to look for | string | 
+**md5** |  optional  | MD5 hash to look for | string | 
+**device_id** |  optional  | Device ID to look for | string | 
+**username** |  optional  | Username to look for | string | 
+**query_operation** |  optional  | Query operator to use with provided arguments | string | 
+**limit** |  optional  | Maximum number of results to retrieve. Default is 50 | numeric | 
+**time_range** |  optional  | Time range to look back. Default is '1d' | string | 
+**show_query** |  optional  | Show the query as part of the result | boolean | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.query_purpose | string |  |  
+action_result.parameter.device_name | string |  |  
+action_result.parameter.file_name | string |  |  
+action_result.parameter.sha1 | string |  |  
+action_result.parameter.sha256 | string |  |  
+action_result.parameter.md5 | string |  |  
+action_result.parameter.device_id | string |  |  
+action_result.parameter.username | string |  |  
+action_result.parameter.query_operation | string |  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.time_range | string |  |  
+action_result.parameter.show_query | boolean |  |  
+action_result.data.\*.DeviceId | string |  |  
+action_result.data.\*.DeviceName | string |  |  
+action_result.data.\*.ActionType | string |  |  
+action_result.data.\*.Timestamp | string |  |  
+action_result.data.\*.FileName | string |  |  
+action_result.data.\*.FolderPath | string |  |  
+action_result.data.\*.SHA1 | string |  |  
+action_result.data.\*.SHA256 | string |  |  
+action_result.data.\*.MD5 | string |  |  
+action_result.data.\*.FileOriginUrl | string |  |  
+action_result.data.\*.FileOriginReferrerUrl | string |  |  
+action_result.data.\*.FileOriginIP | string |  |  
+action_result.data.\*.PreviousFolderPath | string |  |  
+action_result.data.\*.PreviousFileName | string |  |  
+action_result.data.\*.FileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessAccountDomain | string |  |  
+action_result.data.\*.InitiatingProcessAccountName | string |  |  
+action_result.data.\*.InitiatingProcessAccountSid | string |  |  
+action_result.data.\*.InitiatingProcessAccountUpn | string |  |  
+action_result.data.\*.InitiatingProcessAccountObjectId | string |  |  
+action_result.data.\*.InitiatingProcessMD5 | string |  |  
+action_result.data.\*.InitiatingProcessSHA1 | string |  |  
+action_result.data.\*.InitiatingProcessSHA256 | string |  |  
+action_result.data.\*.InitiatingProcessFolderPath | string |  |  
+action_result.data.\*.InitiatingProcessFileName | string |  |  
+action_result.data.\*.InitiatingProcessFileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessCommandLine | string |  |  
+action_result.data.\*.InitiatingProcessCreationTime | string |  |  
+action_result.message | string |  |  
+action_result.summary.query | string |  |  
+action_result.summary.total_results | numeric |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'retrieve file origin details'
+Retrieve file origin details using advanced hunting queries
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**query_purpose** |  required  | The purpose of the query, selecting a designated query template | string | 
+**device_name** |  optional  | Device name to look for | string | 
+**file_name** |  optional  | File name to look for | string | 
+**sha1** |  optional  | SHA1 hash to look for | string | 
+**sha256** |  optional  | SHA256 hash to look for | string | 
+**md5** |  optional  | MD5 hash to look for | string | 
+**device_id** |  optional  | Device ID to look for | string | 
+**query_operation** |  optional  | Query operator to use with provided arguments | string | 
+**limit** |  optional  | Maximum number of results to retrieve. Default is 50 | numeric | 
+**timeout** |  optional  | Timeout for query response (in seconds). Default is 10 | numeric | 
+**time_range** |  optional  | Time range to look back. Default is '1d' | string | 
+**show_query** |  optional  | Show the query as part of the result | boolean | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.query_purpose | string |  |  
+action_result.parameter.device_name | string |  |  
+action_result.parameter.file_name | string |  |  
+action_result.parameter.sha1 | string |  |  
+action_result.parameter.sha256 | string |  |  
+action_result.parameter.md5 | string |  |  
+action_result.parameter.device_id | string |  |  
+action_result.parameter.query_operation | string |  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.timeout | numeric |  |  
+action_result.parameter.time_range | string |  |  
+action_result.parameter.show_query | boolean |  |  
+action_result.data.\*.DeviceId | string |  |  
+action_result.data.\*.DeviceName | string |  |  
+action_result.data.\*.ActionType | string |  |  
+action_result.data.\*.Timestamp | string |  |  
+action_result.data.\*.FileName | string |  |  
+action_result.data.\*.FolderPath | string |  |  
+action_result.data.\*.SHA1 | string |  |  
+action_result.data.\*.SHA256 | string |  |  
+action_result.data.\*.MD5 | string |  |  
+action_result.data.\*.FileOriginUrl | string |  |  
+action_result.data.\*.FileOriginReferrerUrl | string |  |  
+action_result.data.\*.FileOriginIP | string |  |  
+action_result.data.\*.PreviousFolderPath | string |  |  
+action_result.data.\*.PreviousFileName | string |  |  
+action_result.data.\*.FileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessAccountDomain | string |  |  
+action_result.data.\*.InitiatingProcessAccountName | string |  |  
+action_result.data.\*.InitiatingProcessAccountSid | string |  |  
+action_result.data.\*.InitiatingProcessAccountUpn | string |  |  
+action_result.data.\*.InitiatingProcessAccountObjectId | string |  |  
+action_result.data.\*.InitiatingProcessMD5 | string |  |  
+action_result.data.\*.InitiatingProcessSHA1 | string |  |  
+action_result.data.\*.InitiatingProcessSHA256 | string |  |  
+action_result.data.\*.InitiatingProcessFolderPath | string |  |  
+action_result.data.\*.InitiatingProcessFileName | string |  |  
+action_result.data.\*.InitiatingProcessFileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessCommandLine | string |  |  
+action_result.data.\*.InitiatingProcessCreationTime | string |  |  
+action_result.summary.total_results | numeric |  |  
+action_result.message | string |  |  
+action_result.summary.query | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'retrieve privilege escalation'
+Retrieve evidence of privilege escalation using advanced hunting queries
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**device_name** |  required  | Device name to look for | string | 
+**device_id** |  optional  | Device ID to look for | string | 
+**query_operation** |  optional  | Query operator to use with provided arguments | string | 
+**limit** |  optional  | Maximum number of results to retrieve. Default is 50 | numeric | 
+**timeout** |  optional  | Timeout for query response (in seconds). Default is 10 | numeric | 
+**time_range** |  optional  | Time range to look back. Default is '1d' | string | 
+**show_query** |  optional  | Show the query as part of the result | boolean | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.device_name | string |  |  
+action_result.parameter.device_id | string |  |  
+action_result.parameter.query_operation | string |  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.timeout | numeric |  |  
+action_result.parameter.time_range | string |  |  
+action_result.parameter.show_query | boolean |  |  
+action_result.data.\*.DeviceId | string |  `defender atp device id`  |  
+action_result.data.\*.DeviceName | string |  |  
+action_result.data.\*.ActionType | string |  |  
+action_result.data.\*.Timestamp | string |  |  
+action_result.data.\*.FileName | string |  |  
+action_result.data.\*.FolderPath | string |  |  
+action_result.data.\*.SHA1 | string |  |  
+action_result.data.\*.SHA256 | string |  |  
+action_result.data.\*.MD5 | string |  |  
+action_result.data.\*.FileSize | numeric |  |  
+action_result.data.\*.AccountDomain | string |  |  
+action_result.data.\*.AccountName | string |  |  
+action_result.data.\*.AccountSid | string |  |  
+action_result.data.\*.RemoteUrl | string |  |  
+action_result.data.\*.RemoteDeviceName | string |  |  
+action_result.data.\*.ProcessId | numeric |  |  
+action_result.data.\*.ProcessCommandLine | string |  |  
+action_result.data.\*.ProcessCreationTime | string |  |  
+action_result.data.\*.ProcessTokenElevation | string |  |  
+action_result.data.\*.LogonId | numeric |  |  
+action_result.data.\*.RegistryKey | string |  |  
+action_result.data.\*.RegistryValueName | string |  |  
+action_result.data.\*.RegistryValueData | string |  |  
+action_result.data.\*.RemoteIP | string |  |  
+action_result.data.\*.RemotePort | numeric |  |  
+action_result.data.\*.LocalIP | string |  |  
+action_result.data.\*.LocalPort | numeric |  |  
+action_result.data.\*.FileOriginUrl | string |  |  
+action_result.data.\*.FileOriginIP | string |  |  
+action_result.data.\*.InitiatingProcessSHA1 | string |  |  
+action_result.data.\*.InitiatingProcessSHA256 | string |  |  
+action_result.data.\*.InitiatingProcessMD5 | string |  |  
+action_result.data.\*.InitiatingProcessFileName | string |  |  
+action_result.data.\*.InitiatingProcessFileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessFolderPath | string |  |  
+action_result.data.\*.InitiatingProcessId | numeric |  |  
+action_result.data.\*.InitiatingProcessCommandLine | string |  |  
+action_result.data.\*.InitiatingProcessCreationTime | string |  |  
+action_result.data.\*.InitiatingProcessAccountDomain | string |  |  
+action_result.data.\*.InitiatingProcessAccountName | string |  |  
+action_result.data.\*.InitiatingProcessAccountSid | string |  |  
+action_result.data.\*.InitiatingProcessAccountUpn | string |  |  
+action_result.data.\*.InitiatingProcessAccountObjectId | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoCompanyName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductVersion | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoInternalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoOriginalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoFileDescription | string |  |  
+action_result.data.\*.InitiatingProcessParentId | numeric |  |  
+action_result.data.\*.InitiatingProcessParentFileName | string |  |  
+action_result.data.\*.InitiatingProcessParentCreationTime | string |  |  
+action_result.data.\*.InitiatingProcessLogonId | numeric |  |  
+action_result.data.\*.ReportId | numeric |  |  
+action_result.data.\*.AppGuardContainerId | string |  |  
+action_result.data.\*.AdditionalFields | string |  |  
+action_result.data.\*.InitiatingProcessSessionId | numeric |  |  
+action_result.data.\*.IsInitiatingProcessRemoteSession | numeric |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionIP | string |  |  
+action_result.data.\*.CreatedProcessSessionId | numeric |  |  
+action_result.data.\*.IsProcessRemoteSession | numeric |  |  
+action_result.data.\*.ProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.ProcessRemoteSessionIP | string |  |  
+action_result.data.\*.InitiatingProcessUniqueId | string |  |  
+action_result.summary.total_results | numeric |  |  
+action_result.message | string |  |  
+action_result.summary.query | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'retrieve tampering evidence'
+Retrieve evidence of MSDE agent/sensor tampering using advanced hunting queries
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**device_name** |  required  | Device name to look for | string | 
+**device_id** |  optional  | Device ID to look for | string | 
+**query_operation** |  optional  | Query operator to use with provided arguments | string | 
+**limit** |  optional  | Maximum number of results to retrieve. Default is 50 | numeric | 
+**timeout** |  optional  | Timeout for query response (in seconds). Default is 10 | numeric | 
+**time_range** |  optional  | Time range to look back. Default is '1d' | string | 
+**show_query** |  optional  | Show the query as part of the result | boolean | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.device_name | string |  |  
+action_result.parameter.device_id | string |  |  
+action_result.parameter.query_operation | string |  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.timeout | numeric |  |  
+action_result.parameter.time_range | string |  |  
+action_result.parameter.show_query | boolean |  |  
+action_result.data.\*.DeviceId | string |  `defender atp device id`  |  
+action_result.data.\*.DeviceName | string |  |  
+action_result.data.\*.ActionType | string |  |  
+action_result.data.\*.Timestamp | string |  |  
+action_result.data.\*.FileName | string |  |  
+action_result.data.\*.FolderPath | string |  |  
+action_result.data.\*.SHA1 | string |  |  
+action_result.data.\*.SHA256 | string |  |  
+action_result.data.\*.MD5 | string |  |  
+action_result.data.\*.FileSize | numeric |  |  
+action_result.data.\*.AccountDomain | string |  |  
+action_result.data.\*.AccountName | string |  |  
+action_result.data.\*.AccountSid | string |  |  
+action_result.data.\*.RemoteUrl | string |  |  
+action_result.data.\*.RemoteDeviceName | string |  |  
+action_result.data.\*.ProcessId | numeric |  |  
+action_result.data.\*.ProcessCommandLine | string |  |  
+action_result.data.\*.ProcessCreationTime | string |  |  
+action_result.data.\*.ProcessTokenElevation | string |  |  
+action_result.data.\*.LogonId | numeric |  |  
+action_result.data.\*.RegistryKey | string |  |  
+action_result.data.\*.RegistryValueName | string |  |  
+action_result.data.\*.RegistryValueData | string |  |  
+action_result.data.\*.RemoteIP | string |  |  
+action_result.data.\*.RemotePort | numeric |  |  
+action_result.data.\*.LocalIP | string |  |  
+action_result.data.\*.LocalPort | numeric |  |  
+action_result.data.\*.FileOriginUrl | string |  |  
+action_result.data.\*.FileOriginIP | string |  |  
+action_result.data.\*.InitiatingProcessSHA1 | string |  |  
+action_result.data.\*.InitiatingProcessSHA256 | string |  |  
+action_result.data.\*.InitiatingProcessMD5 | string |  |  
+action_result.data.\*.InitiatingProcessFileName | string |  |  
+action_result.data.\*.InitiatingProcessFileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessFolderPath | string |  |  
+action_result.data.\*.InitiatingProcessId | numeric |  |  
+action_result.data.\*.InitiatingProcessCommandLine | string |  |  
+action_result.data.\*.InitiatingProcessCreationTime | string |  |  
+action_result.data.\*.InitiatingProcessAccountDomain | string |  |  
+action_result.data.\*.InitiatingProcessAccountName | string |  |  
+action_result.data.\*.InitiatingProcessAccountSid | string |  |  
+action_result.data.\*.InitiatingProcessAccountUpn | string |  |  
+action_result.data.\*.InitiatingProcessAccountObjectId | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoCompanyName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductVersion | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoInternalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoOriginalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoFileDescription | string |  |  
+action_result.data.\*.InitiatingProcessParentId | numeric |  |  
+action_result.data.\*.InitiatingProcessParentFileName | string |  |  
+action_result.data.\*.InitiatingProcessParentCreationTime | string |  |  
+action_result.data.\*.InitiatingProcessLogonId | numeric |  |  
+action_result.data.\*.ReportId | numeric |  |  
+action_result.data.\*.AppGuardContainerId | string |  |  
+action_result.data.\*.AdditionalFields | string |  |  
+action_result.data.\*.InitiatingProcessSessionId | numeric |  |  
+action_result.data.\*.IsInitiatingProcessRemoteSession | numeric |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionIP | string |  |  
+action_result.data.\*.CreatedProcessSessionId | numeric |  |  
+action_result.data.\*.IsProcessRemoteSession | numeric |  |  
+action_result.data.\*.ProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.ProcessRemoteSessionIP | string |  |  
+action_result.data.\*.InitiatingProcessUniqueId | string |  |  
+action_result.summary.total_results | numeric |  |  
+action_result.message | string |  |  
+action_result.summary.query | string |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
+
+## action: 'retrieve process details'
+Retrieve process details using advanced hunting queries
+
+Type: **investigate**  
+Read only: **True**
+
+#### Action Parameters
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**query_purpose** |  required  | Designated query template for process details | string | 
+**device_name** |  optional  | Device name to look for | string | 
+**file_name** |  optional  | File name to look for | string | 
+**sha1** |  optional  | SHA1 hash to look for | string | 
+**sha256** |  optional  | SHA256 hash to look for | string | 
+**md5** |  optional  | MD5 hash to look for | string | 
+**device_id** |  optional  | Device ID to look for | string | 
+**query_operation** |  optional  | Query operator to use with provided arguments | string | 
+**limit** |  optional  | Maximum number of results to retrieve. Default is 50 | numeric | 
+**timeout** |  optional  | Timeout for query response (in seconds). Default is 10 | numeric | 
+**time_range** |  optional  | Time range to look back. Default is '1d' | string | 
+**show_query** |  optional  | Show the query as part of the result | boolean | 
+
+#### Action Output
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.parameter.query_purpose | string |  |  
+action_result.parameter.device_id | string |  |  
+action_result.parameter.device_name | string |  |  
+action_result.data.\*.ActionType | string |  |  
+action_result.data.\*.Timestamp | string |  |  
+action_result.parameter.file_name | string |  |  
+action_result.parameter.sha1 | string |  |  
+action_result.parameter.sha256 | string |  |  
+action_result.parameter.md5 | string |  |  
+action_result.parameter.query_operation | string |  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.timeout | numeric |  |  
+action_result.parameter.time_range | string |  |  
+action_result.parameter.show_query | boolean |  |  
+action_result.data.\*.DeviceId | string |  |  
+action_result.data.\*.DeviceName | string |  |  
+action_result.data.\*.FileName | string |  |  
+action_result.data.\*.FolderPath | string |  |  
+action_result.data.\*.SHA1 | string |  |  
+action_result.data.\*.SHA256 | string |  |  
+action_result.data.\*.MD5 | string |  |  
+action_result.data.\*.FileSize | numeric |  |  
+action_result.data.\*.ProcessVersionInfoCompanyName | string |  |  
+action_result.data.\*.ProcessVersionInfoProductName | string |  |  
+action_result.data.\*.ProcessVersionInfoProductVersion | string |  |  
+action_result.data.\*.ProcessVersionInfoInternalFileName | string |  |  
+action_result.data.\*.ProcessVersionInfoOriginalFileName | string |  |  
+action_result.data.\*.ProcessVersionInfoFileDescription | string |  |  
+action_result.data.\*.ProcessId | numeric |  |  
+action_result.data.\*.ProcessCommandLine | string |  |  
+action_result.data.\*.ProcessIntegrityLevel | string |  |  
+action_result.data.\*.ProcessTokenElevation | string |  |  
+action_result.data.\*.ProcessCreationTime | string |  |  
+action_result.data.\*.AccountDomain | string |  |  
+action_result.data.\*.AccountName | string |  |  
+action_result.data.\*.AccountSid | string |  |  
+action_result.data.\*.AccountUpn | string |  |  
+action_result.data.\*.AccountObjectId | string |  |  
+action_result.data.\*.LogonId | numeric |  |  
+action_result.data.\*.InitiatingProcessAccountDomain | string |  |  
+action_result.data.\*.InitiatingProcessAccountName | string |  |  
+action_result.data.\*.InitiatingProcessAccountSid | string |  |  
+action_result.data.\*.InitiatingProcessAccountUpn | string |  |  
+action_result.data.\*.InitiatingProcessAccountObjectId | string |  |  
+action_result.data.\*.InitiatingProcessLogonId | numeric |  |  
+action_result.data.\*.InitiatingProcessIntegrityLevel | string |  |  
+action_result.data.\*.InitiatingProcessTokenElevation | string |  |  
+action_result.data.\*.InitiatingProcessSHA1 | string |  |  
+action_result.data.\*.InitiatingProcessSHA256 | string |  |  
+action_result.data.\*.InitiatingProcessMD5 | string |  |  
+action_result.data.\*.InitiatingProcessFileName | string |  |  
+action_result.data.\*.InitiatingProcessFileSize | numeric |  |  
+action_result.data.\*.InitiatingProcessVersionInfoCompanyName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoProductVersion | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoInternalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoOriginalFileName | string |  |  
+action_result.data.\*.InitiatingProcessVersionInfoFileDescription | string |  |  
+action_result.data.\*.InitiatingProcessParentId | numeric |  |  
+action_result.data.\*.InitiatingProcessParentFileName | string |  |  
+action_result.data.\*.InitiatingProcessParentCreationTime | string |  |  
+action_result.data.\*.ReportId | numeric |  |  
+action_result.data.\*.AppGuardContainerId | string |  |  
+action_result.data.\*.AdditionalFields | string |  |  
+action_result.data.\*.ProcessUniqueId | string |  |  
+action_result.data.\*.InitiatingProcessUniqueId | string |  |  
+action_result.data.\*.IsInitiatingProcessRemoteSession | numeric |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.InitiatingProcessRemoteSessionIP | string |  |  
+action_result.data.\*.CreatedProcessSessionId | numeric |  |  
+action_result.data.\*.IsProcessRemoteSession | numeric |  |  
+action_result.data.\*.ProcessRemoteSessionDeviceName | string |  |  
+action_result.data.\*.ProcessRemoteSessionIP | string |  |  
+action_result.message | string |  |  
+action_result.summary.query | string |  |  
+action_result.summary.total_results | numeric |  |  
+summary.total_objects | numeric |  |  
+summary.total_objects_successful | numeric |  |    
 
 ## action: 'get missing kbs'
 Retrieve missing KBs (security updates) by given device ID

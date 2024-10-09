@@ -555,7 +555,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
     def replace_null_values(self, data):
         return json.loads(json.dumps(data).replace("\\u0000", "\\\\u0000"))
 
-    def _update_request(self, action_result, endpoint, headers=None, params=None, data=None, method="get"):
+    def _update_request(self, action_result, endpoint, headers=None, params=None, data=None, method="get", timeout=None):
         """This function is used to update the headers with access_token before making REST call.
 
         :param endpoint: REST endpoint that needs to appended to the service address
@@ -605,7 +605,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         )
 
         ret_val, resp_json = self._make_rest_call(
-            action_result=action_result, endpoint=endpoint, headers=headers, params=params, data=data, method=method
+            action_result=action_result, endpoint=endpoint, headers=headers, params=params, data=data, method=method, timeout=timeout
         )
 
         # If token is expired, generate new token
@@ -626,7 +626,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return phantom.APP_SUCCESS, resp_json
 
-    def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, method="get", verify=True):
+    def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, method="get", verify=True, timeout=None):
         """Function that makes the REST call to the app.
 
         :param endpoint: REST endpoint that needs to appended to the service address
@@ -651,7 +651,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)), resp_json)
 
         try:
-            response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
+            if timeout is None:
+                response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
+            else:
+                response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params, timeout=timeout)
 
         except Exception as e:
             self._dump_error_log("Error occurred while logging the make_rest_call exception message")
@@ -2965,6 +2968,552 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_persistence_evidence(self, param):
+        """This function is used to handle the persistence evidence action in advanced hunting.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        query_purpose = param.get("query_purpose")
+
+        if not query_purpose:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: query_purpose")
+
+        device_name = param.get("device_name")
+        file_name = param.get("file_name")
+        sha1 = param.get("sha1")
+        sha256 = param.get("sha256")
+        md5 = param.get("md5")
+        device_id = param.get("device_id")
+        query_operation = param.get("query_operation", "or")
+        limit = param.get("limit", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        time_range = param.get("time_range", "1d")
+        process_cmd = param.get("process_cmd")
+        show_query = param.get("show_query", False)
+        timeout = param.get("timeout", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+
+        if query_purpose == "registry_entry" and not process_cmd:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: process_cmd")
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query_templates = {
+            "scheduled_job": "DeviceEvents | where ActionType == 'ScheduledTaskCreated'",
+            "registry_entry": f"DeviceEvents | where ActionType == 'RegistryValueSet' and ProcessCommandLine contains '{process_cmd}'",
+            "startup_folder_changes": "DeviceEvents | where ActionType == 'FileCreated' and FolderPath endswith 'Startup'",
+            "new_service_created": "DeviceEvents | where ActionType == 'ServiceInstalled'",
+            "service_updated": "DeviceEvents | where ActionType == 'ServiceUpdated'",
+            "file_replaced": "DeviceEvents | where ActionType == 'FileReplaced'",
+            "new_user": "DeviceEvents | where ActionType == 'UserCreated'",
+            "new_group": "DeviceEvents | where ActionType == 'GroupCreated'",
+            "group_user_change": "DeviceEvents | where ActionType == 'GroupMembershipChanged'",
+            "local_firewall_change": "DeviceEvents | where ActionType == 'FirewallRuleModified'",
+            "host_file_change": "DeviceEvents | where ActionType == 'HostsFileModified'",
+        }
+
+        if query_purpose not in query_templates:
+            return action_result.set_status(phantom.APP_ERROR, "Invalid query_purpose provided")
+
+        query = query_templates[query_purpose]
+
+        optional_conditions = []
+
+        if device_name:
+            optional_conditions.append(f"DeviceName == '{device_name}'")
+        if file_name:
+            optional_conditions.append(f"FileName == '{file_name}'")
+        if sha1:
+            optional_conditions.append(f"SHA1 == '{sha1}'")
+        if sha256:
+            optional_conditions.append(f"SHA256 == '{sha256}'")
+        if md5:
+            optional_conditions.append(f"MD5 == '{md5}'")
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        data = {"Query": query}
+
+        ret_val, response = self._update_request(
+            endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout
+        )
+
+        if phantom.is_fail(ret_val):
+            return action_result.set_status(phantom.APP_ERROR)
+
+        for obj in response.get("Results", []):
+            action_result.add_data(obj)
+
+        summary["total_results"] = len(response.get("Results", []))
+
+        if show_query:
+            summary["query"] = query
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved persistence evidence")
+
+    def _handle_process_details(self, param):
+        """This function handles the process details detection action in advanced hunting.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        query_purpose = param.get("query_purpose")
+        if not query_purpose:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: query_purpose")
+
+        device_name = param.get("device_name")
+        file_name = param.get("file_name")
+        sha1 = param.get("sha1")
+        sha256 = param.get("sha256")
+        md5 = param.get("md5")
+        device_id = param.get("device_id")
+        query_operation = param.get("query_operation", "or")
+        limit = param.get("limit", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        timeout = param.get("timeout", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+        time_range = param.get("time_range", "1d")
+        show_query = param.get("show_query", False)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query_templates = {
+            "parent_process": "DeviceProcessEvents | where ActionType == 'ParentProcessCreated'",
+            "grandparent_process": "DeviceProcessEvents | where ActionType == 'GrandparentProcessCreated'",
+            "process_details": "DeviceProcessEvents | where ActionType == 'ProcessCreated'",
+            "beaconing_evidence": "DeviceNetworkEvents | where ActionType == 'NetworkConnectionEstablished' and RemoteIPType == 'Public'",
+            "powershell_execution_unsigned_files": "DeviceFileEvents | where ActionType == 'FileExecuted' and FileOrigin == 'UnsignedPowerShellScript'",
+            "process_excecution_powershell": "DeviceProcessEvents | where ActionType == 'ProcessCreated' and ProcessCommandLine contains 'PowerShell'",
+        }
+
+        if query_purpose not in query_templates:
+            return action_result.set_status(phantom.APP_ERROR, "Invalid query_purpose provided")
+
+        query = query_templates[query_purpose]
+
+        optional_conditions = []
+
+        if device_name:
+            optional_conditions.append(f"DeviceName == '{device_name}'")
+        if file_name:
+            optional_conditions.append(f"FileName == '{file_name}'")
+        if sha1:
+            optional_conditions.append(f"SHA1 == '{sha1}'")
+        if sha256:
+            optional_conditions.append(f"SHA256 == '{sha256}'")
+        if md5:
+            optional_conditions.append(f"MD5 == '{md5}'")
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        data = {"Query": query}
+
+        ret_val, response = self._update_request(
+            endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout
+        )
+
+        if phantom.is_fail(ret_val):
+            summary["query_status"] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        for obj in response.get("Results", []):
+            action_result.add_data(obj)
+
+        summary["total_results"] = len(response.get("Results", []))
+
+        if show_query:
+            summary["query"] = query
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved process details evidence")
+
+    def _handle_network_connections(self, param):
+        """This function is used to handle the network connections action in advanced hunting.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        query_purpose = param.get("query_purpose")
+
+        if not query_purpose:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters: query_purpose")
+
+        device_name = param.get("device_name")
+        file_name = param.get("file_name")
+        sha1 = param.get("sha1")
+        sha256 = param.get("sha256")
+        md5 = param.get("md5")
+        device_id = param.get("device_id")
+        query_operation = param.get("query_operation", "or")
+        limit = param.get("limit", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        timeout = param.get("timeout", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+        time_range = param.get("time_range", "1d")
+        show_query = param.get("show_query", False)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query_templates = {
+            "external_addresses": "DeviceNetworkEvents | where RemoteIPType == 'Public'",
+            "dns_query": "DeviceNetworkEvents | where ActionType == 'DnsQueryResponse'",
+            "encoded_commands": "DeviceNetworkEvents | where ActionType == 'CommandLineExecuted' and CommandLine contains 'base64'",
+        }
+
+        if query_purpose not in query_templates:
+            return action_result.set_status(phantom.APP_ERROR, "Invalid query_purpose provided")
+
+        query = query_templates[query_purpose]
+
+        optional_conditions = []
+
+        if device_name:
+            optional_conditions.append(f"DeviceName == '{device_name}'")
+        if file_name:
+            optional_conditions.append(f"FileName == '{file_name}'")
+        if sha1:
+            optional_conditions.append(f"SHA1 == '{sha1}'")
+        if sha256:
+            optional_conditions.append(f"SHA256 == '{sha256}'")
+        if md5:
+            optional_conditions.append(f"MD5 == '{md5}'")
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        data = {"Query": query}
+
+        ret_val, response = self._update_request(
+            endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout
+        )
+
+        if phantom.is_fail(ret_val):
+            summary["query_status"] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        for obj in response.get("Results", []):
+            action_result.add_data(obj)
+
+        summary["total_results"] = len(response.get("Results", []))
+
+        if show_query:
+            summary["query"] = query
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved network connections")
+
+    def _handle_cover_up(self, param):
+        """This function is used to handle the cover-up actions in advanced hunting.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        query_purpose = param.get("query_purpose")
+
+        if not query_purpose:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: query_purpose")
+
+        device_name = param.get("device_name")
+        file_name = param.get("file_name")
+        sha1 = param.get("sha1")
+        sha256 = param.get("sha256")
+        md5 = param.get("md5")
+        device_id = param.get("device_id")
+        username = param.get("username")
+        query_operation = param.get("query_operation", "or")
+        limit = param.get("limit", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        timeout = param.get("timeout", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+        time_range = param.get("time_range", "1d")
+        show_query = param.get("show_query", False)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        if query_purpose in ["compromised_information", "connected_devices", "action_types", "common_files"] and not username:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: username")
+
+        # Construct KQL query
+        query_templates = {
+            "file_deleted": "DeviceFileEvents | where ActionType == 'FileDeleted'",
+            "event_log_cleared": "DeviceEvents | where ActionType == 'SecurityEventLogCleared'",
+            "compromised_information": f"IdentityLogonEvents | where AccountName == '{username}'",
+            "connected_devices": f"DeviceNetworkEvents | where AccountName == '{username}'",
+            "action_types": f"DeviceEvents | where AccountName == '{username}'",
+            "common_files": f"DeviceFileEvents | where AccountName == '{username}'",
+        }
+
+        if query_purpose not in query_templates:
+            return action_result.set_status(phantom.APP_ERROR, "Invalid query_purpose provided")
+
+        query = query_templates[query_purpose]
+
+        optional_conditions = []
+
+        if device_name:
+            optional_conditions.append(f"DeviceName == '{device_name}'")
+        if file_name:
+            optional_conditions.append(f"FileName == '{file_name}'")
+        if sha1:
+            optional_conditions.append(f"SHA1 == '{sha1}'")
+        if sha256:
+            optional_conditions.append(f"SHA256 == '{sha256}'")
+        if md5:
+            optional_conditions.append(f"MD5 == '{md5}'")
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+        if username and query_purpose not in ["compromised_information", "connected_devices", "action_types", "common_files"]:
+            optional_conditions.append(f"AccountName == '{username}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        data = {"Query": query}
+
+        ret_val, response = self._update_request(
+            endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout
+        )
+
+        if phantom.is_fail(ret_val):
+            summary["query_status"] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        for obj in response.get("Results", []):
+            action_result.add_data(obj)
+
+        summary["total_results"] = len(response.get("Results", []))
+
+        if show_query:
+            summary["query"] = query
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved cover-up actions")
+
+    def _handle_hunting_file_origin(self, param):
+        """This function handles the file origin hunting action in advanced hunting.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        query_purpose = param.get("query_purpose")
+
+        if not query_purpose:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: query_purpose")
+
+        device_name = param.get("device_name")
+        file_name = param.get("file_name")
+        sha1 = param.get("sha1")
+        sha256 = param.get("sha256")
+        md5 = param.get("md5")
+        device_id = param.get("device_id")
+        query_operation = param.get("query_operation", "or")
+        limit = param.get("limit", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        timeout = param.get("timeout", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+        time_range = param.get("time_range", "1d")
+        show_query = param.get("show_query", False)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query_templates = {
+            "dropped_file": "DeviceFileEvents | where ActionType == 'FileDropped'",
+            "created_file": "DeviceFileEvents | where ActionType == 'FileCreated'",
+            "network_shared": "DeviceNetworkEvents | where ActionType == 'FileShared'",
+            "execution_chain": "DeviceProcessEvents | where ActionType == 'ProcessCreated'",
+        }
+
+        if query_purpose not in query_templates:
+            return action_result.set_status(phantom.APP_ERROR, "Invalid query_purpose provided")
+
+        query = query_templates[query_purpose]
+
+        optional_conditions = []
+
+        if device_name:
+            optional_conditions.append(f"DeviceName == '{device_name}'")
+        if file_name:
+            optional_conditions.append(f"FileName == '{file_name}'")
+        if sha1:
+            optional_conditions.append(f"SHA1 == '{sha1}'")
+        if sha256:
+            optional_conditions.append(f"SHA256 == '{sha256}'")
+        if md5:
+            optional_conditions.append(f"MD5 == '{md5}'")
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        data = {"Query": query}
+
+        ret_val, response = self._update_request(
+            endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout
+        )
+
+        if phantom.is_fail(ret_val):
+            summary["query_status"] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        for obj in response.get("Results", []):
+            action_result.add_data(obj)
+
+        summary["total_results"] = len(response.get("Results", []))
+
+        if show_query:
+            summary["query"] = query
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved file origin details")
+
+    def _handle_privilege_escalation(self, param):
+        """This function is used to handle the privilege escalation detection action in advanced hunting.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        device_name = param.get("device_name")
+        device_id = param.get("device_id")
+        query_operation = param.get("query_operation", "or")
+        limit = param.get("limit", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        timeout = param.get("timeout", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+        time_range = param.get("time_range", "1d")
+        show_query = param.get("show_query", False)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query = "DeviceEvents | where (ActionType == 'UserAccountPrivilegeElevated' or ActionType == 'UserAddedToPrivilegedGroup')"
+
+        optional_conditions = []
+
+        if device_name:
+            optional_conditions.append(f"DeviceName == '{device_name}'")
+
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        data = {"Query": query}
+
+        ret_val, response = self._update_request(
+            endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout
+        )
+
+        if phantom.is_fail(ret_val):
+            summary["query_status"] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        for obj in response.get("Results", []):
+            action_result.add_data(obj)
+
+        summary["total_results"] = len(response.get("Results", []))
+
+        if show_query:
+            summary["query"] = query
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved privilege escalation evidence")
+
+    def _handle_tampering(self, param):
+        """This function is used to detect evidence of MSDE agent/sensor tampering.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+        summary = action_result.update_summary({})
+
+        device_name = param.get("device_name")
+        device_id = param.get("device_id")
+        query_operation = param.get("query_operation", "or")
+        limit = param.get("limit", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_LIMIT)
+        timeout = param.get("timeout", DEFENDERATP_ADVANCED_HUNTING_DEFAULT_TIMEOUT)
+        time_range = param.get("time_range", "1d")
+        show_query = param.get("show_query", False)
+
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
+
+        # Construct KQL query
+        query = "DeviceEvents | where (ActionType == 'SensorTampered' or ActionType == 'AgentTampered')"
+
+        optional_conditions = []
+
+        if device_name:
+            optional_conditions.append(f"DeviceName == '{device_name}'")
+
+        if device_id:
+            optional_conditions.append(f"DeviceId == '{device_id}'")
+
+        if optional_conditions:
+            query = f"{query} and ({' {0} '.format(query_operation).join(optional_conditions)})"
+
+        query = f"{query} | where Timestamp > ago({time_range}) | limit {limit}"
+
+        data = {"Query": query}
+
+        ret_val, response = self._update_request(
+            endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(data), timeout=timeout
+        )
+
+        if phantom.is_fail(ret_val):
+            summary["query_status"] = action_result.get_message()
+            return action_result.set_status(phantom.APP_ERROR)
+
+        for obj in response.get("Results", []):
+            action_result.add_data(obj)
+
+        summary["total_results"] = len(response.get("Results", []))
+
+        if show_query:
+            summary["query"] = query
+
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully retrieved tampering evidence")
+
     def _handle_on_poll(self, param):
         """This function ingests Microsoft Defender for Endpoint alerts during scheduled or manual polling.
 
@@ -3150,6 +3699,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "run_script_live_response": self._handle_run_script_live_response,
             "get_missing_kbs": self._handle_get_missing_kbs,
             "update_device_tag": self._handle_update_device_tag,
+            "retrieve_persistence_evidence": self._handle_persistence_evidence,
+            "retrieve_process_details": self._handle_process_details,
+            "retrieve_network_connections": self._handle_network_connections,
+            "retrieve_cover_up": self._handle_cover_up,
+            "retrieve_file_origin": self._handle_hunting_file_origin,
+            "retrieve_privilege_escalation": self._handle_privilege_escalation,
+            "retrieve_tampering": self._handle_tampering,
         }
 
         action = self.get_action_identifier()
