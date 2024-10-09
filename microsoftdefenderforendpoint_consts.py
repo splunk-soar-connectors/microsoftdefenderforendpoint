@@ -67,6 +67,14 @@ DEFENDERATP_RUN_QUERY_ENDPOINT = "/advancedqueries/run"
 DEFENDERATP_LIVE_RESPONSE_ENDPOINT = "/machines/{device_id}/runliveresponse"
 DEFENDERATP_LIVE_RESPONSE_RESULT_ENDPOINT = "/machineactions/{action_id}/GetLiveResponseResultDownloadLink(index=0)"
 DEFENDERATP_MISSING_KBS_ENDPOINT = "/machines/{device_id}/getmissingkbs"
+DEFENDER_CREATE_ALERT_ENDPOINT = "/alerts/CreateAlertByReference"
+DEFENDER_USER_ALERTS_ENDPOINT = "/users/{user_id}/alerts"
+DEFENDER_DOMAIN_ALERTS_ENDPOINT = "/domains/{domain}/alerts"
+DEFENDER_FILE_ALERTS_ENDPOINT = "/files/{file_hash}/alerts"
+DEFENDER_DEVICE_ALERTS_ENDPOINT = "/machines/{device_id}/alerts"
+DEFENDER_GET_INDICATOR_ENDPOINT = "/indicators/{indicator_id}"
+DEFENDER_UPDATE_INDICATOR_ENDPOINT = "/indicators/import"
+
 DEFENDERATP_IP_PARAM_CONST = "ip"
 DEFENDERATP_DOMAIN_PARAM_CONST = "domain"
 DEFENDERATP_FILE_PARAM_CONST = "file_hash"
@@ -143,6 +151,12 @@ DEFENDERATP_AUTHORIZE_WAIT_TIME = 15
 DEFENDERATP_ALERT_DEFAULT_LIMIT = 100
 DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT = 60
 DEFENDERATP_SCAN_TIMEOUT_MAX_LIMIT = 3600
+DEFENDERATP_FILES_DEFAULT_LIMIT = 100
+DEFENDERATP_FILES_DEFAULT_OFFSET = 0
+DEFENDERATP_IPS_DEFAULT_LIMIT = 100
+DEFENDERATP_IPS_DEFAULT_OFFSET = 0
+DEFENDERATP_DOMAINS_DEFAULT_LIMIT = 100
+DEFENDERATP_DOMAINS_DEFAULT_OFFSET = 0
 DEFENDERATP_LIVE_RESPONSE_DEFAULT = 300
 DEFENDERATP_RUN_SCRIPT_MAX_LIMIT = 600
 DEFENDERATP_MAX_LOOK_BACK_HOURS = 720
@@ -201,3 +215,17 @@ DEFENDERATP_INVALID_LIST_JSON_ERR = "Please provide valid JSON formatted list in
 DEFENDERATP_INVALID_EVENT_ID_ERR = "Event id status: '{0}'. The status of event_id must be 'Succeeded' in order to execute the action"
 DEFENDERATP_INVALID_COMMAND_ERR = "The given event_id does not corrospond to {0} command"
 DEFENDERATP_REQUIRED_PARAMETER_ERR = "Please provide either event_id or ({0}, device_id and comment)"
+
+# Constants relating to 'On Poll'
+DEFENDER_FILTER = "filter"
+DEFENDER_ALERT_DEFAULT_LIMIT_FOR_SCHEDULE_POLLING = 1000
+DEFENDER_ALERT_DEFAULT_TIME_RANGE = 7
+DEFENDER_APP_DT_STR_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+DEFENDER_CONFIG_START_TIME_SCHEDULED_POLL = "start_time"
+DEFENDER_CONFIG_FIRST_RUN_MAX_ALERTS = "max_alerts_per_poll"
+STATE_FIRST_RUN = "first_run"
+STATE_LAST_TIME = "last_time"
+DEFENDER_JSON_LAST_MODIFIED = "lastUpdateTime"
+LOG_UTC_SINCE_TIME_ERR = "Please provide time in UTC format, starting from Unix epoch 1970-01-01T00:00:00Z."
+LOG_GREATER_EQUAL_TIME_ERR = "Invalid {0}, cannot be greater than or equal to the current UTC time."
+LOG_CONFIG_TIME_POLL_NOW = "'Time range for POLL NOW' or 'Start Time for Schedule/Manual POLL' asset configuration parameter."
