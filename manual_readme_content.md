@@ -71,6 +71,19 @@ default ports used by Splunk SOAR.
     non interactive auth will be used otherwise interactive auth will be used. Whenever this
     checkbox is toggled then the test connectivity action must be run again.
 
+## Explanation of Asset Configuration Parameters for On Poll
+
+-   Max Alerts for Polling - During each polling cycle, the specified number of alerts is retrieved for scheduled or interval polling (Default: 1000). Each alert is ingested as a container. This parameter determines the maximum number of alerts that can be fetched in a single poll cycle.
+-   Start Time - This parameter is used to filter alerts based on their last updated time. If no value is provided, the default behavior is a week.<br>
+**Note: The start time filters alerts based on their lastUpdateTime property.**
+-   Filter - Allows additional filtering to be applied to alert properties (such as severity or status). This is useful for targeting specific types of alerts during polling.
+
+## Explanation of On Poll Behavior
+
+-   Start Time Parameter - The `start_time` parameter directly correlates with the lastUpdateTime property of the alerts, ensuring that only alerts updated after this time are included in the ingestion process.
+-   Max Alerts Parameter - The `max_alerts_per_poll` setting works only with scheduled or interval polling, controlling how many alerts are ingested per cycle. For instance, if this value is set to 100, the system will ingest up to 100 distinct alerts, applying the provided filters and start time.
+-   Example - If you configure the maximum alerts parameter to 100, the on_poll function will retrieve up to 100 alerts, considering any filter and start time provided. The filtering ensures only relevant alerts based on the time and other criteria are ingested during the polling process.
+
 ## Configure and set up permissions of the app created on the Microsoft Azure portal
 
 <div style="margin-left: 2em">
