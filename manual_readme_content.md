@@ -113,6 +113,7 @@ default ports used by Splunk SOAR.
         -   Alert.ReadWrite.All
         -   File.Read.All
         -   Ip.Read.All
+        -   Machine.CollectForensics
         -   Machine.Isolate
         -   Machine.LiveResponse
         -   Machine.Offboard
