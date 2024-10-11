@@ -2837,7 +2837,7 @@
         },
         {
             "action": "list software versions",
-            "description": "Retrieves a list of organization's software version distribution",
+            "description": "Retrieve a list of organization's software version distribution",
             "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-software-ver-distribution\" target=\"_blank\">Get Software Distribution API Documentation</a>).",
             "type": "investigate",
             "identifier": "list_software_versions",
