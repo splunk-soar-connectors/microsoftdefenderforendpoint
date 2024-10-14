@@ -1549,6 +1549,114 @@
             "versions": "EQ(*)"
         },
         {
+            "action": "get active users",
+            "description": "Get active users on a device",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-log-on-users\" target=\"_blank\">Get Active Users API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "get_active_users",
+            "read_only": true,
+            "parameters": {
+                "device_id": {
+                    "description": "ID of the device",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 0,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.device_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "User ID",
+                    "column_order": 0,
+                    "contains": [
+                        "defender atp user id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.accountName",
+                    "data_type": "string",
+                    "column_name": "Account Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.accountDomain",
+                    "data_type": "string",
+                    "column_name": "Account Domain",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.firstSeen",
+                    "data_type": "string",
+                    "column_name": "First Seen",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.lastSeen",
+                    "data_type": "string",
+                    "column_name": "Last Seen",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.logonTypes",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.isDomainAdmin",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.isOnlyNetworkUser",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Active Users"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
             "action": "list devices",
             "description": "List of recently seen devices",
             "verbose": "Based on the link (<a href=\"https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/get-machines\" target=\"_blank\">List Machines API Documentation</a>), the user can get devices last seen in the past 30 days; the maximum page size is 10,000; rate limitations for this action are 100 calls per minute and 1500 calls per hour. If the user does not specify the limit value, it will fetch 100 devices by default.",
@@ -2568,6 +2676,845 @@
                     "example_values": [
                         1
                     ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list software",
+            "description": "Retrieve the organization's software inventory",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-software\" target=\"_blank\">Get Software API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "list_software",
+            "read_only": true,
+            "parameters": {
+                "id": {
+                    "description": "ID of the software",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ],
+                    "order": 0
+                },
+                "name": {
+                    "description": "Name of the software",
+                    "data_type": "string",
+                    "order": 1
+                },
+                "vendor": {
+                    "description": "Vendor of the software",
+                    "data_type": "string",
+                    "order": 2
+                },
+                "limit": {
+                    "description": "Maximum number of results to return",
+                    "data_type": "numeric",
+                    "default": 50,
+                    "order": 3
+                },
+                "offset": {
+                    "description": "Number of results to offset",
+                    "data_type": "numeric",
+                    "default": 0,
+                    "order": 4
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.vendor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ],
+                    "column_name": "Software ID",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Software Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.vendor",
+                    "data_type": "string",
+                    "column_name": "Vendor",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.weaknesses",
+                    "data_type": "numeric",
+                    "column_name": "Weaknesses",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.publicExploit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.activeAlert",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.exposedMachines",
+                    "data_type": "numeric",
+                    "column_name": "Exposed Machines",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.installedMachines",
+                    "data_type": "numeric",
+                    "column_name": "Installed Machines",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.impactScore",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.isNormalized",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.category",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.total_software",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list software versions",
+            "description": "Retrieve a list of organization's software version distribution",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-software-ver-distribution\" target=\"_blank\">Get Software Distribution API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "list_software_versions",
+            "read_only": true,
+            "parameters": {
+                "id": {
+                    "description": "ID of the software",
+                    "order": 0,
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ],
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string",
+                    "column_name": "Version",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.installations",
+                    "data_type": "numeric",
+                    "column_name": "Installations",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.vulnerabilities",
+                    "data_type": "numeric",
+                    "column_name": "Vulnerabilities",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.summary.total_versions",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list software devices",
+            "description": "Retrieve a list of devices that have a specific software installed",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-software\" target=\"_blank\">Get Devices With Software Installed API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "list_software_devices",
+            "read_only": true,
+            "parameters": {
+                "id": {
+                    "description": "ID of the software",
+                    "order": 0,
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ],
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string",
+                    "column_name": "Device Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.osPlatform",
+                    "data_type": "string",
+                    "column_name": "Operating System",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string",
+                    "column_name": "RBAC Group Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupId",
+                    "data_type": "string",
+                    "column_name": "RBAC Group ID",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.summary.total_devices",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list software vulnerabilities",
+            "description": "Retrieve vulnerabilities associated with a specific software",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-vuln-by-software\" target=\"_blank\">Get Vulnerabilities By Software API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "list_software_vulnerabilities",
+            "read_only": true,
+            "parameters": {
+                "id": {
+                    "description": "ID of the software",
+                    "order": 0,
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ],
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Vulnerability ID",
+                    "column_order": 0,
+                    "contains": [
+                        "defender atp vulnerability id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Vulnerability Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.cvssV3",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.exposedMachines",
+                    "data_type": "numeric",
+                    "column_name": "Exposed Machines",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.publishedOn",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.updatedOn",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstDetected",
+                    "data_type": "string",
+                    "column_name": "First Detected",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.publicExploit",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.exploitVerified",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.exploitInKit",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.summary.total_vulnerabilities",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list device vulnerabilities",
+            "description": "Retrieve vulnerabilities affecting devices or software in organization",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities-by-machines\" target=\"_blank\">Get Machines by Vulnerability API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "list_device_vulnerabilities",
+            "read_only": true,
+            "parameters": {
+                "device_id": {
+                    "description": "ID of the device",
+                    "data_type": "string",
+                    "order": 0,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                "software_id": {
+                    "description": "ID of the software",
+                    "data_type": "string",
+                    "order": 1,
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                "cve_id": {
+                    "description": "CVE ID",
+                    "data_type": "string",
+                    "order": 2,
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                "product_name": {
+                    "description": "Name of the product",
+                    "order": 3,
+                    "data_type": "string"
+                },
+                "product_version": {
+                    "description": "Version of the product",
+                    "order": 4,
+                    "data_type": "string"
+                },
+                "severity": {
+                    "description": "Severity of the vulnerability",
+                    "order": 5,
+                    "data_type": "string"
+                },
+                "product_vendor": {
+                    "description": "Vendor of the product",
+                    "order": 6,
+                    "data_type": "string"
+                },
+                "limit": {
+                    "description": "Maximum number of results to return",
+                    "data_type": "numeric",
+                    "order": 7,
+                    "default": 25
+                },
+                "offset": {
+                    "description": "Number of results to skip",
+                    "data_type": "numeric",
+                    "order": 8,
+                    "default": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.device_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.software_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.cve_id",
+                    "data_type": "string",
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.product_name",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.product_version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.severity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.product_vendor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "ID",
+                    "column_order": 0,
+                    "contains": [
+                        "defender atp software id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.cveId",
+                    "data_type": "string",
+                    "column_name": "CVE ID",
+                    "column_order": 1,
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.machineId",
+                    "data_type": "string",
+                    "column_name": "Machine ID",
+                    "column_order": 2,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.productName",
+                    "data_type": "string",
+                    "column_name": "Product Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.productVendor",
+                    "data_type": "string",
+                    "column_name": "Product Vendor",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.productVersion",
+                    "data_type": "string",
+                    "column_name": "Product Version",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 6
+                },
+                {
+                    "data_path": "action_result.summary.total_vulnerabilities",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "list vulnerabilities",
+            "description": "Retrieve a list of vulnerabilities based on filters",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities\" target=\"_blank\">Get Vulnerabilities API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "list_vulnerabilities",
+            "read_only": true,
+            "parameters": {
+                "id": {
+                    "description": "ID of the vulnerability",
+                    "data_type": "string",
+                    "order": 0,
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                "name_equal": {
+                    "description": "Exact name of the vulnerability",
+                    "order": 1,
+                    "data_type": "string"
+                },
+                "name_contains": {
+                    "description": "Name contains this string",
+                    "order": 2,
+                    "data_type": "string"
+                },
+                "description_contains": {
+                    "description": "Description contains this string",
+                    "order": 3,
+                    "data_type": "string"
+                },
+                "published_on": {
+                    "description": "Date when the vulnerability was published",
+                    "order": 4,
+                    "data_type": "string"
+                },
+                "cvss": {
+                    "description": "CVSS score",
+                    "order": 5,
+                    "data_type": "numeric"
+                },
+                "severity": {
+                    "description": "Severity of the vulnerability",
+                    "order": 6,
+                    "data_type": "string"
+                },
+                "updated_on": {
+                    "description": "Date when the vulnerability was last updated",
+                    "order": 7,
+                    "data_type": "string"
+                },
+                "limit": {
+                    "description": "Maximum number of results to return",
+                    "order": 8,
+                    "data_type": "numeric",
+                    "default": 25
+                },
+                "offset": {
+                    "description": "Number of results to skip",
+                    "order": 9,
+                    "data_type": "numeric",
+                    "default": 0
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.name_equal",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.name_contains",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.description_contains",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.published_on",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.cvss",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.severity",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.updated_on",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.offset",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Vulnerability ID",
+                    "column_order": 0,
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Vulnerability Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.description",
+                    "data_type": "string",
+                    "column_name": "Description",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.severity",
+                    "data_type": "string",
+                    "column_name": "Severity",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.cvssV3",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.cvssVector",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.exposedMachines",
+                    "data_type": "numeric",
+                    "column_name": "Exposed Machines",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.publishedOn",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.updatedOn",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstDetected",
+                    "data_type": "string",
+                    "column_name": "First Detected",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.publicExploit",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.exploitVerified",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.exploitInKit",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.cveSupportability",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.epss",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.summary.total_vulnerabilities",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
@@ -6337,6 +7284,421 @@
                     "example_values": [
                         1
                     ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "collect investigation package",
+            "description": "Collect an investigation package from a device by its device ID",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/collect-investigation-package\" target=\"_blank\">Collect Investigation Package API Documentation</a>).",
+            "type": "generic",
+            "identifier": "collect_investigation_package",
+            "read_only": false,
+            "parameters": {
+                "device_id": {
+                    "description": "ID of the device",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 0,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                "comment": {
+                    "description": "Comment to include in the investigation package",
+                    "data_type": "string",
+                    "order": 1,
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.device_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Action ID",
+                    "column_order": 0,
+                    "contains": [
+                        "defender atp action id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.scope",
+                    "data_type": "string",
+                    "column_name": "Scope",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.requestor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.requestorComment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.machineId",
+                    "data_type": "string",
+                    "column_name": "Machine ID",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.creationDateTimeUtc",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastUpdateDateTimeUtc",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Collected Investigation Package"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get investigation uri",
+            "description": "Retrieve a URI for downloading an investigation package by its action ID",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-package-sas-uri\" target=\"_blank\">Get Package SAS URI API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "get_investigation_uri",
+            "read_only": true,
+            "parameters": {
+                "action_id": {
+                    "description": "ID of the investigation action",
+                    "order": 0,
+                    "data_type": "string",
+                    "required": true,
+                    "contains": [
+                        "defender atp action id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.action_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp action id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.value",
+                    "data_type": "string",
+                    "column_name": "Investigation Package URI",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Investigation URI"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get device details",
+            "description": "Retrieve details for multiple devices by their device IDs",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-by-id\" target=\"_blank\">Get Machine by ID API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "get_device_details",
+            "read_only": true,
+            "parameters": {
+                "device_ids": {
+                    "description": "Comma-separated list of device IDs",
+                    "order": 0,
+                    "data_type": "string",
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.device_ids",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.firstSeen",
+                    "data_type": "string",
+                    "column_name": "First Seen",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.lastSeen",
+                    "data_type": "string",
+                    "column_name": "Last Seen",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.osPlatform",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.version",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.osProcessor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastIpAddress",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastExternalIpAddress",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.osBuild",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.healthStatus",
+                    "data_type": "string",
+                    "column_name": "Health Status",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupId",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.riskScore",
+                    "data_type": "string",
+                    "column_name": "Risk Score",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.exposureLevel",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.isAadJoined",
+                    "data_type": "boolean"
+                },
+                {
+                    "data_path": "action_result.data.*.aadDeviceId",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Device Details"
+                    ]
+                },
+                {
+                    "data_path": "action_result.total_results",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "get affected devices",
+            "description": "Retrieve a list of devices affected by a vulnerability using CVE IDs",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-vulnerability\" target=\"_blank\">Get Machines by Vulnerability API Documentation</a>).",
+            "type": "investigate",
+            "identifier": "get_affected_devices",
+            "read_only": true,
+            "parameters": {
+                "cve_id": {
+                    "description": "CVE ID of the vulnerability",
+                    "order": 0,
+                    "data_type": "string",
+                    "required": true,
+                    "contains": [
+                        "cve id"
+                    ]
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.cve_id",
+                    "data_type": "string",
+                    "contains": [
+                        "cve id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Device ID",
+                    "column_order": 0,
+                    "contains": [
+                        "defender atp device id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string",
+                    "column_name": "Computer DNS Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.osPlatform",
+                    "data_type": "string",
+                    "column_name": "Operating System",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.rbacGroupName",
+                    "data_type": "string",
+                    "column_name": "RBAC Group Name",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Retrieved Affected Devices"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
                 }
             ],
             "render": {
@@ -11244,6 +12606,132 @@
                     "example_values": [
                         "Event id: 30f736e4-1538-46ca-b21f-8f315b096077, Put file status: Succeeded"
                     ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "cancel live response",
+            "description": "Cancel a live response action",
+            "verbose": "Based on the link (<a href=\"https://learn.microsoft.com/en-us/defender-endpoint/api/cancel-machine-action\" target=\"_blank\">Cancel Machine Action API Documentation</a>).",
+            "type": "generic",
+            "identifier": "cancel_live_response",
+            "read_only": false,
+            "parameters": {
+                "action_id": {
+                    "description": "ID of the live response action to cancel",
+                    "data_type": "string",
+                    "required": true,
+                    "order": 0,
+                    "contains": [
+                        "defender atp action id"
+                    ]
+                },
+                "comment": {
+                    "description": "Comment explaining the reason for cancellation",
+                    "data_type": "string",
+                    "order": 1,
+                    "required": true
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.action_id",
+                    "data_type": "string",
+                    "contains": [
+                        "defender atp action id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.comment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "Action ID",
+                    "column_order": 0,
+                    "contains": [
+                        "defender atp action id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "Action Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.scope",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.requestor",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.requestorComment",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.machineId",
+                    "data_type": "string",
+                    "column_name": "Machine ID",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.data.*.computerDnsName",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.creationDateTimeUtc",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.lastUpdateDateTimeUtc",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary.action_taken",
+                    "data_type": "string",
+                    "example_values": [
+                        "Canceled Live Response Action"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "summary.total_objects",

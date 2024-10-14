@@ -1846,6 +1846,37 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_get_active_users(self, param):
+        """This function retrieves a collection of logged on users on a specific device by its device ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_id = param.get("device_id")
+
+        if not device_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_ACTIVE_DEVICE_USERS.format(device_id=device_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
+
+        summary = action_result.update_summary({})
+        summary["action_taken"] = "Retrieved Active Users"
+        summary["total_results"] = len(response.get("value", []))
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_list_sessions(self, param):
         """This function is used to handle the list sessions action.
 
@@ -1872,6 +1903,290 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, "No sessions found for the given device")
         summary = action_result.update_summary({})
         summary["total_sessions"] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_software(self, param):
+        """This function retrieves the organization's software inventory.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        software_id = param.get("id")
+        software_name = param.get("name")
+        vendor = param.get("vendor")
+        limit = param.get("limit", DEFENDERATP_SOFTWARE_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_SOFTWARE_DEFAULT_OFFSET)
+
+        ret_val, limit = self._validate_integer(action_result, limit, "limit", allow_zero=False)
+        ret_val, offset = self._validate_integer(action_result, offset, "offset", allow_zero=True)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_SOFTWARE_ENDPOINT, limit, offset)
+
+        if software_id:
+            endpoint += "&id={}".format(software_id)
+        if software_name:
+            endpoint += "&name={}".format(software_name)
+        if vendor:
+            endpoint += "&vendor={}".format(vendor)
+
+        endpoint = "{0}{1}".format(self._graph_url, endpoint)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        software_list = response.get("value", [])
+        for software in software_list:
+            action_result.add_data(software)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_SUCCESS, "No software found")
+
+        summary = action_result.update_summary({})
+        summary["total_software"] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_software_versions(self, param):
+        """This function retrieves the software version distribution for a specific software ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        software_id = param.get("id")
+
+        if not software_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT.format(software_id=software_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        version_distribution = response.get("value", [])
+        for version in version_distribution:
+            action_result.add_data(version)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_SUCCESS, "No software versions found for specified software")
+
+        summary = action_result.update_summary({})
+        summary["total_versions"] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_software_devices(self, param):
+        """This function retrieves a list of devices that have a specific software installed by its software ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        software_id = param.get("id")
+
+        if not software_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_DEVICES_ENDPOINT.format(software_id=software_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        devices = response.get("value", [])
+        for device in devices:
+            action_result.add_data(device)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_SUCCESS, "No devices found for specified software")
+
+        summary = action_result.update_summary({})
+        summary["total_devices"] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_software_vulnerabilities(self, param):
+        """This function retrieves vulnerabilities associated with a specific software by its software ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        software_id = param.get("id")
+
+        if not software_id:
+            return action_result.set_status(phantom.APP_SUCCESS, "Missing required parameter: id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT.format(software_id=software_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        vulnerabilities = response.get("value", [])
+        for vulnerability in vulnerabilities:
+            action_result.add_data(vulnerability)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_SUCCESS, "No vulnerabilities found for specified software")
+
+        summary = action_result.update_summary({})
+        summary["total_vulnerabilities"] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_device_vulnerabilities(self, param):
+        """This function retrieves vulnerabilities affecting the organization per device or software.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_ids = param.get("device_id")
+        software_ids = param.get("software_id")
+        cve_ids = param.get("cve_id")
+        product_name = param.get("product_name")
+        product_version = param.get("product_version")
+        severity = param.get("severity")
+        product_vendor = param.get("product_vendor")
+        limit = param.get("limit", DEFENDERATP_DEVICE_VULNERABILITIES_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_DEVICE_VULNERABILITIES_DEFAULT_OFFSET)
+
+        ret_val, limit = self._validate_integer(action_result, limit, "limit", allow_zero=False)
+        ret_val, offset = self._validate_integer(action_result, offset, "offset", allow_zero=True)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_DEVICE_VULNERABILITIES_ENDPOINT, limit, offset)
+
+        filters = []
+        if device_ids:
+            filters.append("deviceIds eq '{}'".format(device_ids))
+        if software_ids:
+            filters.append("softwareIds eq '{}'".format(software_ids))
+        if cve_ids:
+            filters.append("cveIds eq '{}'".format(cve_ids))
+        if product_name:
+            filters.append("productNames eq '{}'".format(product_name))
+        if product_version:
+            filters.append("productVersions eq '{}'".format(product_version))
+        if severity:
+            filters.append("severities eq '{}'".format(severity))
+        if product_vendor:
+            filters.append("productVendors eq '{}'".format(product_vendor))
+
+        if filters:
+            endpoint = "{}&$filter={}".format(endpoint, " and ".join(filters))
+
+        url = "{0}{1}".format(self._graph_url, endpoint)
+
+        ret_val, response = self._update_request(endpoint=url, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        vulnerabilities = response.get("value", [])
+        for vulnerability in vulnerabilities:
+            action_result.add_data(vulnerability)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_SUCCESS, "No vulnerabilities found for specified device")
+
+        summary = action_result.update_summary({})
+        summary["total_vulnerabilities"] = action_result.get_data_size()
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_list_vulnerabilities(self, param):
+        """This function retrieves a list of vulnerabilities based on filters.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        vulnerability_id = param.get("id")
+        name_equal = param.get("name_equal")
+        name_contains = param.get("name_contains")
+        description_contains = param.get("description_contains")
+        published_on = param.get("published_on")
+        cvss = param.get("cvss")
+        severity = param.get("severity")
+        updated_on = param.get("updated_on")
+        limit = param.get("limit", DEFENDERATP_VULNERABILITIES_DEFAULT_LIMIT)
+        offset = param.get("offset", DEFENDERATP_VULNERABILITIES_DEFAULT_OFFSET)
+
+        ret_val, limit = self._validate_integer(action_result, limit, "limit", allow_zero=False)
+        ret_val, offset = self._validate_integer(action_result, offset, "offset", allow_zero=True)
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_VULNERABILITIES_ENDPOINT, limit, offset)
+
+        filters = []
+        if vulnerability_id:
+            filters.append("id eq '{}'".format(vulnerability_id))
+        if name_equal:
+            filters.append("name eq '{}'".format(name_equal))
+        if name_contains:
+            filters.append("contains(name, '{}')".format(name_contains))
+        if description_contains:
+            filters.append("contains(description, '{}')".format(description_contains))
+        if published_on:
+            filters.append("publishedOn eq '{}'".format(published_on))
+        if cvss:
+            filters.append("cvss eq '{}'".format(cvss))
+        if severity:
+            filters.append("severity eq '{}'".format(severity))
+        if updated_on:
+            filters.append("updatedOn eq '{}'".format(updated_on))
+
+        if filters:
+            endpoint += "&$filter={}".format(" and ".join(filters))
+
+        endpoint = "{0}{1}".format(self._graph_url, endpoint)
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        vulnerabilities = response.get("value", [])
+        for vulnerability in vulnerabilities:
+            action_result.add_data(vulnerability)
+
+        if not action_result.get_data_size():
+            return action_result.set_status(phantom.APP_SUCCESS, "No vulnerabilities found")
+
+        summary = action_result.update_summary({})
+        summary["total_vulnerabilities"] = action_result.get_data_size()
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -2136,6 +2451,133 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         action_result.add_data(response_status)
         summary[app_restriction_summary] = response_status.get("status")
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_collect_investigation_package(self, param):
+        """This function collects an investigation package from a device by its device ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_id = param.get("device_id")
+        comment = param.get("comment")
+
+        if not device_id or not comment:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_COLLECT_INVESTIGATION_PACKAGE_ENDPOINT.format(device_id=device_id))
+
+        payload = {"Comment": comment}
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(payload))
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary["action_taken"] = "Collected Investigation Package"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_investigation_uri(self, param):
+        """This function retrieves a URI for downloading an investigation package by its action ID.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        action_id = param.get("action_id")
+
+        if not action_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: action_id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_INVESTIGATION_URI.format(action_id=action_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary["action_taken"] = "Retrieved Investigation URI"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_device_details(self, param):
+        """This function retrieves details for multiple devices by their device IDs.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        device_ids = param.get("device_ids")
+
+        if not device_ids:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_ids")
+
+        device_id_list = [device_id.strip() for device_id in device_ids.split(",") if device_id.strip()]
+
+        all_device_details = []
+        for device_id in device_id_list:
+            endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DEVICE_DETAILS_ENDPOINT.format(device_id=device_id))
+
+            ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+            if phantom.is_fail(ret_val):
+                return action_result.get_status()
+
+            if response:
+                action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary["action_taken"] = "Retrieved Device Details"
+        summary["total_results"] = len(all_device_details)
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_get_affected_devices(self, param):
+        """This function retrieves a list of devices affected by a vulnerability using CVE IDs.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        cve_id = param.get("cve_id")
+
+        if not cve_id:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: cve_id")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_VULNERABILITY_AFFECTED_DEVICES_ENDPOINT.format(cve_id=cve_id))
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        for obj in response.get("value", []):
+            action_result.add_data(obj)
+
+        summary = action_result.update_summary({})
+        summary["action_taken"] = "Retrieved Affected Devices"
+        summary["total_results"] = len(response.get("value", []))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -2834,6 +3276,38 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR)
         return action_result.set_status(phantom.APP_SUCCESS)
 
+    def _handle_cancel_live_response(self, param):
+        """This function cancels a live response action with an unfinished status.
+
+        :param param: Dictionary of input parameters
+        :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
+        """
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        action_id = param.get("action_id")
+        comment = param.get("comment")
+
+        if not action_id or not comment:
+            return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
+
+        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIVE_RESPONSE_CANCEL_ENDPOINT.format(action_id=action_id))
+
+        payload = {"Comment": comment}
+
+        ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(payload))
+
+        if phantom.is_fail(ret_val):
+            return action_result.get_status()
+
+        action_result.add_data(response)
+
+        summary = action_result.update_summary({})
+        summary["action_taken"] = "Canceled Live Response Action"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
     def _handle_run_script_live_response(self, param):
         """This function is used to handle the run script action.
 
@@ -3114,6 +3588,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "list_devices": self._handle_list_devices,
             "list_alerts": self._handle_list_alerts,
             "list_sessions": self._handle_list_sessions,
+            "list_software": self._handle_list_software,
+            "list_software_versions": self._handle_list_software_versions,
+            "list_software_devices": self._handle_list_software_devices,
+            "list_software_vulnerabilities": self._handle_list_software_vulnerabilities,
+            "list_device_vulnerabilities": self._handle_list_device_vulnerabilities,
+            "list_vulnerabilities": self._handle_list_vulnerabilities,
             "get_alert": self._handle_get_alert,
             "get_alert_user": self._handle_get_alert_user,
             "get_alert_files": self._handle_get_alert_files,
@@ -3134,6 +3614,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_installed_software": self._handle_get_installed_software,
             "restrict_app_execution": self._handle_restrict_app_execution,
             "remove_app_restriction": self._handle_remove_app_restriction,
+            "collect_investigation_package": self._handle_collect_investigation_package,
+            "get_investigation_uri": self._handle_get_investigation_uri,
+            "get_device_details": self._handle_get_device_details,
+            "get_active_users": self._handle_get_active_users,
+            "get_affected_devices": self._handle_get_affected_devices,
             "get_indicator": self._handle_get_indicator,
             "list_indicators": self._handle_list_indicators,
             "delete_indicator": self._handle_delete_indicator,
@@ -3147,6 +3632,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "get_secure_score": self._handle_get_secure_score,
             "get_file_live_response": self._handle_get_file_live_response,
             "put_file_live_response": self._handle_put_file_live_response,
+            "cancel_live_response": self._handle_cancel_live_response,
             "run_script_live_response": self._handle_run_script_live_response,
             "get_missing_kbs": self._handle_get_missing_kbs,
             "update_device_tag": self._handle_update_device_tag,
