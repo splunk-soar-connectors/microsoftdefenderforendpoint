@@ -477,7 +477,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [list alerts](#action-list-alerts) - List all alerts of a given type  
 [list sessions](#action-list-sessions) - List all logged in users on a machine  
 [list software](#action-list-software) - Retrieve the organization's software inventory  
-[list software versions](#action-list-software-versions) - Retrieves a list of organization's software version distribution  
+[list software versions](#action-list-software-versions) - Retrieve a list of organization's software version distribution  
 [list software devices](#action-list-software-devices) - Retrieve a list of devices that have a specific software installed  
 [list software vulnerabilities](#action-list-software-vulnerabilities) - Retrieve vulnerabilities associated with a specific software  
 [list device vulnerabilities](#action-list-device-vulnerabilities) - Retrieve vulnerabilities affecting devices or software in organization  
@@ -1078,7 +1078,7 @@ summary.total_objects | numeric |  |
 summary.total_objects_successful | numeric |  |    
 
 ## action: 'list software versions'
-Retrieves a list of organization's software version distribution
+Retrieve a list of organization's software version distribution
 
 Type: **investigate**  
 Read only: **True**
