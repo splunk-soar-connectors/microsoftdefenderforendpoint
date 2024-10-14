@@ -2,7 +2,7 @@
 # Microsoft Defender for Endpoint
 
 Publisher: Splunk  
-Connector Version: 3.8.4  
+Connector Version: 3.8.5  
 Product Vendor: Microsoft  
 Product Name: Microsoft Defender for Endpoint  
 Product Version Supported (regex): ".\*"  
