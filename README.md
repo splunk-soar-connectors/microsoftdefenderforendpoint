@@ -2,11 +2,11 @@
 # Microsoft Defender for Endpoint
 
 Publisher: Splunk  
-Connector Version: 3.8.5  
+Connector Version: 4.0.0  
 Product Vendor: Microsoft  
 Product Name: Microsoft Defender for Endpoint  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 6.2.1  
+Minimum Product Version: 6.2.2  
 
 This app integrates with Microsoft Defender for Endpoint to execute various containment, corrective, generic, and investigative actions
 

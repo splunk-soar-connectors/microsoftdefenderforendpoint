@@ -10,13 +10,13 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2024 Splunk Inc.",
-    "app_version": "3.8.5",
+    "app_version": "4.0.0",
     "utctime_updated": "2024-10-14T22:08:49.000000Z",
     "package_name": "phantom_microsoftdefenderforendpoint",
     "main_module": "microsoftdefenderforendpoint_connector.py",
     "python_version": "3",
     "fips_compliant": true,
-    "min_phantom_version": "6.2.1",
+    "min_phantom_version": "6.2.2",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
         "Cloud November 11, 2022"
