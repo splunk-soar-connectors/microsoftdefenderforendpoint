@@ -1,1 +1,14 @@
 **Unreleased**
+
+* Added ‘list software’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘list software versions’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘list software devices’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘list software vulnerabilities’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘list device vulnerabilities’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘list vulnerabilities’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘get device details’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘collect investigation package’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘get affected devices’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘cancel live response’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘get active users’ action for Microsoft Defender for Endpoint [PAPP-34606]
+* Added ‘get investigation URI’ action for Microsoft Defender for Endpoint [PAPP-34606]
