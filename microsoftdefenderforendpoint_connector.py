@@ -3542,9 +3542,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         try:
             time = datetime.strptime(date, DEFENDER_APP_DT_STR_FORMAT)
-            end_time = datetime.now(datetime.UTC)
-            if self._check_invalid_since_utc_time(time):
-                return action_result.set_status(phantom.APP_ERROR, LOG_UTC_SINCE_TIME_ERR)
+            end_time = datetime.utcnow()
 
             if time >= end_time:
                 message = LOG_GREATER_EQUAL_TIME_ERR.format(LOG_CONFIG_TIME_POLL_NOW)
