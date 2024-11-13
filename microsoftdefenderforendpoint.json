@@ -63,7 +63,7 @@
             "order": 5
         },
         "start_time": {
-            "description": "Start time for schedule/interval/manual poll (Use ISO 8601 UTC format: 2024-09-04T16:26:58.87Z)",
+            "description": "Start time for schedule/interval/manual poll (Use ISO 8601 UTC format: 2024-09-04T16:26:58Z)",
             "data_type": "string",
             "order": 6
         },
