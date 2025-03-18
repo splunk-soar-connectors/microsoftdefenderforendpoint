@@ -1,6 +1,6 @@
 # File: microsoftdefenderforendpoint_consts.py
 #
-# Copyright (c) 2019-2024 Splunk Inc.
+# Copyright (c) 2019-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ DEFENDERATP_NO_DATA_FOUND = "No data found"
 DEFENDERATP_INVALID_LOOK_BACK_HOURS = "Invalid look_back_hours parameter was given, must be greater than zero and lower or equal to 720."
 DEFENDERATP_TOKEN_EXPIRED = "Status Code: 401"
 DEFENDERATP_TOKEN_NOT_AVAILABLE_MSG = "Token not available. Please run test connectivity first"
-DEFENDERATP_BASE_URL_NOT_FOUND_MSG = "Phantom Base URL not found in System Settings. " "Please specify this value in System Settings"
+DEFENDERATP_BASE_URL_NOT_FOUND_MSG = "Phantom Base URL not found in System Settings. Please specify this value in System Settings"
 DEFENDERATP_STATE_FILE_CORRUPT_ERR = (
     "Error occurred while loading the state file due to its unexpected format. "
     "Resetting the state file with the default format. Please try again."
@@ -223,7 +223,7 @@ DEFENDERATP_PAST_TIME_ERR = "Invalid {0}, can not be lesser than or equal to cur
 DEFENDERATP_INVALID_TIME_ERR = "Invalid {0}, supports ISO date format only. e.g. 2019-10-17T00:00:00Z."
 DEFENDERATP_INVALID_RBAC_GROUP_NAMES = "Please provide valid comma-separated RBAC group names."
 DEFENDERATP_INVALID_INDICATOR_TYPE = (
-    'Please provide a valid "indicator type" value.' ' Possible indicator types are "FileSha1", "FileSha256", "IpAddress", "DomainName", "Url".'
+    'Please provide a valid "indicator type" value. Possible indicator types are "FileSha1", "FileSha256", "IpAddress", "DomainName", "Url".'
 )
 DEFENDERATP_INVALID_ACTION = 'Please provide a valid "action" value. Possible action values are "Alert", "AlertAndBlock", "Allowed".'
 DEFENDERATP_INVALID_SEVERITY = 'Please provide a valid "severity" value. Possible severity values are "Informational", "Low", "Medium", "High".'
