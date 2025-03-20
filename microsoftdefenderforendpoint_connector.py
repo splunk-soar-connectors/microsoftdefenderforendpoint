@@ -1,6 +1,6 @@
 # File: microsoftdefenderforendpoint_connector.py
 #
-# Copyright (c) 2019-2024 Splunk Inc.
+# Copyright (c) 2019-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,10 +27,11 @@ import uuid
 import phantom.rules as ph_rules
 from phantom.vault import Vault as Vault
 
+
 try:
     from urllib.parse import quote, unquote, urlencode
 except Exception:
-    from urllib import urlencode, quote, unquote
+    from urllib import quote, unquote, urlencode
 
 import grp
 import ipaddress
@@ -64,7 +65,7 @@ def _handle_login_redirect(request, key):
         return HttpResponse("ERROR: Invalid asset_id", content_type="text/plain", status=400)
     url = state.get(key)
     if not url:
-        return HttpResponse("App state is invalid, {key} not found.".format(key=key), content_type="text/plain", status=400)
+        return HttpResponse(f"App state is invalid, {key} not found.", content_type="text/plain", status=400)
     response = HttpResponse(status=302)
     response["Location"] = url
     return response
@@ -85,7 +86,7 @@ def _load_app_state(asset_id, app_connector=None):
         return {}
 
     app_dir = os.path.dirname(os.path.abspath(__file__))
-    state_file = "{0}/{1}_state.json".format(app_dir, asset_id)
+    state_file = f"{app_dir}/{asset_id}_state.json"
     real_state_file_path = os.path.abspath(state_file)
     if not os.path.dirname(real_state_file_path) == app_dir:
         if app_connector:
@@ -94,12 +95,12 @@ def _load_app_state(asset_id, app_connector=None):
 
     state = {}
     try:
-        with open(real_state_file_path, "r") as state_file_obj:
+        with open(real_state_file_path) as state_file_obj:
             state_file_data = state_file_obj.read()
             state = json.loads(state_file_data)
     except Exception as e:
         if app_connector:
-            app_connector.error_print("In _load_app_state: Exception: {0}".format(str(e)))
+            app_connector.error_print(f"In _load_app_state: Exception: {e!s}")
 
     return state
 
@@ -120,7 +121,7 @@ def _save_app_state(state, asset_id, app_connector):
         return {}
 
     app_dir = os.path.split(__file__)[0]
-    state_file = "{0}/{1}_state.json".format(app_dir, asset_id)
+    state_file = f"{app_dir}/{asset_id}_state.json"
 
     real_state_file_path = os.path.abspath(state_file)
     if not os.path.dirname(real_state_file_path) == app_dir:
@@ -132,7 +133,7 @@ def _save_app_state(state, asset_id, app_connector):
         with open(real_state_file_path, "w+") as state_file_obj:
             state_file_obj.write(json.dumps(state))
     except Exception as e:
-        print("Unable to save state file: {0}".format(str(e)))
+        print(f"Unable to save state file: {e!s}")
 
     return phantom.APP_SUCCESS
 
@@ -146,7 +147,7 @@ def _handle_login_response(request):
 
     asset_id = request.GET.get("state")
     if not asset_id:
-        return HttpResponse("ERROR: Asset ID not found in URL\n{}".format(json.dumps(request.GET)), content_type="text/plain", status=400)
+        return HttpResponse(f"ERROR: Asset ID not found in URL\n{json.dumps(request.GET)}", content_type="text/plain", status=400)
 
     # Check for error in URL
     error = request.GET.get("error")
@@ -154,16 +155,16 @@ def _handle_login_response(request):
 
     # If there is an error in response
     if error:
-        message = "Error: {0}".format(error)
+        message = f"Error: {error}"
         if error_description:
-            message = "{0} Details: {1}".format(message, error_description)
-        return HttpResponse("Server returned {0}".format(message), content_type="text/plain", status=400)
+            message = f"{message} Details: {error_description}"
+        return HttpResponse(f"Server returned {message}", content_type="text/plain", status=400)
 
     code = request.GET.get("code")
 
     # If code is not available
     if not code:
-        return HttpResponse("Error while authenticating\n{0}".format(json.dumps(request.GET)), content_type="text/plain", status=400)
+        return HttpResponse(f"Error while authenticating\n{json.dumps(request.GET)}", content_type="text/plain", status=400)
 
     state = _load_app_state(asset_id)
     state["code"] = code
@@ -195,7 +196,7 @@ def _handle_rest_request(request, path_parts):
         asset_id = request.GET.get("state")  # nosemgrep
         if asset_id and asset_id.isalnum():
             app_dir = os.path.dirname(os.path.abspath(__file__))
-            auth_status_file_path = "{0}/{1}_{2}".format(app_dir, asset_id, DEFENDERATP_TC_FILE)
+            auth_status_file_path = f"{app_dir}/{asset_id}_{DEFENDERATP_TC_FILE}"
             real_auth_status_file_path = os.path.abspath(auth_status_file_path)
             if not os.path.dirname(real_auth_status_file_path) == app_dir:
                 return HttpResponse("Error: Invalid asset_id", content_type="text/plain", status=400)
@@ -232,11 +233,9 @@ class RetVal(tuple):
 
 
 class WindowsDefenderAtpConnector(BaseConnector):
-
     def __init__(self):
-
         # Call the BaseConnectors init first
-        super(WindowsDefenderAtpConnector, self).__init__()
+        super().__init__()
 
         self._state = None
         self._tenant = None
@@ -350,7 +349,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         return RetVal(
             action_result.set_status(
-                phantom.APP_ERROR, "Status Code: {0}. Error: Empty response and no information in the header".format(response.status_code)
+                phantom.APP_ERROR, f"Status Code: {response.status_code}. Error: Empty response and no information in the header"
             ),
             None,
         )
@@ -382,7 +381,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not error_text:
             error_text = "Error message unavailable. Please check the asset configuration and|or the action parameters"
 
-        message = "Status Code: {0}. Data from server:\n{1}\n".format(status_code, error_text)
+        message = f"Status Code: {status_code}. Data from server:\n{error_text}\n"
 
         message = message.replace("{", "{{").replace("}", "}}")
 
@@ -402,7 +401,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         except Exception as e:
             return RetVal(
                 action_result.set_status(
-                    phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(self._get_error_message_from_exception(e))
+                    phantom.APP_ERROR, f"Unable to parse JSON response. Error: {self._get_error_message_from_exception(e)}"
                 ),
                 None,
             )
@@ -416,10 +415,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
         # Check whether the response contains error and error description fields
         # This condition will be used in test_connectivity
         if not isinstance(resp_json.get("error"), dict) and resp_json.get("error_description"):
-            err = "Error:{0}, Error Description:{1} Please check your asset configuration parameters and run the test connectivity".format(
+            err = "Error:{}, Error Description:{} Please check your asset configuration parameters and run the test connectivity".format(
                 resp_json.get("error"), resp_json.get("error_description")
             )
-            message = "Error from server. Status Code: {0} Data from server: {1}".format(response.status_code, err)
+            message = f"Error from server. Status Code: {response.status_code} Data from server: {err}"
 
         # For other actions
         if isinstance(resp_json.get("error"), dict) and resp_json.get("error", {}).get("code"):
@@ -428,16 +427,16 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 msg = BeautifulSoup(msg, "html.parser")
                 for element in msg(["title"]):
                     element.extract()
-                message = "Error from server. Status Code: {0} Error Code: {1} Data from server: {2}".format(
+                message = "Error from server. Status Code: {} Error Code: {} Data from server: {}".format(
                     response.status_code, resp_json.get("error", {}).get("code"), msg.text
                 )
             else:
-                message = "Error from server. Status Code: {0} Error Code: {1} Data from server: {2}".format(
+                message = "Error from server. Status Code: {} Error Code: {} Data from server: {}".format(
                     response.status_code, resp_json.get("error", {}).get("code"), msg
                 )
 
         if not message:
-            message = "Error from server. Status Code: {0} Data from server: {1}".format(
+            message = "Error from server. Status Code: {} Data from server: {}".format(
                 response.status_code, response.text.replace("{", "{{").replace("}", "}}")
             )
 
@@ -477,7 +476,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return self._process_empty_response(response, action_result)
 
         # everything else is actually an error at this point
-        message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(
+        message = "Can't process response from server. Status Code: {} Data from server: {}".format(
             response.status_code, response.text.replace("{", "{{").replace("}", "}}")
         )
 
@@ -526,9 +525,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
             self._dump_error_log(e, "Error occurred while fetching exception information.")
 
         if not err_code:
-            error_text = "Error Message: {}".format(err_msg)
+            error_text = f"Error Message: {err_msg}"
         else:
-            error_text = "Error Code: {}. Error Message: {}".format(err_code, err_msg)
+            error_text = f"Error Code: {err_code}. Error Message: {err_msg}"
 
         return error_text
 
@@ -600,9 +599,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             if phantom.is_fail(status):
                 return action_result.get_status(), None
 
-        headers.update(
-            {"Authorization": "Bearer {0}".format(self._access_token), "Accept": "application/json", "Content-Type": "application/json"}
-        )
+        headers.update({"Authorization": f"Bearer {self._access_token}", "Accept": "application/json", "Content-Type": "application/json"})
 
         ret_val, resp_json = self._make_rest_call(
             action_result=action_result, endpoint=endpoint, headers=headers, params=params, data=data, method=method
@@ -615,7 +612,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             if phantom.is_fail(status):
                 return action_result.get_status(), None
 
-            headers.update({"Authorization": "Bearer {0}".format(self._access_token)})
+            headers.update({"Authorization": f"Bearer {self._access_token}"})
 
             ret_val, resp_json = self._make_rest_call(
                 action_result=action_result, endpoint=endpoint, headers=headers, params=params, data=data, method=method
@@ -648,7 +645,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             request_func = getattr(requests, method)
         except AttributeError as e:
             self._dump_error_log(e, "Error occure while creating request object")
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Invalid method: {0}".format(method)), resp_json)
+            return RetVal(action_result.set_status(phantom.APP_ERROR, f"Invalid method: {method}"), resp_json)
 
         try:
             response = request_func(endpoint, data=data, headers=headers, verify=verify, params=params)
@@ -656,9 +653,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         except Exception as e:
             self._dump_error_log("Error occurred while logging the make_rest_call exception message")
             return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(self._get_error_message_from_exception(e))
-                ),
+                action_result.set_status(phantom.APP_ERROR, f"Error Connecting to server. Details: {self._get_error_message_from_exception(e)}"),
                 resp_json,
             )
 
@@ -673,7 +668,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         asset_id = self.get_asset_id()
         rest_endpoint = DEFENDERATP_PHANTOM_ASSET_INFO_URL.format(asset_id=asset_id)
-        url = "{}{}".format(DEFENDERATP_PHANTOM_BASE_URL.format(phantom_base_url=self.get_phantom_base_url()), rest_endpoint)
+        url = f"{DEFENDERATP_PHANTOM_BASE_URL.format(phantom_base_url=self.get_phantom_base_url())}{rest_endpoint}"
         ret_val, resp_json = self._make_rest_call(action_result=action_result, endpoint=url, verify=False)
 
         if phantom.is_fail(ret_val):
@@ -681,7 +676,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         asset_name = resp_json.get("name")
         if not asset_name:
-            return action_result.set_status(phantom.APP_ERROR, "Asset Name for id: {0} not found.".format(asset_id), None)
+            return action_result.set_status(phantom.APP_ERROR, f"Asset Name for id: {asset_id} not found.", None)
         return phantom.APP_SUCCESS, asset_name
 
     def _get_phantom_base_url_defenderatp(self, action_result):
@@ -692,7 +687,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         base url of phantom
         """
 
-        url = "{}{}".format(DEFENDERATP_PHANTOM_BASE_URL.format(phantom_base_url=self.get_phantom_base_url()), DEFENDERATP_PHANTOM_SYS_INFO_URL)
+        url = f"{DEFENDERATP_PHANTOM_BASE_URL.format(phantom_base_url=self.get_phantom_base_url())}{DEFENDERATP_PHANTOM_SYS_INFO_URL}"
         ret_val, resp_json = self._make_rest_call(action_result=action_result, endpoint=url, verify=False)
         if phantom.is_fail(ret_val):
             return ret_val, None
@@ -718,12 +713,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status(), None
         phantom_base_url = phantom_base_url.rstrip("/")
-        self.save_progress("Using Phantom base URL as: {0}".format(phantom_base_url))
+        self.save_progress(f"Using Phantom base URL as: {phantom_base_url}")
         app_json = self.get_app_json()
         app_name = app_json["name"]
 
         app_dir_name = _get_dir_name_from_app_name(app_name)
-        url_to_app_rest = "{0}/rest/handler/{1}_{2}/{3}".format(phantom_base_url, app_dir_name, app_json["appid"], asset_name)
+        url_to_app_rest = "{}/rest/handler/{}_{}/{}".format(phantom_base_url, app_dir_name, app_json["appid"], asset_name)
         return phantom.APP_SUCCESS, url_to_app_rest
 
     def _generate_new_access_token(self, action_result, data):
@@ -734,7 +729,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status phantom.APP_ERROR/phantom.APP_SUCCESS
         """
 
-        req_url = "{}{}".format(self._login_url, DEFENDERATP_SERVER_TOKEN_URL.format(tenant_id=quote(self._tenant)))
+        req_url = f"{self._login_url}{DEFENDERATP_SERVER_TOKEN_URL.format(tenant_id=quote(self._tenant))}"
 
         ret_val, resp_json = self._make_rest_call(action_result=action_result, endpoint=req_url, data=urlencode(data), method="post")
 
@@ -748,7 +743,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 self._refresh_token = resp_json[DEFENDERATP_REFRESH_TOKEN_STRING]
         except Exception as e:
             err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred while generating access token {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred while generating access token {err}")
 
         try:
             _save_app_state(self._state, self.get_asset_id(), self)
@@ -770,7 +765,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         app_dir = os.path.dirname(os.path.abspath(__file__))
         # file to check whether the request has been granted or not
-        auth_status_file_path = "{0}/{1}_{2}".format(app_dir, self.get_asset_id(), DEFENDERATP_TC_FILE)
+        auth_status_file_path = f"{app_dir}/{self.get_asset_id()}_{DEFENDERATP_TC_FILE}"
         time_out = False
 
         # wait-time while request is being granted for 105 seconds
@@ -799,9 +794,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress(DEFENDERATP_MAKING_CONNECTIVITY_MSG)
 
-        self.save_progress("Login URL: {}".format(self._login_url))
-        self.save_progress("Graph URL: {}".format(self._graph_url))
-        self.save_progress("Resource URL: {}".format(self._resource_url))
+        self.save_progress(f"Login URL: {self._login_url}")
+        self.save_progress(f"Graph URL: {self._graph_url}")
+        self.save_progress(f"Resource URL: {self._resource_url}")
 
         if not self._state:
             self._state = {}
@@ -814,7 +809,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 return action_result.get_status()
 
             # Append /result to create redirect_uri
-            redirect_uri = "{0}/result".format(app_rest_url)
+            redirect_uri = f"{app_rest_url}/result"
             self._state["redirect_uri"] = redirect_uri
 
             self.save_progress(DEFENDERATP_OAUTH_URL_MSG)
@@ -829,12 +824,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 response_type="code",
                 resource=self._resource_url,
             )
-            authorization_url = "{}{}".format(self._login_url, authorization_url)
+            authorization_url = f"{self._login_url}{authorization_url}"
 
             self._state["authorization_url"] = authorization_url
 
             # URL which would be shown to the user
-            url_for_authorize_request = "{0}/start_oauth?asset_id={1}&".format(app_rest_url, self.get_asset_id())
+            url_for_authorize_request = f"{app_rest_url}/start_oauth?asset_id={self.get_asset_id()}&"
             _save_app_state(self._state, self.get_asset_id(), self)
 
             self.save_progress(DEFENDERATP_AUTHORIZE_USER_MSG)
@@ -897,7 +892,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         self.save_progress(DEFENDERATP_ALERTS_INFO_MSG)
 
-        url = "{}{}".format(self._graph_url, DEFENDERATP_ALERTS_ENDPOINT)
+        url = f"{self._graph_url}{DEFENDERATP_ALERTS_ENDPOINT}"
         params = {"$top": 1}
         ret_val, response = self._update_request(action_result=action_result, endpoint=url, params=params)
         if phantom.is_fail(ret_val):
@@ -917,7 +912,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :param timeout: timeout period for status check
         :return: status (success/failed), response
         """
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINEACTIONS_ENDPOINT.format(action_id=action_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_MACHINEACTIONS_ENDPOINT.format(action_id=action_id)}"
 
         if timeout < 5:
             timeout = 5
@@ -937,7 +932,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     return phantom.APP_SUCCESS, response
             except Exception as e:
                 err = self._get_error_message_from_exception(e)
-                return (action_result.set_status(phantom.APP_ERROR, "Error occurred while processing the response {}".format(err)),)
+                return (action_result.set_status(phantom.APP_ERROR, f"Error occurred while processing the response {err}"),)
 
         return phantom.APP_SUCCESS, response
 
@@ -948,15 +943,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
         type = param[DEFENDERATP_JSON_TYPE]
         if type not in TYPE_VALUE_LIST:
-            return action_result.set_status(
-                phantom.APP_ERROR, "Please provide valid input from {} in 'type' action parameter".format(TYPE_VALUE_LIST)
-            )
+            return action_result.set_status(phantom.APP_ERROR, f"Please provide valid input from {TYPE_VALUE_LIST} in 'type' action parameter")
         comment = param[DEFENDERATP_JSON_COMMENT]
         timeout = param.get(DEFENDERATP_JSON_TIMEOUT, DEFENDERATP_STATUS_CHECK_DEFAULT)
 
@@ -967,7 +960,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if timeout > DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT:
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ISOLATE_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_ISOLATE_ENDPOINT.format(device_id=device_id)}"
 
         data = {"Comment": comment, "IsolationType": type}
 
@@ -1000,7 +993,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
@@ -1014,7 +1007,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if timeout > DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT:
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_UNISOLATE_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_UNISOLATE_ENDPOINT.format(device_id=device_id)}"
 
         data = {"Comment": comment}
 
@@ -1047,12 +1040,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         event_id = param[DEFENDERATP_EVENT_ID]
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINEACTIONS_ENDPOINT.format(action_id=event_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_MACHINEACTIONS_ENDPOINT.format(action_id=event_id)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -1067,7 +1060,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             summary["event_status"] = response["status"]
         except Exception as e:
             err = self._get_error_message_from_exception(e)
-            return action_result.set_status(phantom.APP_ERROR, "Error occurred while processing the response {}".format(err))
+            return action_result.set_status(phantom.APP_ERROR, f"Error occurred while processing the response {err}")
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -1078,7 +1071,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
@@ -1087,10 +1080,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         if operation not in TAG_OPERATION_VALUE_LIST:
             return action_result.set_status(
-                phantom.APP_ERROR, "Please provide valid input from {} in 'operation' action parameter".format(TAG_OPERATION_VALUE_LIST)
+                phantom.APP_ERROR, f"Please provide valid input from {TAG_OPERATION_VALUE_LIST} in 'operation' action parameter"
             )
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINES_TAGS_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_MACHINES_TAGS_ENDPOINT.format(device_id=device_id)}"
 
         data = {"Action": operation, "Value": tag}
 
@@ -1114,14 +1107,14 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(success/failed)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
         scan_type = param[DEFENDERATP_JSON_SCAN_TYPE]
         if scan_type not in SCAN_TYPE_VALUE_LIST:
             return action_result.set_status(
-                phantom.APP_ERROR, "Please provide valid input from {} in 'scan_type' action parameter".format(SCAN_TYPE_VALUE_LIST)
+                phantom.APP_ERROR, f"Please provide valid input from {SCAN_TYPE_VALUE_LIST} in 'scan_type' action parameter"
             )
         comment = param[DEFENDERATP_JSON_COMMENT]
         timeout = param.get(DEFENDERATP_JSON_TIMEOUT, DEFENDERATP_STATUS_CHECK_DEFAULT)
@@ -1135,7 +1128,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         endpoint = DEFENDERATP_SCAN_DEVICE_ENDPOINT.format(device_id=device_id)
 
-        url = "{0}{1}".format(self._graph_url, endpoint)
+        url = f"{self._graph_url}{endpoint}"
 
         request_data = {"Comment": comment, "ScanType": scan_type}
 
@@ -1168,7 +1161,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
@@ -1183,7 +1176,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if timeout > DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT:
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_FILE_QUARANTINE_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_FILE_QUARANTINE_ENDPOINT.format(device_id=device_id)}"
 
         data = {"Comment": comment, "Sha1": file_hash}
 
@@ -1216,13 +1209,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(Success/Failed)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         file_hash = param[DEFENDERATP_JSON_FILE_HASH]
         comment = param[DEFENDERATP_JSON_COMMENT]
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_UNBLOCK_HASH_ENDPOINT.format(file_hash=file_hash))
+        endpoint = f"{self._graph_url}{DEFENDERATP_UNBLOCK_HASH_ENDPOINT.format(file_hash=file_hash)}"
 
         request_data = {"Comment": comment}
 
@@ -1241,13 +1234,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         file_hash = param[DEFENDERATP_JSON_FILE_HASH]
         comment = param[DEFENDERATP_JSON_COMMENT]
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_FILE_BLOCK_ENDPOINT.format(file_hash=file_hash))
+        endpoint = f"{self._graph_url}{DEFENDERATP_FILE_BLOCK_ENDPOINT.format(file_hash=file_hash)}"
 
         data = {"Comment": comment}
 
@@ -1266,13 +1259,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         input_type = param[DEFENDERATP_JSON_INPUT_TYPE]
         if input_type not in INPUT_TYPE_VALUE_LIST_DEVICES:
             return action_result.set_status(
-                phantom.APP_ERROR, "Please provide valid input from {} in 'input_type' action parameter".format(INPUT_TYPE_VALUE_LIST_DEVICES)
+                phantom.APP_ERROR, f"Please provide valid input from {INPUT_TYPE_VALUE_LIST_DEVICES} in 'input_type' action parameter"
             )
 
         input = param.get(DEFENDERATP_JSON_INPUT)
@@ -1328,7 +1321,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                         " Hence, ignoring the validation and continuing the action execution"
                     )
 
-        url = "{0}{1}?$top={2}&{3}".format(self._graph_url, endpoint, limit, query)
+        url = f"{self._graph_url}{endpoint}?$top={limit}&{query}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=url, action_result=action_result)
@@ -1357,13 +1350,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         input_type = param.get(DEFENDERATP_JSON_INPUT_TYPE, DEFENDERATP_ALL_CONST)
         if input_type not in INPUT_TYPE_VALUE_LIST_ALERTS:
             return action_result.set_status(
-                phantom.APP_ERROR, "Please provide valid input from {} in 'input_type' action parameter".format(INPUT_TYPE_VALUE_LIST_ALERTS)
+                phantom.APP_ERROR, f"Please provide valid input from {INPUT_TYPE_VALUE_LIST_ALERTS} in 'input_type' action parameter"
             )
 
         input = param.get(DEFENDERATP_JSON_INPUT, "")
@@ -1426,7 +1419,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                         " Hence, ignoring the validation and continuing the action execution"
                     )
 
-        url = "{0}{1}?$top={2}".format(self._graph_url, endpoint, limit)
+        url = f"{self._graph_url}{endpoint}?$top={limit}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=url, action_result=action_result)
@@ -1455,12 +1448,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         alert_id = param[DEFENDERATP_ALERT_ID]
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -1485,7 +1478,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         alert_id = param.get("alert_id")
@@ -1493,7 +1486,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not alert_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
-        endpoint = "{0}{1}/user".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id)}/user"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1514,7 +1507,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         alert_id = param.get("alert_id")
@@ -1524,9 +1517,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not alert_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
-        endpoint = "{0}{1}/files?$top={2}&$skip={3}".format(
-            self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id), limit, offset
-        )
+        endpoint = f"{self._graph_url}{DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id)}/files?$top={limit}&$skip={offset}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1549,7 +1540,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         alert_id = param.get("alert_id")
@@ -1559,7 +1550,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not alert_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
-        endpoint = "{0}{1}/ips?$top={2}&$skip={3}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id), limit, offset)
+        endpoint = f"{self._graph_url}{DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id)}/ips?$top={limit}&$skip={offset}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1582,7 +1573,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         alert_id = param.get("alert_id")
@@ -1592,9 +1583,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not alert_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: alert_id")
 
-        endpoint = "{0}{1}/domains?$top={2}&$skip={3}".format(
-            self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id), limit, offset
-        )
+        endpoint = f"{self._graph_url}{DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id)}/domains?$top={limit}&$skip={offset}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1617,7 +1606,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         report_id = param.get("report_id")
@@ -1644,7 +1633,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             "category": category,
         }
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_CREATE_ALERT_ENDPOINT)
+        endpoint = f"{self._graph_url}{DEFENDER_CREATE_ALERT_ENDPOINT}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="post", data=json.dumps(request_body))
 
@@ -1665,7 +1654,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         alert_id = param[DEFENDERATP_ALERT_ID]
@@ -1692,7 +1681,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if comment:
             request_body["comment"] = comment
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_ALERTS_ID_ENDPOINT.format(input=alert_id)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="patch", data=json.dumps(request_body))
@@ -1717,7 +1706,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         user = param.get("user")
@@ -1725,7 +1714,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not user:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: user")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_USER_ALERTS_ENDPOINT.format(user_id=user))
+        endpoint = f"{self._graph_url}{DEFENDER_USER_ALERTS_ENDPOINT.format(user_id=user)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1751,7 +1740,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         domain = param.get("domain")
@@ -1759,7 +1748,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not domain:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: domain")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DOMAIN_ALERTS_ENDPOINT.format(domain=domain))
+        endpoint = f"{self._graph_url}{DEFENDER_DOMAIN_ALERTS_ENDPOINT.format(domain=domain)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1785,7 +1774,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         file_hash = param.get("file_hash")
@@ -1793,7 +1782,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not file_hash:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: file_hash")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_FILE_ALERTS_ENDPOINT.format(file_hash=file_hash))
+        endpoint = f"{self._graph_url}{DEFENDER_FILE_ALERTS_ENDPOINT.format(file_hash=file_hash)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1819,7 +1808,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param.get("device_id")
@@ -1827,7 +1816,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not device_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DEVICE_ALERTS_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDER_DEVICE_ALERTS_ENDPOINT.format(device_id=device_id)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1853,7 +1842,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param.get("device_id")
@@ -1861,7 +1850,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not device_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: device_id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_ACTIVE_DEVICE_USERS.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDER_GET_ACTIVE_DEVICE_USERS.format(device_id=device_id)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -1884,11 +1873,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_SESSIONS_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_SESSIONS_ENDPOINT.format(device_id=device_id)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -1913,7 +1902,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         software_id = param.get("id")
@@ -1927,16 +1916,16 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_SOFTWARE_ENDPOINT, limit, offset)
+        endpoint = f"{DEFENDER_LIST_SOFTWARE_ENDPOINT}?$top={limit}&$skip={offset}"
 
         if software_id:
-            endpoint += "&id={}".format(software_id)
+            endpoint += f"&id={software_id}"
         if software_name:
-            endpoint += "&name={}".format(software_name)
+            endpoint += f"&name={software_name}"
         if vendor:
-            endpoint += "&vendor={}".format(vendor)
+            endpoint += f"&vendor={vendor}"
 
-        endpoint = "{0}{1}".format(self._graph_url, endpoint)
+        endpoint = f"{self._graph_url}{endpoint}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1962,7 +1951,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         software_id = param.get("id")
@@ -1970,7 +1959,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not software_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT.format(software_id=software_id))
+        endpoint = f"{self._graph_url}{DEFENDER_LIST_SOFTWARE_VERSIONS_ENDPOINT.format(software_id=software_id)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -1996,7 +1985,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         software_id = param.get("id")
@@ -2004,7 +1993,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not software_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_DEVICES_ENDPOINT.format(software_id=software_id))
+        endpoint = f"{self._graph_url}{DEFENDER_LIST_SOFTWARE_DEVICES_ENDPOINT.format(software_id=software_id)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -2030,7 +2019,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         software_id = param.get("id")
@@ -2038,7 +2027,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not software_id:
             return action_result.set_status(phantom.APP_SUCCESS, "Missing required parameter: id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT.format(software_id=software_id))
+        endpoint = f"{self._graph_url}{DEFENDER_LIST_SOFTWARE_VULNERABILITIES_ENDPOINT.format(software_id=software_id)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -2064,7 +2053,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_ids = param.get("device_id")
@@ -2082,28 +2071,28 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_DEVICE_VULNERABILITIES_ENDPOINT, limit, offset)
+        endpoint = f"{DEFENDER_LIST_DEVICE_VULNERABILITIES_ENDPOINT}?$top={limit}&$skip={offset}"
 
         filters = []
         if device_ids:
-            filters.append("deviceIds eq '{}'".format(device_ids))
+            filters.append(f"deviceIds eq '{device_ids}'")
         if software_ids:
-            filters.append("softwareIds eq '{}'".format(software_ids))
+            filters.append(f"softwareIds eq '{software_ids}'")
         if cve_ids:
-            filters.append("cveIds eq '{}'".format(cve_ids))
+            filters.append(f"cveIds eq '{cve_ids}'")
         if product_name:
-            filters.append("productNames eq '{}'".format(product_name))
+            filters.append(f"productNames eq '{product_name}'")
         if product_version:
-            filters.append("productVersions eq '{}'".format(product_version))
+            filters.append(f"productVersions eq '{product_version}'")
         if severity:
-            filters.append("severities eq '{}'".format(severity))
+            filters.append(f"severities eq '{severity}'")
         if product_vendor:
-            filters.append("productVendors eq '{}'".format(product_vendor))
+            filters.append(f"productVendors eq '{product_vendor}'")
 
         if filters:
             endpoint = "{}&$filter={}".format(endpoint, " and ".join(filters))
 
-        url = "{0}{1}".format(self._graph_url, endpoint)
+        url = f"{self._graph_url}{endpoint}"
 
         ret_val, response = self._update_request(endpoint=url, action_result=action_result)
 
@@ -2129,7 +2118,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         vulnerability_id = param.get("id")
@@ -2148,30 +2137,30 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        endpoint = "{0}?$top={1}&$skip={2}".format(DEFENDER_LIST_VULNERABILITIES_ENDPOINT, limit, offset)
+        endpoint = f"{DEFENDER_LIST_VULNERABILITIES_ENDPOINT}?$top={limit}&$skip={offset}"
 
         filters = []
         if vulnerability_id:
-            filters.append("id eq '{}'".format(vulnerability_id))
+            filters.append(f"id eq '{vulnerability_id}'")
         if name_equal:
-            filters.append("name eq '{}'".format(name_equal))
+            filters.append(f"name eq '{name_equal}'")
         if name_contains:
-            filters.append("contains(name, '{}')".format(name_contains))
+            filters.append(f"contains(name, '{name_contains}')")
         if description_contains:
-            filters.append("contains(description, '{}')".format(description_contains))
+            filters.append(f"contains(description, '{description_contains}')")
         if published_on:
-            filters.append("publishedOn eq '{}'".format(published_on))
+            filters.append(f"publishedOn eq '{published_on}'")
         if cvss:
-            filters.append("cvss eq '{}'".format(cvss))
+            filters.append(f"cvss eq '{cvss}'")
         if severity:
-            filters.append("severity eq '{}'".format(severity))
+            filters.append(f"severity eq '{severity}'")
         if updated_on:
-            filters.append("updatedOn eq '{}'".format(updated_on))
+            filters.append(f"updatedOn eq '{updated_on}'")
 
         if filters:
             endpoint += "&$filter={}".format(" and ".join(filters))
 
-        endpoint = "{0}{1}".format(self._graph_url, endpoint)
+        endpoint = f"{self._graph_url}{endpoint}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
@@ -2192,19 +2181,19 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
     def _handle_ip_prevalence(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_prevalence method")
         return self._handle_prevalence(param, action_identifier)
 
     def _handle_domain_prevalence(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_prevalence method")
         return self._handle_prevalence(param, action_identifier)
 
     def _handle_file_prevalence(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_prevalence method")
         return self._handle_prevalence(param, action_identifier)
 
@@ -2215,7 +2204,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(action_identifier))
+        self.save_progress(f"In action handler for: {action_identifier}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         # Endpoint
@@ -2242,7 +2231,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_LOOK_BACK_HOURS)
 
         # URL
-        url = "{0}{1}".format(self._graph_url, endpoint)
+        url = f"{self._graph_url}{endpoint}"
 
         # Prepare request params
         params = {"lookBackHours": look_back_hours}
@@ -2269,11 +2258,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         file_hash = param[DEFENDERATP_JSON_FILE_HASH]
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_FILE_INFO_ENDPOINT.format(file_hash=file_hash))
+        endpoint = f"{self._graph_url}{DEFENDERATP_FILE_INFO_ENDPOINT.format(file_hash=file_hash)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -2296,19 +2285,19 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
     def _handle_get_domain_related_devices(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_get_related_devices method")
         return self._handle_get_related_devices(param, action_identifier)
 
     def _handle_get_file_related_devices(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_get_related_devices method")
         return self._handle_get_related_devices(param, action_identifier)
 
     def _handle_get_user_related_devices(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_get_related_devices method")
         return self._handle_get_related_devices(param, action_identifier)
 
@@ -2319,20 +2308,20 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         if action_identifier == "get_file_related_devices":
             file_hash = param[DEFENDERATP_JSON_FILE_HASH]
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINE_FILES_ENDPOINT.format(file_hash=file_hash))
+            endpoint = f"{self._graph_url}{DEFENDERATP_MACHINE_FILES_ENDPOINT.format(file_hash=file_hash)}"
 
         elif action_identifier == "get_domain_related_devices":
             domain = param[DEFENDERATP_DOMAIN_PARAM_CONST]
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_DOMAIN_MACHINES_ENDPOINT.format(input=domain))
+            endpoint = f"{self._graph_url}{DEFENDERATP_DOMAIN_MACHINES_ENDPOINT.format(input=domain)}"
 
         elif action_identifier == "get_user_related_devices":
             user_id = param[DEFENDERATP_JSON_USER_ID]
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_USER_FILES_ENDPOINT.format(file_hash=user_id))
+            endpoint = f"{self._graph_url}{DEFENDERATP_USER_FILES_ENDPOINT.format(file_hash=user_id)}"
 
         else:
             return action_result.set_status(phantom.APP_ERROR, "Action identifier did not match")
@@ -2361,11 +2350,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_INSTALLED_SOFTWARE_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_INSTALLED_SOFTWARE_ENDPOINT.format(device_id=device_id)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -2386,13 +2375,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
     def _handle_restrict_app_execution(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_app_execution method")
         return self._handle_app_execution(param, action_identifier)
 
     def _handle_remove_app_restriction(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_app_execution method")
         return self._handle_app_execution(param, action_identifier)
 
@@ -2403,7 +2392,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
@@ -2418,11 +2407,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
             timeout = DEFENDERATP_QUARANTINE_TIMEOUT_MAX_LIMIT
 
         if action_identifier == "restrict_app_execution":
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_RESTRICT_APP_EXECUTION_ENDPOINT.format(device_id=device_id))
+            endpoint = f"{self._graph_url}{DEFENDERATP_RESTRICT_APP_EXECUTION_ENDPOINT.format(device_id=device_id)}"
             app_restriction_summary = "restrict_app_execution_status"
 
         elif action_identifier == "remove_app_restriction":
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_REMOVE_APP_RESTRICTION_ENDPOINT.format(device_id=device_id))
+            endpoint = f"{self._graph_url}{DEFENDERATP_REMOVE_APP_RESTRICTION_ENDPOINT.format(device_id=device_id)}"
             app_restriction_summary = "remove_app_restriction_status"
 
         else:
@@ -2461,7 +2450,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param.get("device_id")
@@ -2470,7 +2459,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not device_id or not comment:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_COLLECT_INVESTIGATION_PACKAGE_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDER_COLLECT_INVESTIGATION_PACKAGE_ENDPOINT.format(device_id=device_id)}"
 
         payload = {"Comment": comment}
 
@@ -2493,7 +2482,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         action_id = param.get("action_id")
@@ -2501,7 +2490,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not action_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: action_id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_INVESTIGATION_URI.format(action_id=action_id))
+        endpoint = f"{self._graph_url}{DEFENDER_GET_INVESTIGATION_URI.format(action_id=action_id)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -2522,7 +2511,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_ids = param.get("device_ids")
@@ -2534,7 +2523,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         all_device_details = []
         for device_id in device_id_list:
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDER_DEVICE_DETAILS_ENDPOINT.format(device_id=device_id))
+            endpoint = f"{self._graph_url}{DEFENDER_DEVICE_DETAILS_ENDPOINT.format(device_id=device_id)}"
 
             ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -2557,7 +2546,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         cve_id = param.get("cve_id")
@@ -2565,7 +2554,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not cve_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: cve_id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_VULNERABILITY_AFFECTED_DEVICES_ENDPOINT.format(cve_id=cve_id))
+        endpoint = f"{self._graph_url}{DEFENDER_GET_VULNERABILITY_AFFECTED_DEVICES_ENDPOINT.format(cve_id=cve_id)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -2588,7 +2577,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         indicator_id = param.get("indicator_id")
@@ -2596,7 +2585,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not indicator_id:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameter: indicator_id")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_GET_INDICATOR_ENDPOINT.format(indicator_id=indicator_id))
+        endpoint = f"{self._graph_url}{DEFENDER_GET_INDICATOR_ENDPOINT.format(indicator_id=indicator_id)}"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, method="get")
 
@@ -2617,7 +2606,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         limit = param.get(DEFENDERATP_JSON_LIMIT, DEFENDERATP_ALERT_DEFAULT_LIMIT)
@@ -2626,13 +2615,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        endpoint = "{}?$top={}".format(DEFENDERATP_LIST_INDICATORS_ENDPOINT, limit)
+        endpoint = f"{DEFENDERATP_LIST_INDICATORS_ENDPOINT}?$top={limit}"
 
         filter = param.get(DEFENDERATP_JSON_FILTER)
         if filter:
             endpoint = "{}&$filter={}".format(endpoint, filter.replace("&", "%26"))
 
-        url = "{0}{1}".format(self._graph_url, endpoint)
+        url = f"{self._graph_url}{endpoint}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=url, action_result=action_result)
@@ -2661,7 +2650,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         indicator_value = param.get("indicator_value")
@@ -2673,7 +2662,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not all([indicator_value, indicator_type, action_taken, description, title]):
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_UPDATE_INDICATOR_ENDPOINT)
+        endpoint = f"{self._graph_url}{DEFENDER_UPDATE_INDICATOR_ENDPOINT}"
 
         payload = {
             "indicatorValue": indicator_value,
@@ -2724,7 +2713,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         indicator_batch = param.get("indicator_batch")
@@ -2735,12 +2724,12 @@ class WindowsDefenderAtpConnector(BaseConnector):
         try:
             indicator_batch = json.loads(indicator_batch)
         except Exception as e:
-            return action_result.set_status(phantom.APP_ERROR, f"Error processing batch: {str(e)}")
+            return action_result.set_status(phantom.APP_ERROR, f"Error processing batch: {e!s}")
 
         if not isinstance(indicator_batch, list):
             return action_result.set_status(phantom.APP_ERROR, "indicator_batch must be a list of dictionaries")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_UPDATE_INDICATOR_ENDPOINT)
+        endpoint = f"{self._graph_url}{DEFENDER_UPDATE_INDICATOR_ENDPOINT}"
 
         payload = {"Indicators": indicator_batch}
 
@@ -2766,11 +2755,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         indicator_id = param[DEFENDERATP_JSON_INDICATOR_ID]
-        endpoint = "{0}{1}/{2}".format(self._graph_url, DEFENDERATP_LIST_INDICATORS_ENDPOINT, indicator_id)
+        endpoint = f"{self._graph_url}{DEFENDERATP_LIST_INDICATORS_ENDPOINT}/{indicator_id}"
 
         # make rest call
         ret_val, _ = self._update_request(endpoint=endpoint, action_result=action_result, method="delete")
@@ -2813,7 +2802,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         title = param[DEFENDERATP_JSON_INDICATOR_TITLE]
@@ -2884,7 +2873,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if severity:
             data.update({"severity": severity})
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIST_INDICATORS_ENDPOINT)
+        endpoint = f"{self._graph_url}{DEFENDERATP_LIST_INDICATORS_ENDPOINT}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, data=json.dumps(data), method="post")
@@ -2913,7 +2902,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         query = param[DEFENDERATP_JSON_QUERY]
@@ -2921,7 +2910,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         # prepare data parameters
         data = {"Query": query}
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_RUN_QUERY_ENDPOINT)
+        endpoint = f"{self._graph_url}{DEFENDERATP_RUN_QUERY_ENDPOINT}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result, data=json.dumps(data), method="post")
@@ -2950,11 +2939,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_VULNERABILITIES_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_VULNERABILITIES_ENDPOINT.format(device_id=device_id)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -2975,13 +2964,13 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
     def _handle_get_exposure_score(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_get_score method")
         return self._handle_get_score(param, action_identifier)
 
     def _handle_get_secure_score(self, param):
         action_identifier = self.get_action_identifier()
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
         self.debug_print("Calling _handle_get_score method")
         return self._handle_get_score(param, action_identifier)
 
@@ -2992,16 +2981,16 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for {}".format(action_identifier))
+        self.save_progress(f"In action handler for {action_identifier}")
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         if action_identifier == "get_exposure_score":
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_EXPOSURE_ENDPOINT)
+            endpoint = f"{self._graph_url}{DEFENDERATP_EXPOSURE_ENDPOINT}"
             action_score_summary_key = "exposure_score"
 
         elif action_identifier == "get_secure_score":
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_SECURE_ENDPOINT)
+            endpoint = f"{self._graph_url}{DEFENDERATP_SECURE_ENDPOINT}"
             action_score_summary_key = "secure_score"
 
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -3020,11 +3009,10 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _vault_file(self, filename=None, content=None):
-
         if not filename or not content:
             return "Error: one or more arguments are null value", None
 
-        gzip_filename = "{}.gz".format(filename)
+        gzip_filename = f"{filename}.gz"
         guid = uuid.uuid4()
 
         if hasattr(Vault, "get_vault_tmp_dir"):
@@ -3032,8 +3020,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
         else:
             temp_dir = "/vault/tmp"
 
-        local_dir = "{}/{}".format(temp_dir, guid)
-        self.save_progress("Using temp directory: {0}".format(guid))
+        local_dir = f"{temp_dir}/{guid}"
+        self.save_progress(f"Using temp directory: {guid}")
 
         try:
             os.makedirs(local_dir)
@@ -3041,8 +3029,8 @@ class WindowsDefenderAtpConnector(BaseConnector):
             self._dump_error_log(e, "Error occured while creating directory.")
             return "Error while creating directory", None
 
-        gzip_file_path = "{0}/{1}".format(local_dir, gzip_filename)
-        file_path = "{0}/{1}".format(local_dir, filename)
+        gzip_file_path = f"{local_dir}/{gzip_filename}"
+        file_path = f"{local_dir}/{filename}"
 
         # For image files add the content in .gz file
         with open(gzip_file_path, "wb") as f:
@@ -3071,8 +3059,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return True, vault_id
 
     def _get_live_response_result(self, action_id, action_result):
-
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIVE_RESPONSE_RESULT_ENDPOINT.format(action_id=action_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_LIVE_RESPONSE_RESULT_ENDPOINT.format(action_id=action_id)}"
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         if phantom.is_fail(ret_val):
@@ -3086,8 +3073,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         return action_result.set_status(phantom.APP_ERROR, "No result found for live response action"), None
 
     def _validate_event_id(self, event_id, command, action_result, summary):
-
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MACHINEACTIONS_ENDPOINT.format(action_id=event_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_MACHINEACTIONS_ENDPOINT.format(action_id=event_id)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -3123,7 +3109,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
         summary = action_result.update_summary({})
 
@@ -3154,7 +3140,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 summary["file_status"] = action_result.get_message()
                 return action_result.set_status(phantom.APP_ERROR)
 
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIVE_RESPONSE_ENDPOINT.format(device_id=device_id))
+            endpoint = f"{self._graph_url}{DEFENDERATP_LIVE_RESPONSE_ENDPOINT.format(device_id=device_id)}"
 
             data = {"Comment": comment, "Commands": [{"type": DEFENDERATP_GET_FILE_COMMAND, "params": [{"key": "Path", "value": file_path}]}]}
 
@@ -3181,7 +3167,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             action_result.add_data(response)
             status = response.get("status")
 
-            self.debug_print("Status of live response action: {}".format(status))
+            self.debug_print(f"Status of live response action: {status}")
             self.debug_print("Command Status of live response action: {}".format(response.get("commands")))
 
             summary["file_status"] = status
@@ -3228,7 +3214,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
         file_name = param[DEFENDERATP_JSON_FILE_NAME]
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
@@ -3240,7 +3226,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIVE_RESPONSE_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_LIVE_RESPONSE_ENDPOINT.format(device_id=device_id)}"
 
         data = {"Comment": comment, "Commands": [{"type": DEFENDERATP_PUT_FILE_COMMAND, "params": [{"key": "FileName", "value": file_name}]}]}
 
@@ -3261,7 +3247,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         status, response = self._status_wait(action_result, action_id, timeout)
 
         status = response.get("status")
-        self.debug_print("Status of live response action: {}".format(status))
+        self.debug_print(f"Status of live response action: {status}")
         self.debug_print("Command Status of live response action: {}".format(response.get("commands")))
 
         if phantom.is_fail(status):
@@ -3283,7 +3269,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         action_id = param.get("action_id")
@@ -3292,7 +3278,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if not action_id or not comment:
             return action_result.set_status(phantom.APP_ERROR, "Missing required parameters")
 
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDER_LIVE_RESPONSE_CANCEL_ENDPOINT.format(action_id=action_id))
+        endpoint = f"{self._graph_url}{DEFENDER_LIVE_RESPONSE_CANCEL_ENDPOINT.format(action_id=action_id)}"
 
         payload = {"Comment": comment}
 
@@ -3315,7 +3301,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
         summary = action_result.update_summary({})
 
@@ -3347,7 +3333,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             if timeout > DEFENDERATP_RUN_SCRIPT_MAX_LIMIT:
                 timeout = DEFENDERATP_RUN_SCRIPT_MAX_LIMIT
 
-            endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_LIVE_RESPONSE_ENDPOINT.format(device_id=device_id))
+            endpoint = f"{self._graph_url}{DEFENDERATP_LIVE_RESPONSE_ENDPOINT.format(device_id=device_id)}"
 
             data = {
                 "Comment": comment,
@@ -3377,7 +3363,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 return action_result.set_status(phantom.APP_ERROR)
 
             status = response.get("status")
-            self.debug_print("Status of live response action: {}".format(status))
+            self.debug_print(f"Status of live response action: {status}")
             self.debug_print("Command Status of live response action: {}".format(response.get("commands")))
 
             summary["script_status"] = status
@@ -3403,7 +3389,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             resp_json = result.json()
             resp_json = self.replace_null_values(resp_json)
         except Exception as e:
-            summary["live_response_result"] = "Unable to parse JSON response. Error: {0}".format(self._get_error_message_from_exception(e))
+            summary["live_response_result"] = f"Unable to parse JSON response. Error: {self._get_error_message_from_exception(e)}"
             return action_result.set_status(phantom.APP_ERROR)
 
         action_result.add_data(resp_json)
@@ -3416,11 +3402,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         device_id = param[DEFENDERATP_JSON_DEVICE_ID]
-        endpoint = "{0}{1}".format(self._graph_url, DEFENDERATP_MISSING_KBS_ENDPOINT.format(device_id=device_id))
+        endpoint = f"{self._graph_url}{DEFENDERATP_MISSING_KBS_ENDPOINT.format(device_id=device_id)}"
 
         # make rest call
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
@@ -3447,7 +3433,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         """
 
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+        self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         config = self.get_config()
 
         poll_filter = config.get(DEFENDER_FILTER, "")
@@ -3478,7 +3464,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         start_time_filter = f"lastUpdateTime ge {last_modified_time}"
         poll_filter += start_time_filter if not poll_filter else f" and {start_time_filter}"
 
-        endpoint = "{0}{1}?$top={2}&$filter={3}".format(self._graph_url, DEFENDERATP_ALERTS_ENDPOINT, max_alerts, poll_filter)
+        endpoint = f"{self._graph_url}{DEFENDERATP_ALERTS_ENDPOINT}?$top={max_alerts}&$filter={poll_filter}"
         ret_val, response = self._update_request(endpoint=endpoint, action_result=action_result)
 
         alert_list = response.get("value", [])
@@ -3495,7 +3481,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                     return action_result.get_status()
 
             except Exception as e:
-                return action_result.set_status(phantom.APP_ERROR, "Could not ingested alert. Error: {}".format(e))
+                return action_result.set_status(phantom.APP_ERROR, f"Could not ingested alert. Error: {e}")
 
             # Set state to last modified time of last alert so we can pick up from there next time
             self._state[STATE_LAST_TIME] = alert_list[-1].get(DEFENDER_JSON_LAST_MODIFIED)
@@ -3536,7 +3522,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.set_status(phantom.APP_ERROR, message)
 
-        self.debug_print("save_container returned: {}, reason: {}, id: {}".format(ret_val, message, cid))
+        self.debug_print(f"save_container returned: {ret_val}, reason: {message}, id: {cid}")
 
         if message in "Duplicate container found":
             self.save_progress("Duplicate container found. Continuing with the same container.")
@@ -3564,7 +3550,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
                 message = LOG_GREATER_EQUAL_TIME_ERR.format(LOG_CONFIG_TIME_POLL_NOW)
                 return action_result.set_status(phantom.APP_ERROR, message)
         except Exception as e:
-            message = "Invalid date string received. Error occurred while checking date format. Error: {}".format(str(e))
+            message = f"Invalid date string received. Error occurred while checking date format. Error: {e!s}"
             return action_result.set_status(phantom.APP_ERROR, message)
 
         return phantom.APP_SUCCESS
@@ -3723,7 +3709,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
 
 if __name__ == "__main__":
-
     import argparse
 
     import pudb
@@ -3745,14 +3730,13 @@ if __name__ == "__main__":
     verify = args.verify
 
     if username is not None and password is None:
-
         # User specified a username but not a password, so ask
         import getpass
 
         password = getpass.getpass("Password: ")
 
     if username and password:
-        login_url = "{}login".format(BaseConnector._get_phantom_base_url())
+        login_url = f"{BaseConnector._get_phantom_base_url()}login"
         try:
             print("Accessing the Login page")
             r = requests.get(login_url, verify=verify)  # nosemgrep: python.requests.best-practice.use-timeout.use-timeout
@@ -3764,17 +3748,20 @@ if __name__ == "__main__":
             data["csrfmiddlewaretoken"] = csrftoken
 
             headers = dict()
-            headers["Cookie"] = "csrftoken={}".format(csrftoken)
+            headers["Cookie"] = f"csrftoken={csrftoken}"
             headers["Referer"] = login_url
 
             print("Logging into Platform to get the session id")
             r2 = requests.post(
-                login_url, verify=verify, data=data, headers=headers  # nosemgrep: python.requests.best-practice.use-timeout.use-timeout
+                login_url,
+                verify=verify,
+                data=data,
+                headers=headers,  # nosemgrep: python.requests.best-practice.use-timeout.use-timeout
             )
 
             session_id = r2.cookies["sessionid"]
         except Exception as e:
-            print("Unable to get session id from the platform. Error: {0}".format(str(e)))
+            print(f"Unable to get session id from the platform. Error: {e!s}")
             sys.exit(1)
 
     with open(args.input_test_json) as f:
