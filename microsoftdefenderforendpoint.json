@@ -10444,7 +10444,7 @@
                     "data_path": "action_result.data.*.InitiatingProcessVersionInfoProductName",
                     "data_type": "string",
                     "example_values": [
-                        "Microsoft\u00ae Windows\u00ae Operating System"
+                        "Microsoft® Windows® Operating System"
                     ]
                 },
                 {
@@ -13076,18 +13076,6 @@
             "versions": "EQ(*)"
         }
     ],
-    "pip_dependencies": {
-        "wheel": [
-            {
-                "module": "beautifulsoup4",
-                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
-            },
-            {
-                "module": "soupsieve",
-                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
-            }
-        ]
-    },
     "pip39_dependencies": {
         "wheel": []
     },
