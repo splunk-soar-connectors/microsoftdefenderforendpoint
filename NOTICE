@@ -1,11 +1,2 @@
-Splunk SOAR Microsoft Defender for Endpoint
-Copyright (c) 2019-2024 Splunk Inc.
-
-Third-party Software Attributions:
-
-Library: beautifulsoup4
-Version: 4.9.1
-License: MIT
-Copyright 2004-2017 Leonard Richardson
-Copyright 2004-2019 Leonard Richardson
-Copyright 2018 Isaac Muse
+Splunk SOAR App: Microsoft Defender for Endpoint
+Copyright (c) 2019-2025 Splunk Inc.
