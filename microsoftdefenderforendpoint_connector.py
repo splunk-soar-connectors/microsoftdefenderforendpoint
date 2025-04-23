@@ -2787,7 +2787,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_TIME_ERR.format("expiration time")), None
 
         # Checking for future date
-        today = datetime.utcnow()
+        today = datetime.now(datetime.UTC)
         if time <= today:
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_PAST_TIME_ERR.format("expiration time")), None
 
@@ -3543,8 +3543,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
         try:
             time = datetime.strptime(date, DEFENDER_APP_DT_STR_FORMAT)
             end_time = datetime.now(datetime.UTC)
-            if self._check_invalid_since_utc_time(time):
-                return action_result.set_status(phantom.APP_ERROR, LOG_UTC_SINCE_TIME_ERR)
 
             if time >= end_time:
                 message = LOG_GREATER_EQUAL_TIME_ERR.format(LOG_CONFIG_TIME_POLL_NOW)

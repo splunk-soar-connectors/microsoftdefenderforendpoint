@@ -413,7 +413,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **client_secret** | required | password | Client Secret |
 **non_interactive** | optional | boolean | Non Interactive Auth |
 **max_alerts_per_poll** | optional | numeric | Maximum Alerts for scheduled/interval polling for each cycle |
-**start_time** | optional | string | Start time for schedule/interval/manual poll (Use ISO 8601 UTC format: 2024-09-04T16:26:58.87Z) |
+**start_time** | optional | string | Start time for schedule/interval/manual poll (Use ISO 8601 UTC format: 2024-09-04T16:26:58Z) |
 **environment** | required | string | Azure environment to connect |
 
 ### Supported Actions
