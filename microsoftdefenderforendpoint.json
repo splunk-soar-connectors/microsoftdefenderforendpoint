@@ -10,8 +10,8 @@
     "product_version_regex": ".*",
     "publisher": "Splunk",
     "license": "Copyright (c) 2019-2025 Splunk Inc.",
-    "app_version": "4.0.0",
-    "utctime_updated": "2024-10-14T22:08:49.000000Z",
+    "app_version": "4.0.1",
+    "utctime_updated": "2025-04-29T23:00:47.027590Z",
     "package_name": "phantom_microsoftdefenderforendpoint",
     "main_module": "microsoftdefenderforendpoint_connector.py",
     "python_version": "3",
@@ -10444,7 +10444,7 @@
                     "data_path": "action_result.data.*.InitiatingProcessVersionInfoProductName",
                     "data_type": "string",
                     "example_values": [
-                        "Microsoft® Windows® Operating System"
+                        "Microsoft\u00ae Windows\u00ae Operating System"
                     ]
                 },
                 {

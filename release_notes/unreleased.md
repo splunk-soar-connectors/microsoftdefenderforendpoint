@@ -1,7 +1,1 @@
 **Unreleased**
-
-* Fixed start_time param documentation for on_poll to use and handle correct date format [PAPP-35102]
-* Update Python dependencies for vulnerabilities, package updates, and platform built-in removals
-* Update Python dependencies for Python 3.13 support
-* Update NOTICE file with updated dependencies
-* Apply pre-commit fixes
