@@ -14,7 +14,7 @@
     "utctime_updated": "2025-04-29T23:00:47.027590Z",
     "package_name": "phantom_microsoftdefenderforendpoint",
     "main_module": "microsoftdefenderforendpoint_connector.py",
-    "python_version": "3",
+    "python_version": ["3.9", "3.13"],
     "fips_compliant": true,
     "min_phantom_version": "6.2.2",
     "app_wizard_version": "1.0.0",
