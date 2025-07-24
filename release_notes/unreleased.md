@@ -1,2 +1,3 @@
 **Unreleased**
-* Fixed issue where expiration time was not being checked for future date
+* Resolved issue where the expiration time was not validated against future dates
+* Fixed test connectivity timeout and polling issues
