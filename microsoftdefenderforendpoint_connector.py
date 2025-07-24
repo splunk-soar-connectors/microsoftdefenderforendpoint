@@ -36,7 +36,7 @@ except Exception:
 import grp
 import ipaddress
 import pwd
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import encryption_helper
 import phantom.app as phantom
@@ -2787,7 +2787,19 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_TIME_ERR.format("expiration time")), None
 
         # Checking for future date
-        today = datetime.now(datetime.UTC)
+        try:
+            # Try Python 3.11+ approach
+            today = datetime.now(datetime.UTC)
+        except AttributeError as e:
+            # Fall back to Python 3.9 approach
+            self.debug_print(f"Got AttributeError. Exception: {e}")
+            self.debug_print("Falling back to Python 3.9 approach")
+            today = datetime.now(timezone.utc)
+
+            # Make time timezone-aware before comparison
+            time = time.replace(tzinfo=timezone.utc)
+            self.debug_print(f"Time after changing timezone-aware: {time}")
+
         if time <= today:
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_PAST_TIME_ERR.format("expiration time")), None
 
