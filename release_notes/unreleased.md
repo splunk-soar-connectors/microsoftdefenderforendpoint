@@ -1,3 +1,3 @@
 **Unreleased**
-* Resolved issue where the expiration time was not validated against future dates
-* Fixed test connectivity timeout and polling issues
+* Resolved issue where the expiration time was not validated against future dates [PAPP-36235]
+* Fixed test connectivity timeout and polling issues [PAPP-35707]

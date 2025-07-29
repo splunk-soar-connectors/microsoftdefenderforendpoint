@@ -263,15 +263,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         access_token = state.get("token", {}).get("access_token")
         if access_token:
-            state["token"]["access_token"] = encryption_helper.decrypt(
-                access_token, salt
-            )
+            state["token"]["access_token"] = encryption_helper.decrypt(access_token, salt)
 
         refresh_token = state.get("token", {}).get("refresh_token")
         if refresh_token:
-            state["token"]["refresh_token"] = encryption_helper.decrypt(
-                refresh_token, salt
-            )
+            state["token"]["refresh_token"] = encryption_helper.decrypt(refresh_token, salt)
         code = state.get("code")
         if code:
             state["code"] = encryption_helper.decrypt(code, salt)
@@ -288,15 +284,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
         """
         access_token = state.get("token", {}).get("access_token")
         if access_token:
-            state["token"]["access_token"] = encryption_helper.encrypt(
-                access_token, salt
-            )
+            state["token"]["access_token"] = encryption_helper.encrypt(access_token, salt)
 
         refresh_token = state.get("token", {}).get("refresh_token")
         if refresh_token:
-            state["token"]["refresh_token"] = encryption_helper.encrypt(
-                refresh_token, salt
-            )
+            state["token"]["refresh_token"] = encryption_helper.encrypt(refresh_token, salt)
 
         code = state.get("code")
         if code:
@@ -306,7 +298,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         state["is_encrypted"] = True
 
         return state
-        
+
     def load_state(self):
         """
         Load the contents of the state file to the state dictionary and decrypt it.
