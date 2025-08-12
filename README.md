@@ -1,9 +1,9 @@
 # Microsoft Defender for Endpoint
 
-Publisher: Splunk \
-Connector Version: 4.0.1 \
-Product Vendor: Microsoft \
-Product Name: Microsoft Defender for Endpoint \
+Publisher: Splunk <br>
+Connector Version: 4.0.2 <br>
+Product Vendor: Microsoft <br>
+Product Name: Microsoft Defender for Endpoint <br>
 Minimum Product Version: 6.2.2
 
 This app integrates with Microsoft Defender for Endpoint to execute various containment, corrective, generic, and investigative actions
@@ -418,70 +418,70 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using the supplied configuration \
-[on poll](#action-on-poll) - Callback action for the on_poll ingest functionality for Defender for Endpoint \
-[quarantine device](#action-quarantine-device) - Quarantine the device \
-[unquarantine device](#action-unquarantine-device) - Unquarantine the device \
-[get status](#action-get-status) - Get status of the event on a machine \
-[scan device](#action-scan-device) - Scan a device for virus \
-[quarantine file](#action-quarantine-file) - Quarantine a file \
-[get active users](#action-get-active-users) - Get active users on a device \
-[list devices](#action-list-devices) - List of recently seen devices \
-[list alerts](#action-list-alerts) - List all alerts of a given type \
-[list sessions](#action-list-sessions) - List all logged in users on a machine \
-[list software](#action-list-software) - Retrieve the organization's software inventory \
-[list software versions](#action-list-software-versions) - Retrieve a list of organization's software version distribution \
-[list software devices](#action-list-software-devices) - Retrieve a list of devices that have a specific software installed \
-[list software vulnerabilities](#action-list-software-vulnerabilities) - Retrieve vulnerabilities associated with a specific software \
-[list device vulnerabilities](#action-list-device-vulnerabilities) - Retrieve vulnerabilities affecting devices or software in organization \
-[list vulnerabilities](#action-list-vulnerabilities) - Retrieve a list of vulnerabilities based on filters \
-[get alert](#action-get-alert) - Retrieve specific Alert by its ID \
-[get alert user](#action-get-alert-user) - Retrieve user for specific Alert from its ID \
-[get alert files](#action-get-alert-files) - Retrieve files for specific Alert from its ID \
-[get alert ips](#action-get-alert-ips) - Retrieve IP addresses for a specific Alert from its ID \
-[get alert domains](#action-get-alert-domains) - Retrieve domains for a specific Alert from its ID \
-[create alert](#action-create-alert) - Create a new alert in Defender for Endpoint \
-[update alert](#action-update-alert) - Update properties of existing Alert \
-[domain prevalence](#action-domain-prevalence) - Return statistics for the specified domain \
-[ip prevalence](#action-ip-prevalence) - Return statistics for the specified IP \
-[file prevalence](#action-file-prevalence) - Return statistics for the specified file \
-[get file info](#action-get-file-info) - Retrieve a File information by identifier SHA1, or SHA256 \
-[get file devices](#action-get-file-devices) - Retrieve a collection of devices related to a given file hash (SHA1) \
-[get user devices](#action-get-user-devices) - Retrieve a collection of devices related to a given user ID \
-[get installed software](#action-get-installed-software) - Retrieve a collection of installed software related to a given device ID \
-[restrict app execution](#action-restrict-app-execution) - Restrict execution of all applications on the device except a predefined set \
-[list indicators](#action-list-indicators) - Retrieve a collection of all active Indicators \
-[collect investigation package](#action-collect-investigation-package) - Collect an investigation package from a device by its device ID \
-[get investigation uri](#action-get-investigation-uri) - Retrieve a URI for downloading an investigation package by its action ID \
-[get device details](#action-get-device-details) - Retrieve details for multiple devices by their device IDs \
-[get affected devices](#action-get-affected-devices) - Retrieve a list of devices affected by a vulnerability using CVE IDs \
-[get indicator](#action-get-indicator) - Retrieve an Indicator entity by its ID \
-[submit indicator](#action-submit-indicator) - Submit or Update new Indicator entity \
-[update indicator](#action-update-indicator) - Update an existing Indicator entity \
-[update indicator batch](#action-update-indicator-batch) - Update or create a batch of Indicator entities \
-[get file alerts](#action-get-file-alerts) - Retrieve alerts related to a specific file hash \
-[get device alerts](#action-get-device-alerts) - Retrieve all alerts related to a specific device \
-[get user alerts](#action-get-user-alerts) - Retrieve alerts related to a specific user \
-[get domain alerts](#action-get-domain-alerts) - Retrieve alerts related to a specific domain address \
-[delete indicator](#action-delete-indicator) - Delete an Indicator entity by ID \
-[run query](#action-run-query) - An advanced search query \
-[get domain devices](#action-get-domain-devices) - Retrieve a collection of devices that have communicated to or from a given domain address \
-[update device tag](#action-update-device-tag) - Add or remove a tag from a given device (Maximum: 200 characters) \
-[get discovered vulnerabilities](#action-get-discovered-vulnerabilities) - Retrieve a collection of discovered vulnerabilities related to a given device ID \
-[remove app restriction](#action-remove-app-restriction) - Enable execution of any application on the device \
-[get exposure score](#action-get-exposure-score) - Retrieve the organizational exposure score \
-[get secure score](#action-get-secure-score) - Retrieve your Microsoft Secure Score for devices \
-[get file](#action-get-file) - Download a file from a device using live response \
-[put file](#action-put-file) - Put a file from the library to a device using live response \
-[cancel live response](#action-cancel-live-response) - Cancel a live response action \
-[run script](#action-run-script) - Run a script from the library on a device using live response \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using the supplied configuration <br>
+[on poll](#action-on-poll) - Callback action for the on_poll ingest functionality for Defender for Endpoint <br>
+[quarantine device](#action-quarantine-device) - Quarantine the device <br>
+[unquarantine device](#action-unquarantine-device) - Unquarantine the device <br>
+[get status](#action-get-status) - Get status of the event on a machine <br>
+[scan device](#action-scan-device) - Scan a device for virus <br>
+[quarantine file](#action-quarantine-file) - Quarantine a file <br>
+[get active users](#action-get-active-users) - Get active users on a device <br>
+[list devices](#action-list-devices) - List of recently seen devices <br>
+[list alerts](#action-list-alerts) - List all alerts of a given type <br>
+[list sessions](#action-list-sessions) - List all logged in users on a machine <br>
+[list software](#action-list-software) - Retrieve the organization's software inventory <br>
+[list software versions](#action-list-software-versions) - Retrieve a list of organization's software version distribution <br>
+[list software devices](#action-list-software-devices) - Retrieve a list of devices that have a specific software installed <br>
+[list software vulnerabilities](#action-list-software-vulnerabilities) - Retrieve vulnerabilities associated with a specific software <br>
+[list device vulnerabilities](#action-list-device-vulnerabilities) - Retrieve vulnerabilities affecting devices or software in organization <br>
+[list vulnerabilities](#action-list-vulnerabilities) - Retrieve a list of vulnerabilities based on filters <br>
+[get alert](#action-get-alert) - Retrieve specific Alert by its ID <br>
+[get alert user](#action-get-alert-user) - Retrieve user for specific Alert from its ID <br>
+[get alert files](#action-get-alert-files) - Retrieve files for specific Alert from its ID <br>
+[get alert ips](#action-get-alert-ips) - Retrieve IP addresses for a specific Alert from its ID <br>
+[get alert domains](#action-get-alert-domains) - Retrieve domains for a specific Alert from its ID <br>
+[create alert](#action-create-alert) - Create a new alert in Defender for Endpoint <br>
+[update alert](#action-update-alert) - Update properties of existing Alert <br>
+[domain prevalence](#action-domain-prevalence) - Return statistics for the specified domain <br>
+[ip prevalence](#action-ip-prevalence) - Return statistics for the specified IP <br>
+[file prevalence](#action-file-prevalence) - Return statistics for the specified file <br>
+[get file info](#action-get-file-info) - Retrieve a File information by identifier SHA1, or SHA256 <br>
+[get file devices](#action-get-file-devices) - Retrieve a collection of devices related to a given file hash (SHA1) <br>
+[get user devices](#action-get-user-devices) - Retrieve a collection of devices related to a given user ID <br>
+[get installed software](#action-get-installed-software) - Retrieve a collection of installed software related to a given device ID <br>
+[restrict app execution](#action-restrict-app-execution) - Restrict execution of all applications on the device except a predefined set <br>
+[list indicators](#action-list-indicators) - Retrieve a collection of all active Indicators <br>
+[collect investigation package](#action-collect-investigation-package) - Collect an investigation package from a device by its device ID <br>
+[get investigation uri](#action-get-investigation-uri) - Retrieve a URI for downloading an investigation package by its action ID <br>
+[get device details](#action-get-device-details) - Retrieve details for multiple devices by their device IDs <br>
+[get affected devices](#action-get-affected-devices) - Retrieve a list of devices affected by a vulnerability using CVE IDs <br>
+[get indicator](#action-get-indicator) - Retrieve an Indicator entity by its ID <br>
+[submit indicator](#action-submit-indicator) - Submit or Update new Indicator entity <br>
+[update indicator](#action-update-indicator) - Update an existing Indicator entity <br>
+[update indicator batch](#action-update-indicator-batch) - Update or create a batch of Indicator entities <br>
+[get file alerts](#action-get-file-alerts) - Retrieve alerts related to a specific file hash <br>
+[get device alerts](#action-get-device-alerts) - Retrieve all alerts related to a specific device <br>
+[get user alerts](#action-get-user-alerts) - Retrieve alerts related to a specific user <br>
+[get domain alerts](#action-get-domain-alerts) - Retrieve alerts related to a specific domain address <br>
+[delete indicator](#action-delete-indicator) - Delete an Indicator entity by ID <br>
+[run query](#action-run-query) - An advanced search query <br>
+[get domain devices](#action-get-domain-devices) - Retrieve a collection of devices that have communicated to or from a given domain address <br>
+[update device tag](#action-update-device-tag) - Add or remove a tag from a given device (Maximum: 200 characters) <br>
+[get discovered vulnerabilities](#action-get-discovered-vulnerabilities) - Retrieve a collection of discovered vulnerabilities related to a given device ID <br>
+[remove app restriction](#action-remove-app-restriction) - Enable execution of any application on the device <br>
+[get exposure score](#action-get-exposure-score) - Retrieve the organizational exposure score <br>
+[get secure score](#action-get-secure-score) - Retrieve your Microsoft Secure Score for devices <br>
+[get file](#action-get-file) - Download a file from a device using live response <br>
+[put file](#action-put-file) - Put a file from the library to a device using live response <br>
+[cancel live response](#action-cancel-live-response) - Cancel a live response action <br>
+[run script](#action-run-script) - Run a script from the library on a device using live response <br>
 [get missing kbs](#action-get-missing-kbs) - Retrieve missing KBs (security updates) by given device ID
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using the supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -496,7 +496,7 @@ No Output
 
 Callback action for the on_poll ingest functionality for Defender for Endpoint
 
-Type: **ingest** \
+Type: **ingest** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -517,7 +517,7 @@ No Output
 
 Quarantine the device
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>For parameter <i>type</i>, <b>&quotFull&quot</b> will completely quarantine the device while <b>&quotSelective&quot</b> will allow Skype and Outlook to be accessed.<br>The maximum timeout period for a status check is 10 minutes.
@@ -571,7 +571,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Unquarantine the device
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 10 minutes.
@@ -623,7 +623,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get status of the event on a machine
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -679,7 +679,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Scan a device for virus
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 1 hour.
@@ -733,7 +733,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Quarantine a file
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 10 minutes.
@@ -792,7 +792,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get active users on a device
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-log-on-users" target="_blank">Get Active Users API Documentation</a>).
@@ -827,7 +827,7 @@ summary.total_objects_successful | numeric | | |
 
 List of recently seen devices
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/get-machines" target="_blank">List Machines API Documentation</a>), the user can get devices last seen in the past 30 days; the maximum page size is 10,000; rate limitations for this action are 100 calls per minute and 1500 calls per hour. If the user does not specify the limit value, it will fetch 100 devices by default.
@@ -896,7 +896,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List all alerts of a given type
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/get-alerts" target="_blank">List Alerts API Documentation</a>), the user can get alerts last updated in the past 30 days; the maximum page size is 10,000; rate limitations for this action are 100 calls per minute and 1500 calls per hour. If the user does not specify the limit value, it will fetch 100 alerts by default.
@@ -986,7 +986,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 List all logged in users on a machine
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/get-machine-log-on-users" target="_blank">List Sessions API Documentation</a>), the user can query on machines last seen in the past 30 days; rate limitations for this action are 100 calls per minute and 1500 calls per hour.
@@ -1025,7 +1025,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve the organization's software inventory
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-software" target="_blank">Get Software API Documentation</a>).
@@ -1070,7 +1070,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve a list of organization's software version distribution
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-software-ver-distribution" target="_blank">Get Software Distribution API Documentation</a>).
@@ -1099,7 +1099,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve a list of devices that have a specific software installed
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-software" target="_blank">Get Devices With Software Installed API Documentation</a>).
@@ -1130,7 +1130,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve vulnerabilities associated with a specific software
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-vuln-by-software" target="_blank">Get Vulnerabilities By Software API Documentation</a>).
@@ -1168,7 +1168,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve vulnerabilities affecting devices or software in organization
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities-by-machines" target="_blank">Get Machines by Vulnerability API Documentation</a>).
@@ -1217,7 +1217,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve a list of vulnerabilities based on filters
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-all-vulnerabilities" target="_blank">Get Vulnerabilities API Documentation</a>).
@@ -1276,7 +1276,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve specific Alert by its ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-alert-info-by-id" target="_blank">Get Alert Information by ID API Documentation</a>), user can get alerts last updated according to your configured retention period.; rate limitations for this action are 100 calls per minute and 1500 calls per hour.
@@ -1362,7 +1362,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve user for specific Alert from its ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -1398,7 +1398,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve files for specific Alert from its ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -1444,7 +1444,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve IP addresses for a specific Alert from its ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -1474,7 +1474,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve domains for a specific Alert from its ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -1504,7 +1504,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Create a new alert in Defender for Endpoint
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -1601,7 +1601,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Update properties of existing Alert
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **False**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/update-alert" target="_blank">Get Alert Information by ID API Documentation</a>), user can update alerts that available in the API. See List Alerts for more information. Also, previously supported alert determination values ('Apt' and 'SecurityPersonnel') have been deprecated and no longer available via the API; rate limitations for this action are 100 calls per minute and 1500 calls per hour.
@@ -1696,7 +1696,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Return statistics for the specified domain
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-domain-statistics?view=o365-worldwide" target="_blank">Get domain statistics API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The maximum value for look_back_hours is 720 hours (30 days).
@@ -1730,7 +1730,7 @@ summary.total_objects_successful | numeric | | 4 |
 
 Return statistics for the specified IP
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-ip-statistics?view=o365-worldwide" target="_blank">Get IP statistics API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The maximum value for look_back_hours is 720 hours (30 days).
@@ -1764,7 +1764,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Return statistics for the specified file
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-file-statistics?view=o365-worldwide" target="_blank">Get File statistics API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The maximum value for look_back_hours is 720 hours (30 days).
@@ -1803,7 +1803,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve a File information by identifier SHA1, or SHA256
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-file-information?view=o365-worldwide" target="_blank">Get File Information API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The valid file identifiers are SHA1, SHA256.
@@ -1847,7 +1847,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve a collection of devices related to a given file hash (SHA1)
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-file-related-machines?view=o365-worldwide" target="_blank">Get File Related Machines API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The valid file identifier is SHA1.<br>The action retrieves data of the last 30 days.
@@ -1907,7 +1907,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve a collection of devices related to a given user ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-user-related-machines?view=o365-worldwide" target="_blank">Get User Related Machines API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. The ID is not the full UPN, but only the user name. (for example, to retrieve machines for user1@contoso.com use user1 for user_id parameter).<br>The action retrieves data of the last 30 days.
@@ -1967,7 +1967,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve a collection of installed software related to a given device ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -2002,7 +2002,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Restrict execution of all applications on the device except a predefined set
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/restrict-code-execution?view=o365-worldwide" target="_blank">Restrict app execution API Documentation</a>), rate limitations for this API are 100 calls per minute and 1500 calls per hour.<br>This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 1 minute.
@@ -2055,7 +2055,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve a collection of all active Indicators
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-ti-indicators-collection?view=o365-worldwide" target="_blank">List Indicators API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. If the user does not specify the limit value, it will fetch 100 indicators by default. The maximum value for the limit parameter is 10000.
@@ -2115,7 +2115,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Collect an investigation package from a device by its device ID
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/collect-investigation-package" target="_blank">Collect Investigation Package API Documentation</a>).
@@ -2153,7 +2153,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve a URI for downloading an investigation package by its action ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-package-sas-uri" target="_blank">Get Package SAS URI API Documentation</a>).
@@ -2180,7 +2180,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve details for multiple devices by their device IDs
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-machine-by-id" target="_blank">Get Machine by ID API Documentation</a>).
@@ -2224,7 +2224,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve a list of devices affected by a vulnerability using CVE IDs
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/get-machines-by-vulnerability" target="_blank">Get Machines by Vulnerability API Documentation</a>).
@@ -2255,7 +2255,7 @@ summary.total_objects_successful | numeric | | |
 
 Retrieve an Indicator entity by its ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -2311,7 +2311,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Submit or Update new Indicator entity
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/post-ti-indicator?view=o365-worldwide" target="_blank">Submit or Update Indicator API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. There is a limit of 15,000 active indicators per tenant.<br><b>Notes:</b><ul><li>For the possible values of given action parameters, refer to the documentation link provided above.<li>CIDR notation for IPs is not supported.</li></ul>
@@ -2386,7 +2386,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Update an existing Indicator entity
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -2433,7 +2433,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Update or create a batch of Indicator entities
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 This action updates or creates a batch of indicators from a json object. Based on (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/import-ti-indicators" target="_blank">Batch Update Indicator API Documentation</a>). New indicators will be created if they do not exist.
@@ -2464,7 +2464,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve alerts related to a specific file hash
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Retrieve alerts related to a specific file hash, such as a SHA1 or SHA256 hash.
@@ -2550,7 +2550,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve all alerts related to a specific device
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -2634,7 +2634,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve alerts related to a specific user
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -2718,7 +2718,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve alerts related to a specific domain address
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -2802,7 +2802,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Delete an Indicator entity by ID
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/delete-ti-indicator-by-id?view=o365-worldwide" target="_blank">Delete Indicator API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour.
@@ -2829,7 +2829,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 An advanced search query
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-advanced-query-api?view=o365-worldwide" target="_blank">Advanced Hunting API Documentation</a>), <li>rate limitations for this action are 45 calls per minute and 1500 calls per hour.</li><li>You can only run a query on data from the last 30 days.</li><li>The execution time is 10 minutes for every hour and 3 hours of running time a day. The maximal execution time of a single request is 10 minutes.</li><li>The maximum query result size of a single request cannot exceed 124 MB. If exceeded, HTTP 400 Bad Request with the message "Query execution has exceeded the allowed result size. Optimize your query by limiting the amount of results and try again" will appear.</li><li>The 429 response indicates that you have reached your quota limit, either in terms of requests or CPU usage. To figure out what limit has been reached, read the response body.</li>
@@ -2909,7 +2909,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve a collection of devices that have communicated to or from a given domain address
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-domain-related-machines?view=o365-worldwide" target="_blank">Get domain related machines API Documentation</a>), rate limitations for this action are 100 calls per minute and 1500 calls per hour. You can query on devices last updated according to your configured retention period.<br>The action retrieves data of the last 30 days.
@@ -2969,7 +2969,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add or remove a tag from a given device (Maximum: 200 characters)
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -3046,7 +3046,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve a collection of discovered vulnerabilities related to a given device ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-discovered-vulnerabilities?view=o365-worldwide" target="_blank">Get discovered vulnerabilities API Documentation</a>), rate limitations for this API are 50 calls per minute and 1500 calls per hour.
@@ -3087,7 +3087,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Enable execution of any application on the device
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/unrestrict-code-execution?view=o365-worldwide" target="_blank">Remove app restriction API Documentation</a>), rate limitations for this API are 100 calls per minute and 1500 calls per hour.<br>This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br>The maximum timeout period for a status check is 1 minute.
@@ -3140,7 +3140,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve the organizational exposure score
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -3166,7 +3166,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve your Microsoft Secure Score for devices
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-device-secure-score?view=o365-worldwide" target="_blank">Get device secure score API Documentation</a>), a higher Microsoft Secure Score for devices means your endpoints are more resilient from cybersecurity threat attacks.
@@ -3194,7 +3194,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Download a file from a device using live response
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-live-response?view=o365-worldwide" target="_blank">Run live response commands on a device API Documentation</a>), the user can collect file from a device in the vault, rate limitations for this API are 10 calls per minute.<br>The action tries to get the file using file_path along with the device_id. This action can take a while to complete the execution. The action retries at an interval of 5 seconds within a specified timeout to check if event execution is completed. If not, the action would return the latest status of the event along with the event ID. The get status action can be used to fetch the latest status of the event with the event ID. If the status is 'Succeeded', the event ID can be used in the same action to get the file. If all the parameters are given, the action gives higher priority to the event ID parameter.<br><br><b>Notes:</b><ul><li>Live response actions cannot be queued up and can only be executed one at a time.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group.</li></ul>
@@ -3259,7 +3259,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Put a file from the library to a device using live response
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-live-response?view=o365-worldwide" target="_blank">Run live response commands on a device API Documentation</a>), the user can put a file from the library to the device, rate limitations for this API are 10 calls per minute.<br>This action can take a while to complete execution. The action retries at an interval of 5 seconds within a specified <b>timeout</b> to check if event execution is complete. If not, the action would return the latest status of the event along with the event ID.<br>The <b>get status</b> action can be used to fetch the latest status of the event with the event ID.<br><b>Notes:</b><ul><li>Live response actions cannot be queued up and can only be executed one at a time.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group.</li></ul>
@@ -3319,7 +3319,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Cancel a live response action
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Based on the link (<a href="https://learn.microsoft.com/en-us/defender-endpoint/api/cancel-machine-action" target="_blank">Cancel Machine Action API Documentation</a>).
@@ -3357,7 +3357,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Run a script from the library on a device using live response
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/run-live-response?view=o365-worldwide" target="_blank">Run live response commands on a device API Documentation</a>), the user can run a script from the library on a device. The script_args parameter is passed to your script, rate limitations for this API are 10 calls per minute.<br>The action tries to execute the script using script_name along with the device_id. This action can take a while to complete the execution. The action retries at an interval of 5 seconds within a specified timeout to check if event execution is completed. If not, the action would return the latest status of the event along with the event ID. The get status action can be used to fetch the latest status of the event with the event ID. If the status is 'Succeded', the event ID can be used in the same action to get the script output. If all the parameters are given, the action gives higher priority to the event ID parameter.<br><br><b>Notes:</b><ul><li>The maximum timeout period for the script execution is 10 minutes.</li><li>Live response actions cannot be queued up and can only be executed one at a time.</li><li>If the machine that you are trying to run this action is in an RBAC device group that does not have an automated remediation level assigned to it, you'll need to at least enable the minimum Remediation Level for a given Device Group.</li></ul>
@@ -3400,7 +3400,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Retrieve missing KBs (security updates) by given device ID
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Based on the link (<a href="https://docs.microsoft.com/en-us/microsoft-365/security/defender-endpoint/get-missing-kbs-machine?view=o365-worldwide" target="_blank">Get missing KBs API Documentation</a>), the user can retrieve a collection of missing security updated related to a given device ID.

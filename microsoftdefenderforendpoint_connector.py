@@ -23,6 +23,7 @@ import shutil
 import sys
 import time
 import uuid
+from copy import deepcopy
 
 import phantom.rules as ph_rules
 from phantom.vault import Vault as Vault
@@ -36,7 +37,7 @@ except Exception:
 import grp
 import ipaddress
 import pwd
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import encryption_helper
 import phantom.app as phantom
@@ -267,7 +268,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
         refresh_token = state.get("token", {}).get("refresh_token")
         if refresh_token:
             state["token"]["refresh_token"] = encryption_helper.decrypt(refresh_token, salt)
-
         code = state.get("code")
         if code:
             state["code"] = encryption_helper.decrypt(code, salt)
@@ -282,7 +282,6 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :param salt: salt used for encryption
         :return: encrypted state
         """
-
         access_token = state.get("token", {}).get("access_token")
         if access_token:
             state["token"]["access_token"] = encryption_helper.encrypt(access_token, salt)
@@ -294,6 +293,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         code = state.get("code")
         if code:
             state["code"] = encryption_helper.encrypt(code, salt)
+            self.debug_print(f"Encrypted State Code: {state['code']}")
 
         state["is_encrypted"] = True
 
@@ -306,6 +306,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
         :return: loaded state
         """
         state = super().load_state()
+        self.debug_print(f"Loaded App State: {state}")
         if not isinstance(state, dict):
             self.debug_print("Resetting the state file with the default format")
             state = {"app_version": self.get_app_json().get("app_version")}
@@ -2787,7 +2788,19 @@ class WindowsDefenderAtpConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_INVALID_TIME_ERR.format("expiration time")), None
 
         # Checking for future date
-        today = datetime.now(datetime.UTC)
+        try:
+            # Try Python 3.11+ approach
+            today = datetime.now(datetime.UTC)
+        except AttributeError as e:
+            # Fall back to Python 3.9 approach
+            self.debug_print(f"Got AttributeError. Exception: {e}")
+            self.debug_print("Falling back to Python 3.9 approach")
+            today = datetime.now(timezone.utc)
+
+            # Make time timezone-aware before comparison
+            time = time.replace(tzinfo=timezone.utc)
+            self.debug_print(f"Time after changing timezone-aware: {time}")
+
         if time <= today:
             return action_result.set_status(phantom.APP_ERROR, DEFENDERATP_PAST_TIME_ERR.format("expiration time")), None
 
@@ -3485,7 +3498,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
             # Set state to last modified time of last alert so we can pick up from there next time
             self._state[STATE_LAST_TIME] = alert_list[-1].get(DEFENDER_JSON_LAST_MODIFIED)
-            self.save_state(self._state)
+            self.save_state(deepcopy(self._state))
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
@@ -3697,7 +3710,7 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         # Save the state, this data is saved across actions and app upgrades
         try:
-            self.save_state(self._state)
+            self.save_state(deepcopy(self._state))
             _save_app_state(self._state, self.get_asset_id(), self)
         except Exception as e:
             self._dump_error_log(e, "Error occured while saving state file.")
