@@ -2998,6 +2998,9 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
+        endpoint = ""
+        action_score_summary_key = ""
+
         if action_identifier == "get_exposure_score":
             endpoint = f"{self._graph_url}{DEFENDERATP_EXPOSURE_ENDPOINT}"
             action_score_summary_key = "exposure_score"
@@ -3555,7 +3558,14 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         try:
             time = datetime.strptime(date, DEFENDER_APP_DT_STR_FORMAT)
-            end_time = datetime.now(datetime.UTC)
+            try:
+                # Try Python 3.11+ approach
+                end_time = datetime.now(datetime.UTC)
+            except AttributeError:
+                # Fall back to Python 3.9 approach
+                end_time = datetime.now(timezone.utc)
+                # Make time timezone-aware before comparison
+                time = time.replace(tzinfo=timezone.utc)
 
             if time >= end_time:
                 message = LOG_GREATER_EQUAL_TIME_ERR.format(LOG_CONFIG_TIME_POLL_NOW)
