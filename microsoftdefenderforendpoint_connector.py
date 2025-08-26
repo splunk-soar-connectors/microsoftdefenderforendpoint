@@ -2076,16 +2076,11 @@ class WindowsDefenderAtpConnector(BaseConnector):
 
         filters = []
         if device_ids:
-            # Assuming device_ids is a comma separated string like "id1,id2"
-            # Split, strip whitespace, add quotes, then rejoin to get "machineId in ('id1',id2'...)"
-            quoted_device_ids = ",".join(f"'{id.strip()}'" for id in device_ids.split(','))
-            filters.append(f"machineId in ({quoted_device_ids})")
+            filters.append(f"machineId eq '{device_ids}'")
         if software_ids:
-            quoted_software_ids = ",".join(f"'{id.strip()}'" for id in software_ids.split(','))
-            filters.append(f"softwareId in ({quoted_software_ids})")
+            filters.append(f"softwareId eq '{software_ids}'")
         if cve_ids:
-            quoted_cve_ids = ",".join(f"'{id.strip()}'" for id in cve_ids.split(','))
-            filters.append(f"cveId in ({quoted_cve_ids})")
+            filters.append(f"cveId eq '{cve_ids}'")
         if product_name:
             filters.append(f"productName eq '{product_name}'")
         if product_version:
