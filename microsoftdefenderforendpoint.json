@@ -14,9 +14,9 @@
     "utctime_updated": "2026-08-04T00:11:09.510741Z",
     "package_name": "phantom_microsoftdefenderforendpoint",
     "main_module": "microsoftdefenderforendpoint_connector.py",
-    "python_version": "3.9, 3.13",
+    "python_version": "3.13",
     "fips_compliant": true,
-    "min_phantom_version": "6.2.2",
+    "min_phantom_version": "7.0.0",
     "app_wizard_version": "1.0.0",
     "latest_tested_versions": [
         "Cloud November 11, 2022"
@@ -35,40 +35,47 @@
             "description": "Tenant ID",
             "data_type": "string",
             "required": true,
-            "order": 0
+            "order": 0,
+            "category": "connectivity"
         },
         "ph": {
             "data_type": "ph",
-            "order": 1
+            "order": 1,
+            "category": "connectivity"
         },
         "client_id": {
             "description": "Client ID",
             "data_type": "string",
             "required": true,
-            "order": 2
+            "order": 2,
+            "category": "connectivity"
         },
         "client_secret": {
             "description": "Client Secret",
             "data_type": "password",
             "required": true,
-            "order": 3
+            "order": 3,
+            "category": "connectivity"
         },
         "non_interactive": {
             "description": "Non Interactive Auth",
             "data_type": "boolean",
             "default": false,
-            "order": 4
+            "order": 4,
+            "category": "connectivity"
         },
         "max_alerts_per_poll": {
             "description": "Maximum Alerts for scheduled/interval polling for each cycle",
             "data_type": "numeric",
             "default": 1000,
-            "order": 5
+            "order": 5,
+            "category": "ingest"
         },
         "start_time": {
             "description": "Start time for schedule/interval/manual poll (Use ISO 8601 UTC format: 2024-09-04T16:26:58Z)",
             "data_type": "string",
-            "order": 6
+            "order": 6,
+            "category": "ingest"
         },
         "environment": {
             "description": "Azure environment to connect",
@@ -80,7 +87,8 @@
                 "GCC",
                 "GCC High"
             ],
-            "order": 7
+            "order": 7,
+            "category": "connectivity"
         }
     },
     "actions": [
@@ -300,10 +308,6 @@
                     "contains": [
                         "defender atp device id"
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.relatedFileInfo",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.requestSource",
@@ -557,10 +561,6 @@
                     "contains": [
                         "defender atp device id"
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.relatedFileInfo",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.requestSource",
@@ -828,10 +828,6 @@
                     ],
                     "column_name": "Device ID",
                     "column_order": 3
-                },
-                {
-                    "data_path": "action_result.data.*.relatedFileInfo",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.relatedFileInfo.fileIdentifier",
@@ -1126,10 +1122,6 @@
                     "contains": [
                         "defender atp device id"
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.relatedFileInfo",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.requestSource",
@@ -1978,10 +1970,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.vmMetadata",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.vmMetadata.cloudProvider",
                     "data_type": "string",
                     "example_values": [
@@ -2412,10 +2400,6 @@
                     "example_values": [
                         "Collect artifacts and determine scope Review the machine timeline for suspicious activities that may have occurred before and after the time of the alert, and record additional related artifacts (files, IPs/URLs) Look for the presence of relevant artifacts on other systems. Identify commonalities and differences between potentially compromised systems. Submit relevant files for deep analysis and review resulting in detailed behavioral information. Submit undetected files to the MMPC malware portal Initiate containment & mitigation Contact the user to verify intent and initiate local remediation actions as needed. Update AV signatures and run a full scan. The scan might reveal and remove previously-undetected malware components. Ensure that the machine has the latest security updates. In particular, ensure that you have installed the latest software, web browser, and Operating System versions. If credential theft is suspected, reset all relevant users' passwords. Block communication with relevant URLs or IPs at the organization's perimeter."
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.relatedUser",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.relatedUser.domainName",
@@ -3816,10 +3800,6 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.relatedUser",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.relatedUser.domainName",
                     "data_type": "string",
                     "example_values": [
@@ -4773,10 +4753,6 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.relatedUser",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.relatedUser.domainName",
                     "data_type": "string"
                 },
@@ -5183,10 +5159,6 @@
                 },
                 {
                     "data_path": "action_result.data.*.rbacGroupName",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.relatedUser",
                     "data_type": "string"
                 },
                 {
@@ -5754,9 +5726,7 @@
                     "example_values": [
                         "success",
                         "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 0
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.file_hash",
@@ -5768,9 +5738,7 @@
                     "contains": [
                         "sha1",
                         "sha256"
-                    ],
-                    "column_name": "File Hash",
-                    "column_order": 1
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.@odata.context",
@@ -5938,6 +5906,30 @@
                     "example_values": [
                         1
                     ]
+                },
+                {
+                    "data_path": "action_result.data.*.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failure"
+                    ],
+                    "column_name": "Status",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.data.*.file_hash",
+                    "data_type": "string",
+                    "example_values": [
+                        "954e0fd64a1242d0fa860b220198118268e35018",
+                        "1a563e59bfcdc9e7b4d8ac81c6b6579e2d215952f6dd98e0ab1ab026ac616896"
+                    ],
+                    "contains": [
+                        "sha1",
+                        "sha256"
+                    ],
+                    "column_name": "File Hash",
+                    "column_order": 1
                 }
             ],
             "render": {
@@ -6186,10 +6178,6 @@
                     "example_values": [
                         "20H2"
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.vmMetadata",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.vmMetadata.cloudProvider",
@@ -6497,10 +6485,6 @@
                     "example_values": [
                         "20H2"
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.vmMetadata",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.vmMetadata.cloudProvider",
@@ -6883,10 +6867,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.relatedFileInfo",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.requestSource",
                     "data_type": "string",
                     "example_values": [
@@ -7064,10 +7044,6 @@
                     "example_values": [
                         1
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.certificateInfo",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.certificateInfo.issuer",
@@ -7766,10 +7742,6 @@
                     "data_type": "numeric"
                 },
                 {
-                    "data_path": "action_result.data.*.certificateInfo",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.certificateInfo.issuer",
                     "data_type": "string"
                 },
@@ -8170,10 +8142,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.certificateInfo",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.createdBy",
                     "data_type": "string",
                     "example_values": [
@@ -8539,10 +8507,6 @@
                 },
                 {
                     "data_path": "action_result.parameter.rbac_group_names",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.parameter.expiration_time",
                     "data_type": "string"
                 },
                 {
@@ -8973,10 +8937,6 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.relatedUser",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.relatedUser.domainName",
                     "data_type": "string"
                 },
@@ -9319,10 +9279,6 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.relatedUser",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.relatedUser.domainName",
                     "data_type": "string"
                 },
@@ -9656,10 +9612,6 @@
                 },
                 {
                     "data_path": "action_result.data.*.rbacGroupName",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.relatedUser",
                     "data_type": "string"
                 },
                 {
@@ -10005,10 +9957,6 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.relatedUser",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.relatedUser.domainName",
                     "data_type": "string"
                 },
@@ -10106,9 +10054,7 @@
                     "example_values": [
                         "success",
                         "failed"
-                    ],
-                    "column_name": "Status",
-                    "column_order": 1
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.indicator_id",
@@ -10121,10 +10067,6 @@
                     ],
                     "column_name": "Indicator ID",
                     "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
@@ -10447,7 +10389,7 @@
                     "data_path": "action_result.data.*.InitiatingProcessVersionInfoProductName",
                     "data_type": "string",
                     "example_values": [
-                        "Microsoft\u00ae Windows\u00ae Operating System"
+                        "Microsoft® Windows® Operating System"
                     ]
                 },
                 {
@@ -10831,10 +10773,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.vmMetadata",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.vmMetadata.cloudProvider",
                     "data_type": "string",
                     "example_values": [
@@ -10976,13 +10914,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.@odata.context",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://api.securitycenter.windows.com/api/$metadata#Machines/$entity"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.aadDeviceId",
                     "data_type": "string"
                 },
@@ -11008,20 +10939,6 @@
                     "data_type": "string",
                     "example_values": [
                         "NotSupported"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.defenderAvStatus",
-                    "data_type": "string",
-                    "example_values": [
-                        "NotSupported"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.deviceValue",
-                    "data_type": "string",
-                    "example_values": [
-                        "Normal"
                     ]
                 },
                 {
@@ -11078,23 +10995,10 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.ipAddresses.*.ipAddress",
-                    "data_type": "string",
-                    "example_values": [
-                        "10.0.2.15"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.ipAddresses.*.macAddress",
                     "data_type": "string",
                     "example_values": [
-                        "002248242A86"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ipAddresses.*.macAddress",
-                    "data_type": "string",
-                    "example_values": [
+                        "002248242A86",
                         "001238242A86"
                     ]
                 },
@@ -11103,20 +11007,6 @@
                     "data_type": "string",
                     "example_values": [
                         "Up"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ipAddresses.*.operationalStatus",
-                    "data_type": "string",
-                    "example_values": [
-                        "Up"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.ipAddresses.*.type",
-                    "data_type": "string",
-                    "example_values": [
-                        "Ethernet"
                     ]
                 },
                 {
@@ -11178,17 +11068,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.managedBy",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.managedByStatus",
-                    "data_type": "string",
-                    "example_values": [
-                        "Unknown"
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.managedByStatus",
                     "data_type": "string",
                     "example_values": [
@@ -11200,20 +11079,6 @@
                     "data_type": "string",
                     "example_values": [
                         "Onboarded"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.onboardingStatus",
-                    "data_type": "string",
-                    "example_values": [
-                        "Onboarded"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.osArchitecture",
-                    "data_type": "string",
-                    "example_values": [
-                        "64-bit"
                     ]
                 },
                 {
@@ -11283,21 +11148,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.vmMetadata",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.data.*.vmMetadata",
-                    "data_type": "string"
-                },
-                {
-                    "data_path": "action_result.summary.operation",
-                    "data_type": "string",
-                    "example_values": [
-                        "Add"
-                    ]
-                },
-                {
                     "data_path": "action_result.summary.operation",
                     "data_type": "string",
                     "example_values": [
@@ -11308,13 +11158,7 @@
                     "data_path": "action_result.summary.tag",
                     "data_type": "string",
                     "example_values": [
-                        "test-new-ac"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.tag",
-                    "data_type": "string",
-                    "example_values": [
+                        "test-new-ac",
                         "test-tag"
                     ]
                 },
@@ -11386,10 +11230,6 @@
                     ],
                     "column_name": "Device ID",
                     "column_order": 0
-                },
-                {
-                    "data_path": "action_result.data.*.@odata.type",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.@odata.type",
@@ -11685,10 +11525,6 @@
                     "contains": [
                         "defender atp device id"
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.relatedFileInfo",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.requestSource",
@@ -12045,7 +11881,7 @@
                         "defender atp device id"
                     ],
                     "column_name": "Device ID",
-                    "column_order": 1
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.event_id",
@@ -12067,7 +11903,7 @@
                         "file path"
                     ],
                     "column_name": "File Path",
-                    "column_order": 2
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.timeout",
@@ -12200,10 +12036,6 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.relatedFileInfo",
-                    "data_type": "string"
-                },
-                {
                     "data_path": "action_result.data.*.requestSource",
                     "data_type": "string",
                     "example_values": [
@@ -12260,7 +12092,7 @@
                         "defender atp event id"
                     ],
                     "column_name": "Event ID",
-                    "column_order": 0
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.summary.event_id_status",
@@ -12384,7 +12216,7 @@
                         "defender atp device id"
                     ],
                     "column_name": "Device ID",
-                    "column_order": 1
+                    "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.file_name",
@@ -12396,7 +12228,7 @@
                         "file name"
                     ],
                     "column_name": "File Name",
-                    "column_order": 2
+                    "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.timeout",
@@ -12514,7 +12346,7 @@
                         "defender atp event id"
                     ],
                     "column_name": "Event ID",
-                    "column_order": 0
+                    "column_order": 2
                 },
                 {
                     "data_path": "action_result.data.*.lastUpdateDateTimeUtc",
@@ -12532,10 +12364,6 @@
                     "contains": [
                         "defender atp device id"
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.relatedFileInfo",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.data.*.requestSource",

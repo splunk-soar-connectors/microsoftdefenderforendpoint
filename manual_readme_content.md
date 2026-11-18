@@ -28,12 +28,11 @@ default ports used by Splunk SOAR.
 |         http | tcp | 80 |
 |         https | tcp | 443 |
 
-## Pagination Not Supported
+## Pagination
 
-- Based on the base URL link ( [Microsoft Defender for Endpoint API
-  Documentation](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-atp/exposed-apis-list)
-  ), the pagination is not supported by the Defender for Endpoint APIs. Hence, this app does not implement
-  the pagination for the below-mentioned actions.
+- Microsoft Defender for Endpoint APIs support pagination on endpoints that document the `$skip` query
+  parameter. The alerts API supports `$skip` and a maximum page size of 10,000. This SDK app uses paging
+  for alert ingestion. The following list actions still make a single request and may return one page:
 
   - List Devices
   - List Alerts
@@ -64,16 +63,27 @@ default ports used by Splunk SOAR.
 
 ## Explanation of Asset Configuration Parameters for On Poll
 
-- Max Alerts for Polling - During each polling cycle, the specified number of alerts is retrieved for scheduled or interval polling (Default: 1000). Each alert is ingested as a container. This parameter determines the maximum number of alerts that can be fetched in a single poll cycle.
-- Start Time - This parameter is used to filter alerts based on their last updated time. If no value is provided, the default behavior is a week.<br>
-  **Note: The start time filters alerts based on their lastUpdateTime property.**
-- Filter - Allows additional filtering to be applied to alert properties (such as severity or status). This is useful for targeting specific types of alerts during polling.
+- Max Alerts for Polling - During each scheduled or interval poll, the app ingests up to this many alerts (default: 1000).
+- Start Time - Optional ISO-8601 UTC timestamp used for the first scheduled poll. If it is blank, the first poll starts seven days before the current time. Invalid or future values are rejected.
+
+## SDK upgrade and polling state
+
+- Before upgrading, back up the asset state through your normal SOAR administrative procedure.
+  The SDK reads the legacy `last_time` checkpoint from the asset state backend on its first poll
+  and copies it into the SDK ingestion partition. An existing SDK checkpoint takes precedence.
+  Legacy OAuth tokens are not copied; complete the SDK authorization setup described below.
+- Old SDK windows containing page offsets restart at the beginning of their bounded window.
+  Replayed alerts retain their source data identifiers so SOAR can deduplicate them.
+- Polling now continues using `lastUpdateTime` and alert ID instead of row offsets. Alert updates
+  that remove earlier records from a window therefore do not shift the continuation position.
+- Verify the first scheduled poll after upgrade. If the legacy asset state is unavailable, set
+  Start Time to the last successfully ingested UTC time before starting the first SDK poll.
+  Recovery is limited by Defender's configured alert retention.
 
 ## Explanation of On Poll Behavior
 
-- Start Time Parameter - The `start_time` parameter directly correlates with the lastUpdateTime property of the alerts, ensuring that only alerts updated after this time are included in the ingestion process.
-- Max Alerts Parameter - The `max_alerts_per_poll` setting works only with scheduled or interval polling, controlling how many alerts are ingested per cycle. For instance, if this value is set to 100, the system will ingest up to 100 distinct alerts, applying the provided filters and start time.
-- Example - If you configure the maximum alerts parameter to 100, the on_poll function will retrieve up to 100 alerts, considering any filter and start time provided. The filtering ensures only relevant alerts based on the time and other criteria are ingested during the polling process.
+- Poll window - The SDK `on_poll` action accepts optional `start_time` and `end_time` values in epoch milliseconds. These bound the alert `lastUpdateTime` query for that poll. If omitted, scheduled polling resumes its saved checkpoint and uses the current time as the window end.
+- Max Alerts Parameter - `max_alerts_per_poll` controls the scheduled cycle limit. Each API page is capped at 10,000 alerts; when a window is not exhausted within the configured limit, polling resumes after the saved alert timestamp and ID on the next cycle. A limit of zero skips the cycle without moving the checkpoint.
 
 ## Configure and set up permissions of the app created on the Microsoft Azure portal
 
@@ -183,16 +193,15 @@ When creating an asset for the app,
 
 - Save the asset with the above values.
 
-- After saving the asset, a new uneditable field will appear in the 'Asset Settings' tab of the
-  configured asset for the Defender for Endpoint app on SOAR. Copy the URL mentioned in the 'POST incoming for
-  Microsoft Defender for Endpoint to this location' field. Add a suffix '/result' to the URL copied in the
-  previous step. The resulting URL looks like the one mentioned below.
+- Enable webhooks for the asset. The SDK uses an OAuth callback webhook instead of the legacy `/result`
+  endpoint. Run Test Connectivity and copy the exact URL shown in the `OAuth callback URL:` progress log.
+  The URL has this shape:
 
   ```
-              https://<soar_host>/rest/handler/microsoftdefenderforendpoint_<appid>/<asset_name>/result
+  https://<soar_host>:<webhook_port>/webhook/microsoftdefenderforendpoint_<appid>/<asset_id>/oauth_callback
   ```
 
-- Add the URL created in the earlier step into the 'Redirect URIs' section of the 'Authentication'
+- Add that exact URL to the 'Redirect URIs' section of the 'Authentication'
   menu for the registered app that was created in the previous steps on the Microsoft Azure
   portal. For the 'Redirect URIs' section, follow the below steps.
 
@@ -202,7 +211,7 @@ When creating an asset for the app,
   1. Click on the earlier created app. You can search for the app by name or client ID.
   1. Navigate to the 'Authentication' menu of the app on the left-side panel.
   1. Click on the 'Add a platform' button and select 'Web' from the displayed options.
-  1. Enter the URL created in the earlier section in the 'Redirect URIs' text-box.
+  1. Enter the SDK callback URL in the 'Redirect URIs' text-box.
   1. Select the 'ID tokens' checkbox and click 'Save'.
   1. This will display the 'Redirect URIs' under the 'Web' section displayed on the page.
 
@@ -313,10 +322,8 @@ Please check the permissions for the state file as mentioned below.
 
 ## Notes
 
-- \<appid> - The app ID will be available in the Redirect URI which gets populated in the field
-  'POST incoming for Microsoft Defender for Endpoint to this location' when the Defender for Endpoint Splunk SOAR app
-  asset is configured e.g.
-  https://\<splunk_soar_host>/rest/handler/microsoftdefenderforendpoint\_\<appid>/\<asset_name>/result
+- \<appid> - The app ID is part of the SDK webhook URL shown in the `OAuth callback URL:` progress log.
+- \<webhook_port> - The SOAR webhook listener port is included in the same generated URL.
 - \<asset_id> - The asset ID will be available on the created asset's Splunk SOAR web URL e.g.
   https://\<splunk_soar_host>/apps/\<app_number>/asset/\<asset_id>/
 
